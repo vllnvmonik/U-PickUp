@@ -13,8 +13,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.echelon.upickup.R
+import com.echelon.upickup.components.BasicText
 import com.echelon.upickup.components.EditText
 import com.echelon.upickup.components.LogoImage
+import com.echelon.upickup.components.RoundedButton
 import com.echelon.upickup.components.TitleText
 
 @Composable
@@ -28,13 +30,18 @@ fun SignInScreen(){
         ){
             Spacer(modifier = Modifier.height(100.dp))
             LogoImage()
+            Spacer(modifier = Modifier.height(20.dp))
             TitleText(text = stringResource(R.string.hey_there))
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             EditText(title = stringResource(id = R.string.e_mail), KeyboardType.Text)
             Spacer(modifier = Modifier.height(5.dp))
             EditText(title = stringResource(R.string.password), KeyboardType.Text)
             Spacer(modifier = Modifier.height(5.dp))
             EditText(stringResource(R.string.id_number), KeyboardType.Number)
+            Spacer(modifier = Modifier.height(50.dp))
+            RoundedButton(text = stringResource(R.string.sign_in))
+            Spacer(modifier = Modifier.height(120.dp))
+            BasicText(text = "Don't have an account? SIGN UP!")
 
         }
     }
