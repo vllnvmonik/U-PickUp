@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style
+        name="Theme.UPickUp.Splash"
+        parent="Theme.SplashScreen"
+        >
+        <item name="windowSplashScreenBackground">#E5E5E5</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.UPickUp.Splash</item>
+    </style>
+
+
+
+</resources>
