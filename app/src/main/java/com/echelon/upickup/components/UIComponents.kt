@@ -3,7 +3,10 @@ package com.echelon.upickup.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -42,9 +45,6 @@ fun TitleText(
 ) {
     Text(
         text = text,
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .wrapContentHeight(align = Alignment.CenterVertically),
         style = TextStyle(
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
@@ -87,6 +87,9 @@ fun EditText(
         value = text, onValueChange = { newText ->
         text = newText
         },
+        textStyle = TextStyle(
+            fontSize = 18.sp
+        ),
         label = {
             Text(title)
         },
@@ -94,6 +97,32 @@ fun EditText(
             Text(title)
         },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+    )
+}
+
+@Composable
+fun RoundedButton(text: String) {
+    Button(onClick = { /*TODO*/ },
+        modifier = Modifier
+            .width(220.dp)
+            .height(45.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.pale_green))
+    ) {
+        ButtonText(text = text)
+    }
+}
+@Composable
+fun ButtonText(
+    text: String
+) {
+    Text(
+        text = text,
+        style = TextStyle(
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium,
+            color = colorResource(id = R.color.background_color),
+        )
     )
 }
 
