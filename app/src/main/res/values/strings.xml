@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">U Pick Up</string>
-    <string name="hey_there">"HEY THERE, "</string>
+    <string name="hey_there">"HEY THERE!"</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="id_number">ID Number</string>
 </resources>
