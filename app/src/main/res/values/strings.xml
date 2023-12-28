@@ -5,4 +5,8 @@
     <string name="password">Password</string>
     <string name="id_number">ID Number</string>
     <string name="sign_in">SIGN IN</string>
+    <string name="create_new_account">CREATE NEW ACCOUNT</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">SIGN UP</string>
 </resources>
