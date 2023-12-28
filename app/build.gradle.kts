@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.echelon.upickup"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.echelon.upickup"
@@ -68,5 +68,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //for splash screen
-    implementation ("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.core:core-splashscreen:1.0.1")
+    // for navigation
+    implementation ("androidx.navigation:navigation-compose:2.7.5")
 }

@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import com.echelon.upickup.R
-import com.echelon.upickup.appscreens.SignUpScreen
+import com.echelon.upickup.navigation.NavController
 
 @Composable
 fun UPickUp(){
@@ -14,6 +14,6 @@ fun UPickUp(){
         .fillMaxSize(),
         color = colorResource(id = R.color.background_color)
     ){
-        SignUpScreen()
+        NavController()
     }
 }

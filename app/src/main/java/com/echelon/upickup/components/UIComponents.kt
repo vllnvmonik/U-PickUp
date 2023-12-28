@@ -101,8 +101,8 @@ fun EditText(
 }
 
 @Composable
-fun RoundedButton(text: String) {
-    Button(onClick = { /*TODO*/ },
+fun RoundedButton(text: String, onClick: () -> Unit) {
+    Button(onClick = onClick,
         modifier = Modifier
             .width(220.dp)
             .height(45.dp),
