@@ -43,7 +43,7 @@ fun SignInScreen(navController: NavController){
             RoundedButton(
                 text = stringResource(R.string.sign_in)
             ) {
-                navController.navigate("signup")
+                navController.navigate("dashboard")
             }
             Spacer(modifier = Modifier.height(120.dp))
             ClickableNavigationText(

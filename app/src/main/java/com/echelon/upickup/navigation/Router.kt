@@ -5,12 +5,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.echelon.upickup.appscreens.DashboardScreen
 import com.echelon.upickup.appscreens.SignInScreen
 import com.echelon.upickup.appscreens.SignUpScreen
 
 sealed class Screen (val route: String) {
     object SignUpScreen: Screen("signup")
     object SignInScreen: Screen("signin")
+    object DashboardScreen: Screen("dashboard")
 }
 
 
@@ -27,6 +29,9 @@ fun NavController() {
         }
         composable(Screen.SignInScreen.route) {
             SignInScreen(navController = navController)
+        }
+        composable(Screen.DashboardScreen.route) {
+            DashboardScreen(navController = navController)
         }
     }
 }
