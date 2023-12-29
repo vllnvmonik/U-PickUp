@@ -14,7 +14,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.echelon.upickup.R
-import com.echelon.upickup.components.BasicText
+import com.echelon.upickup.components.ClickableNavigationText
 import com.echelon.upickup.components.EditText
 import com.echelon.upickup.components.LogoImage
 import com.echelon.upickup.components.RoundedButton
@@ -49,7 +49,13 @@ fun SignUpScreen(navController: NavController){
                 navController.navigate("signin")
             }
             Spacer(modifier = Modifier.height(90.dp))
-            BasicText(text = "Already have an account? SIGN IN!")
+
+            ClickableNavigationText(
+                normalText = "Already have an account?",
+                clickableText = "SIGN IN!",
+                navigateTo = "signin",
+                navController = navController
+            )
         }
     }
 }
