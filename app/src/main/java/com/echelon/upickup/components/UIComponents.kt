@@ -1,5 +1,6 @@
 package com.echelon.upickup.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,16 +13,23 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -31,7 +39,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.echelon.upickup.R
+import com.echelon.upickup.navigation.BottomNavItem
 
 
 @Composable
@@ -159,4 +169,44 @@ fun ClickableNavigationText(
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun BottomNavigationBar(navController: NavHostController) {
+    val items = listOf(
+        BottomNavItem.DashboardItems,
+        BottomNavItem.CalendarItems,
+        BottomNavItem.ChatItems,
+        BottomNavItem.ProfileItems
+    )
+
+    var selectedItem by rememberSaveable {
+        mutableIntStateOf(0)
+    }
+    NavigationBar (
+        modifier = Modifier
+            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
+        containerColor = colorResource(id = R.color.white)
+    ){
+        items.forEachIndexed{ index, item ->
+            NavigationBarItem(
+                selected = (selectedItem == index),
+                icon = { Icon(
+                    imageVector = item.selectedIcon,
+                    contentDescription = null
+                ) },
+                onClick = {
+                    if (navController.currentBackStack.value.size >=2){
+                        navController.popBackStack()
+                    }
+                    selectedItem = index
+                    navController.navigate(item.route)
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = colorResource(id = R.color.pale_green),
+                    indicatorColor = colorResource(id = R.color.white)
+                )
+            )
+        }
+    }
+}
 
