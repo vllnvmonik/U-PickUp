@@ -12,7 +12,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.ClickableNavigationText
 import com.echelon.upickup.components.EditText
@@ -21,7 +21,7 @@ import com.echelon.upickup.components.RoundedButton
 import com.echelon.upickup.components.TitleText
 
 @Composable
-fun SignInScreen(navController: NavController){
+fun SignInScreen(navController: NavHostController){
     Surface (modifier = Modifier
         .fillMaxSize(),
         color = colorResource(id = R.color.background_color)
