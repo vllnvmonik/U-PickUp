@@ -191,7 +191,7 @@ fun BottomNavigationBar(navController: NavHostController) {
             NavigationBarItem(
                 selected = (selectedItem == index),
                 icon = { Icon(
-                    imageVector = item.selectedIcon,
+                    painterResource(id = item.selectedIcon),
                     contentDescription = null
                 ) },
                 onClick = {

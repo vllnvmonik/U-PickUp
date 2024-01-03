@@ -1,15 +1,10 @@
 package com.echelon.upickup.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.echelon.upickup.R
 import com.echelon.upickup.appscreens.CalendarScreen
 import com.echelon.upickup.appscreens.ChatScreen
 import com.echelon.upickup.appscreens.DashboardScreen
@@ -28,12 +23,12 @@ sealed class Screen (val route: String) {
 
 sealed class BottomNavItem(
     val route: String,
-    val selectedIcon: ImageVector,
+    val selectedIcon: Int,
 ) {
-    object DashboardItems: BottomNavItem("dashboard", Icons.Filled.Home)
-    object CalendarItems: BottomNavItem("calendar", Icons.Filled.DateRange)
-    object ChatItems: BottomNavItem("chat", Icons.Filled.Email)
-    object ProfileItems: BottomNavItem("profile", Icons.Filled.Person)
+    object DashboardItems: BottomNavItem("dashboard", R.drawable.house_solid)
+    object CalendarItems: BottomNavItem("calendar", R.drawable.calendar_solid)
+    object ChatItems: BottomNavItem("chat", R.drawable.message_solid)
+    object ProfileItems: BottomNavItem("profile", R.drawable.circle_user_solid)
 }
 
 @Composable
@@ -63,3 +58,18 @@ fun NavController(navController: NavHostController) {
         }
     }
 }
+
+//@Composable
+//fun ShowBottomNavBar(navController: NavHostController) {
+//    val currentRoute = navController.currentBackStackEntry?.destination?.route
+//    Log.d("sdfsdfsdf", "riute $currentRoute")
+//
+//    if (currentRoute in listOf(
+//            Screen.DashboardScreen.route,
+//            Screen.CalendarScreen.route,
+//            Screen.ChatScreen.route,
+//            Screen.ProfileScreen.route
+//        )) {
+//        BottomNavigationBar(navController)
+//    }
+//}
