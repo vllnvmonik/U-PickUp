@@ -195,11 +195,16 @@ fun BottomNavigationBar(navController: NavHostController) {
                     contentDescription = null
                 ) },
                 onClick = {
-                    if (navController.currentBackStack.value.size >=2){
-                        navController.popBackStack()
+                    if (selectedItem != index) {
+                        if (navController.currentBackStack.value.size >= 2) {
+                            navController.popBackStack()
+                        }
+                        selectedItem = index
+                        navController.navigate(item.route){
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
-                    selectedItem = index
-                    navController.navigate(item.route)
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = colorResource(id = R.color.pale_green),
