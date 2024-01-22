@@ -40,8 +40,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.echelon.upickup.R
 import com.echelon.upickup.navigation.BottomNavItem
+import com.echelon.upickup.navigation.Screen
 
 
 @Composable
@@ -178,39 +180,44 @@ fun BottomNavigationBar(navController: NavHostController) {
         BottomNavItem.ChatItems,
         BottomNavItem.ProfileItems
     )
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
-    var selectedItem by rememberSaveable {
-        mutableIntStateOf(0)
-    }
-    NavigationBar (
-        modifier = Modifier
-            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
-        containerColor = colorResource(id = R.color.white)
-    ){
-        items.forEachIndexed{ index, item ->
-            NavigationBarItem(
-                selected = (selectedItem == index),
-                icon = { Icon(
-                    painterResource(id = item.selectedIcon),
-                    contentDescription = null
-                ) },
-                onClick = {
-                    if (selectedItem != index) {
-                        if (navController.currentBackStack.value.size >= 2) {
-                            navController.popBackStack()
+    if (currentRoute !in listOf(Screen.AuthRoute.route, Screen.SignInScreen.route, Screen.SignUpScreen.route)) {
+        var selectedItem by rememberSaveable {
+            mutableIntStateOf(0)
+        }
+        NavigationBar (
+            modifier = Modifier
+                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
+            containerColor = colorResource(id = R.color.white)
+        ){
+            items.forEachIndexed{ index, item ->
+                NavigationBarItem(
+                    selected = (selectedItem == index),
+                    icon = { Icon(
+                        painterResource(id = item.selectedIcon),
+                        contentDescription = null
+                    ) },
+                    onClick = {
+                        if (selectedItem != index) {
+                            if (navController.currentBackStack.value.size >= 2) {
+                                navController.popBackStack()
+                            }
+                            selectedItem = index
+                            navController.navigate(item.route){
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         }
-                        selectedItem = index
-                        navController.navigate(item.route){
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-                },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = colorResource(id = R.color.pale_green),
-                    indicatorColor = colorResource(id = R.color.white)
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = colorResource(id = R.color.selected_nav_icon),
+                        indicatorColor = colorResource(id = R.color.white),
+                        unselectedIconColor = colorResource(id = R.color.unselected_nav_icon),
+                    )
                 )
-            )
+            }
         }
     }
 }
