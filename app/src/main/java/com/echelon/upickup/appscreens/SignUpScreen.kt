@@ -20,6 +20,7 @@ import com.echelon.upickup.components.EditText
 import com.echelon.upickup.components.LogoImage
 import com.echelon.upickup.components.RoundedButton
 import com.echelon.upickup.components.TitleText
+import com.echelon.upickup.navigation.Screen
 
 @Composable
 fun SignUpScreen(navController: NavHostController){
@@ -48,14 +49,14 @@ fun SignUpScreen(navController: NavHostController){
             RoundedButton(
                 text = stringResource(R.string.sign_up)
             ) {
-                navController.navigate("dashboard")
+                navController.navigate(Screen.DashboardScreen.route)
             }
             Spacer(modifier = Modifier.height(90.dp))
 
             ClickableNavigationText(
                 normalText = "Already have an account?",
                 clickableText = "SIGN IN!",
-                navigateTo = "signin",
+                navigateTo = Screen.SignInScreen.route,
                 navController = navController
             )
         }
