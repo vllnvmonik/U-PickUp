@@ -1,17 +1,26 @@
 package com.echelon.upickup.components
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -190,7 +199,7 @@ fun BottomNavigationBar(navController: NavHostController) {
         NavigationBar (
             modifier = Modifier
                 .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
-            containerColor = colorResource(id = R.color.white)
+            containerColor = colorResource(id = R.color.bottom_bar)
         ){
             items.forEachIndexed{ index, item ->
                 NavigationBarItem(
@@ -200,7 +209,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                         contentDescription = null
                     ) },
                     onClick = {
-                        if (selectedItem != index) {
+                        if (selectedItem != index){
                             if (navController.currentBackStack.value.size >= 2) {
                                 navController.popBackStack()
                             }
@@ -213,7 +222,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                     },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = colorResource(id = R.color.selected_nav_icon),
-                        indicatorColor = colorResource(id = R.color.white),
+                        indicatorColor = colorResource(id = R.color.bottom_bar),
                         unselectedIconColor = colorResource(id = R.color.unselected_nav_icon),
                     )
                 )
@@ -222,3 +231,45 @@ fun BottomNavigationBar(navController: NavHostController) {
     }
 }
 
+@Composable
+fun CustomImage(width: Int, height: Int, imageResourceID: Int) {
+    Image(
+        modifier = Modifier
+            .width(width.dp)
+            .height(height.dp)
+        ,
+        painter = painterResource(id = imageResourceID),
+        contentDescription = "Image"
+    )
+}
+// dashboard screen components
+@Composable
+fun FeedBox() {
+    LazyColumn(contentPadding = PaddingValues(16.dp)){
+        items(10){ item ->
+            FeedBoxLayout(modifier = Modifier)
+        }
+    }
+}
+@Composable
+fun FeedBoxLayout(modifier: Modifier) {
+    Card(
+        modifier = Modifier
+            .padding(bottom = 15.dp)
+            .fillMaxWidth()
+            .height(250.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.background_color)
+        ),
+        elevation = CardDefaults.cardElevation(3.dp),
+        border = BorderStroke(2.dp, colorResource(id = R.color.border_gray))
+    ) {
+        Box(
+            Modifier
+                .padding(10.dp)
+                .fillMaxSize(),
+        ){
+        }
+    }
+}
