@@ -1,10 +1,13 @@
 package com.echelon.upickup.components
 
 import android.annotation.SuppressLint
+import android.widget.CalendarView
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,8 +48,10 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -273,3 +278,105 @@ fun FeedBoxLayout(modifier: Modifier) {
         }
     }
 }
+
+// calendar components
+@Composable
+fun CustomColorTitleText(
+    text: String,
+    color: Int
+) {
+    Text(
+        text = text,
+        style = TextStyle(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = colorResource(id = color)
+        )
+    )
+}
+
+@Composable
+fun CalendarBox() {
+    var date by remember {
+        mutableStateOf("")
+    }
+
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
+        AndroidView(factory = { context ->
+            CalendarView(context).apply {
+//                setDateTextAppearance(R.style.calendar_date_text) // changes the color of the dates text
+            }
+        }, modifier = Modifier
+            .width(400.dp)
+            .height(350.dp)
+            .border(
+                2.dp, colorResource(id = R.color.border_gray),
+                shape = RoundedCornerShape(10.dp)
+            )
+        ) { calendarView ->
+
+
+        }
+    }
+}
+
+@Composable
+fun CalendarAnnouncementBox() {
+    Card(
+        modifier = Modifier
+            .padding(start = 15.dp, end = 15.dp)
+            .width(400.dp)
+            .height(320.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.calendar_announcement_box)
+        ),
+        elevation = CardDefaults.cardElevation(3.dp),
+        border = BorderStroke(2.dp, colorResource(id = R.color.unselected_nav_icon))
+    ) {
+        Box(
+            Modifier
+                .padding(20.dp)
+                .fillMaxSize(),
+        ){
+            Column {
+                Spacer(modifier = Modifier.height(10.dp))
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    Icon(
+                        painter = painterResource(id = R.drawable.bullhorn_solid),
+                        contentDescription = "announcement",
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp),
+                        tint = colorResource(id = R.color.slate)
+                    )
+                    Spacer(modifier = Modifier.padding(10.dp))
+                    CustomColorTitleText(text = "Announcements will appear here!", R.color.slate)
+                }
+                Column (
+                    modifier = Modifier
+                        .padding(5.dp)
+                ){
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.padding(5.dp))
+                    Text(text = "Announcements will appear here! Announcements will appear here! Announcements will appear here! Announcements will appear here!Announcements will appear here!",
+                        overflow = TextOverflow.Clip,
+                        style = TextStyle(
+                            fontSize = 14.sp
+                        )
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+
+
