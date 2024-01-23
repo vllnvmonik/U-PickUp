@@ -9,6 +9,7 @@ import com.echelon.upickup.R
 import com.echelon.upickup.appscreens.CalendarScreen
 import com.echelon.upickup.appscreens.ChatScreen
 import com.echelon.upickup.appscreens.DashboardScreen
+import com.echelon.upickup.appscreens.ForgotPasswordScreen
 import com.echelon.upickup.appscreens.ProfileScreen
 import com.echelon.upickup.appscreens.SignInScreen
 import com.echelon.upickup.appscreens.SignUpScreen
@@ -16,6 +17,8 @@ import com.echelon.upickup.appscreens.SignUpScreen
 sealed class Screen (val route: String) {
     object SignUpScreen: Screen("signup")
     object SignInScreen: Screen("signin")
+    object ForgotPasswordScreen: Screen("forgot")
+
     object DashboardScreen: Screen("dashboard")
     object CalendarScreen: Screen("calendar")
     object ChatScreen: Screen("chat")
@@ -49,6 +52,9 @@ fun NavController(navController: NavHostController) {
             }
             composable(Screen.SignInScreen.route) {
                 SignInScreen(navController = navController)
+            }
+            composable(Screen.ForgotPasswordScreen.route){
+                ForgotPasswordScreen(navController = navController)
             }
         }
         // application navigation route after successful log in
