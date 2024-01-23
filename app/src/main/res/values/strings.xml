@@ -9,4 +9,6 @@
     <string name="name">Name</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="sign_up">SIGN UP</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="forgot_password_uppercase">FORGOT PASSWORD</string>
 </resources>
