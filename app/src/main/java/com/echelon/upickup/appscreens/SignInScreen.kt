@@ -3,7 +3,9 @@ package com.echelon.upickup.appscreens
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,6 +42,21 @@ fun SignInScreen(navController: NavHostController){
             EditText(title = stringResource(R.string.password), KeyboardType.Text)
             Spacer(modifier = Modifier.height(5.dp))
             EditText(stringResource(R.string.id_number), KeyboardType.Number)
+            Spacer(modifier = Modifier.height(10.dp))
+            Column (
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 60.dp)
+            ){
+                ClickableNavigationText(
+                    normalText = "",
+                    clickableText = "Forgot Password?",
+                    navigateTo = Screen.ForgotPasswordScreen.route,
+                    navController = navController
+                )
+            }
+
             Spacer(modifier = Modifier.height(50.dp))
             RoundedButton(
                 text = stringResource(R.string.sign_in)
