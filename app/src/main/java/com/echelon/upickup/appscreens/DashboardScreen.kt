@@ -24,7 +24,8 @@ fun DashboardScreen(navController: NavHostController) {
             contentAlignment = Alignment.Center)
         {
             Column (
-                modifier = Modifier,
+                modifier = Modifier
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 CustomImage(100,100, R.drawable.logo)
