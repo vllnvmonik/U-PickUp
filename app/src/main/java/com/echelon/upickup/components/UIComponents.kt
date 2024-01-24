@@ -313,13 +313,12 @@ fun CalendarBox() {
             }
         }, modifier = Modifier
             .width(400.dp)
-            .height(350.dp)
+            .height(330.dp)
             .border(
-                2.dp, colorResource(id = R.color.border_gray),
+                1.5.dp, colorResource(id = R.color.border_gray),
                 shape = RoundedCornerShape(10.dp)
             )
         ) { calendarView ->
-
 
         }
     }
