@@ -17,4 +17,7 @@
     <color name="border_gray">#9E9E9E</color>
     <color name="calendar_announcement_box">#B0C4B1</color>
     <color name="slate">#26282A</color>
+    <color name="dark_green">#3B5534</color>
+    <color name="class_details_box">#EDEDED</color>
+    <color name="dark_red">#981616</color>
 </resources>
