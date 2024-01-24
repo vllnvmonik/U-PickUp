@@ -11,4 +11,7 @@
     <string name="sign_up">SIGN UP</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="forgot_password_uppercase">FORGOT PASSWORD</string>
+    <string name="profile_name">MONICA VILLANUEVA</string>
+    <string name="profile_program">BSIT</string>
+    <string name="logout">LOGOUT</string>
 </resources>
