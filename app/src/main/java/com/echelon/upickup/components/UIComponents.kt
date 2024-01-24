@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.widget.CalendarView
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -191,7 +192,7 @@ fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
         BottomNavItem.DashboardItems,
         BottomNavItem.CalendarItems,
-        BottomNavItem.ChatItems,
+//        BottomNavItem.ChatItems,
         BottomNavItem.ProfileItems
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -267,8 +268,8 @@ fun FeedBoxLayout(modifier: Modifier) {
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.background_color)
         ),
-        elevation = CardDefaults.cardElevation(3.dp),
-        border = BorderStroke(2.dp, colorResource(id = R.color.border_gray))
+        elevation = CardDefaults.cardElevation(5.dp),
+//        border = BorderStroke(2.dp, colorResource(id = R.color.border_gray))
     ) {
         Box(
             Modifier
@@ -283,12 +284,13 @@ fun FeedBoxLayout(modifier: Modifier) {
 @Composable
 fun CustomColorTitleText(
     text: String,
-    color: Int
+    color: Int,
+    weight: Int
 ) {
     Text(
         text = text,
         style = TextStyle(
-            fontSize = 16.sp,
+            fontSize = weight.sp,
             fontWeight = FontWeight.Bold,
             color = colorResource(id = color)
         )
@@ -357,7 +359,7 @@ fun CalendarAnnouncementBox() {
                         tint = colorResource(id = R.color.slate)
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
-                    CustomColorTitleText(text = "Announcements will appear here!", R.color.slate)
+                    CustomColorTitleText(text = "Announcements will appear here!", R.color.slate, 16)
                 }
                 Column (
                     modifier = Modifier
@@ -377,6 +379,122 @@ fun CalendarAnnouncementBox() {
     }
 }
 
-
-
-
+// profile components
+@Composable
+fun ClassDetailsBox() {
+    Card(
+        modifier = Modifier
+            .padding(start = 15.dp, end = 15.dp)
+            .width(350.dp)
+            .height(250.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.class_details_box)
+        ),
+        elevation = CardDefaults.cardElevation(3.dp),
+//        border = BorderStroke(1.dp, colorResource(id = R.color.border_gray))
+    ) {
+        Box(
+            Modifier
+                .padding(20.dp)
+                .fillMaxSize(),
+        ) {
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CustomImage(width = 70, height = 70, imageResourceID = R.drawable.logo)
+                    CustomColorTitleText(text = "CLASS DETAILS", R.color.dark_green, 16)
+                }
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CustomDivider(height = 2, width = 270, color = R.color.border_gray)
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .padding(15.dp),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(10.dp)
+                    ) {
+                        CustomColorTitleText(
+                            text = "DEPARTMENT",
+                            color = R.color.dark_green,
+                            weight = 16
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        CustomColorTitleText(
+                            text = "YEAR",
+                            color = R.color.dark_green,
+                            weight = 16
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        CustomColorTitleText(
+                            text = "BLOCK",
+                            color = R.color.dark_green,
+                            weight = 16
+                        )
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Spacer(modifier = Modifier.width(10.dp))
+                        CustomDivider(height = 100, width = 2, color = R.color.border_gray)
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
+                    Column(
+                        modifier = Modifier
+                            .padding(10.dp)
+                    ) {
+                        CustomColorTitleText(
+                            text = "CITE",
+                            color = R.color.dark_green,
+                            weight = 16
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        CustomColorTitleText(
+                            text = "2",
+                            color = R.color.dark_green,
+                            weight = 16
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        CustomColorTitleText(
+                            text = "3",
+                            color = R.color.dark_green,
+                            weight = 16
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+@Composable
+fun CustomDivider(height: Int, width: Int, color: Int) {
+    Box(
+        modifier = Modifier
+            .height(height.dp)
+            .width(width.dp)
+            .background(colorResource(id = color))
+    )
+}
+@Composable
+fun LogoutButton(text: String, onClick: () -> Unit) {
+    Button(onClick = onClick,
+        modifier = Modifier
+            .width(220.dp)
+            .height(45.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.dark_red))
+    ) {
+        ButtonText(text = text)
+    }
+}
