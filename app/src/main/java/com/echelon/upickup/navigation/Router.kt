@@ -7,7 +7,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.echelon.upickup.R
 import com.echelon.upickup.appscreens.CalendarScreen
-import com.echelon.upickup.appscreens.ChatScreen
 import com.echelon.upickup.appscreens.DashboardScreen
 import com.echelon.upickup.appscreens.ForgotPasswordScreen
 import com.echelon.upickup.appscreens.ProfileScreen
@@ -21,7 +20,7 @@ sealed class Screen (val route: String) {
 
     object DashboardScreen: Screen("dashboard")
     object CalendarScreen: Screen("calendar")
-    object ChatScreen: Screen("chat")
+//    object ChatScreen: Screen("chat")
     object ProfileScreen: Screen("profile")
     object AuthRoute: Screen("auth")
     object AppRoute: Screen("app")
@@ -34,7 +33,7 @@ sealed class BottomNavItem(
 ) {
     object DashboardItems: BottomNavItem("dashboard", R.drawable.house_solid)
     object CalendarItems: BottomNavItem("calendar", R.drawable.calendar_solid)
-    object ChatItems: BottomNavItem("chat", R.drawable.message_solid)
+//    object ChatItems: BottomNavItem("chat", R.drawable.message_solid)
     object ProfileItems: BottomNavItem("profile", R.drawable.circle_user_solid)
 }
 
@@ -65,9 +64,9 @@ fun NavController(navController: NavHostController) {
             composable(Screen.CalendarScreen.route) {
                 CalendarScreen(navController = navController)
             }
-            composable(Screen.ChatScreen.route) {
-                ChatScreen(navController = navController)
-            }
+//            composable(Screen.ChatScreen.route) {
+//                ChatScreen(navController = navController)
+//            }
             composable(Screen.ProfileScreen.route) {
                 ProfileScreen(navController = navController)
             }
