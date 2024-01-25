@@ -20,4 +20,5 @@
     <color name="dark_green">#3B5534</color>
     <color name="class_details_box">#EDEDED</color>
     <color name="dark_red">#981616</color>
+    <color name="user_icon">#CCCCCC</color>
 </resources>
