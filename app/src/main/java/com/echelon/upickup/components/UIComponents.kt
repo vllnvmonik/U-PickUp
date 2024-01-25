@@ -1,11 +1,15 @@
 package com.echelon.upickup.components
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.widget.CalendarView
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +20,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -43,6 +49,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -56,6 +64,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import coil.compose.rememberAsyncImagePainter
 import com.echelon.upickup.R
 import com.echelon.upickup.navigation.BottomNavItem
 import com.echelon.upickup.navigation.Screen
@@ -379,6 +388,70 @@ fun CalendarAnnouncementBox() {
 }
 
 // profile components
+
+// image picker from gallery
+@Composable
+fun ProfileImage() {
+    val imageUri = rememberSaveable { mutableStateOf("")}
+    val painter = rememberAsyncImagePainter(
+        imageUri.value.ifEmpty {
+            R.drawable.logo
+        }
+    )
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ){uri: Uri? ->
+        uri?.let { imageUri.value = it.toString() }
+    }
+
+    Box(
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            painter = painter,
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(300.dp)
+                .background(colorResource(id = R.color.class_details_box))
+                .clickable { launcher.launch("image/*") }
+                .shadow(shape = CircleShape, elevation = 3.dp)
+        )
+    }
+}
+
+// static profile
+@Composable
+fun StaticProfile() {
+    Card(
+        modifier = Modifier
+            .padding(start = 15.dp, end = 15.dp)
+            .width(300.dp)
+            .height(300.dp),
+        shape = RoundedCornerShape(500.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.dark_green)
+        ),
+        elevation = CardDefaults.cardElevation(3.dp),
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.user_solid),
+                contentDescription = "user",
+                modifier = Modifier
+                    .height(130.dp)
+                    .width(130.dp),
+                tint = colorResource(id = R.color.user_icon)
+            )
+        }
+    }
+}
+
 @Composable
 fun ClassDetailsBox() {
     Card(
