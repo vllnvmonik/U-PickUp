@@ -19,11 +19,13 @@ import com.echelon.upickup.R
 import com.echelon.upickup.components.ClassDetailsBox
 import com.echelon.upickup.components.CustomColorTitleText
 import com.echelon.upickup.components.LogoutButton
+import com.echelon.upickup.components.StaticProfile
 
 @Composable
 fun ProfileScreen(navController: NavHostController) {
     Surface (modifier = Modifier
         .fillMaxSize(),
+//        .verticalScroll(rememberScrollState()), // for scrollable screen
         color = colorResource(id = R.color.background_color)
     ){
         Box(
@@ -37,11 +39,15 @@ fun ProfileScreen(navController: NavHostController) {
                 Arrangement.Center,
                 Alignment.CenterHorizontally
             ){
+                Spacer(modifier = Modifier.height(10.dp))
+//                ProfileImage()
+                StaticProfile()
+                Spacer(modifier = Modifier.height(20.dp))
                 CustomColorTitleText(text = stringResource(R.string.profile_name), color = R.color.dark_green, 22)
                 CustomColorTitleText(text = stringResource(R.string.profile_program), color = R.color.dark_green, 16)
                 Spacer(modifier = Modifier.height(20.dp))
                 ClassDetailsBox()
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 LogoutButton(text = stringResource(R.string.logout)) {
                     
                 }
