@@ -71,4 +71,6 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
     // for navigation
     implementation ("androidx.navigation:navigation-compose:2.7.5")
+    // for image loading
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }
