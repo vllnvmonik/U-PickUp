@@ -50,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -112,40 +113,45 @@ fun BasicText(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditText(
+    value: String,
+    onValueChange: (String) -> Unit,
     title: String,
-    keyboardType: KeyboardType
+    keyboardType: KeyboardType,
+    isError: Boolean = false,
+    errorMessage: String? = null
 ) {
-    var text by remember {
-        mutableStateOf("")
+    Column {
+        TextField(
+            colors = TextFieldDefaults.textFieldColors(
+                unfocusedLabelColor = colorResource(id = R.color.edit_text_gray),
+                focusedLabelColor = colorResource(id = R.color.edit_text_gray),
+                containerColor = colorResource(id = R.color.background_color),
+            ),
+            modifier = Modifier
+                .width(300.dp)
+                .height(60.dp),
+            value = value,
+            onValueChange = onValueChange,
+            textStyle = TextStyle(fontSize = 18.sp),
+            label = { Text(title) },
+            placeholder = { Text(title) },
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            isError = isError
+        )
+        if (isError && !errorMessage.isNullOrBlank()) {
+            Text(
+                text = errorMessage,
+                modifier = Modifier.padding(start = 12.dp),
+                color = Color.Red
+            )
+        }
     }
-    TextField(
-        colors = TextFieldDefaults.textFieldColors(
-            unfocusedLabelColor = colorResource(id = R.color.edit_text_gray),
-            focusedLabelColor = colorResource(id = R.color.edit_text_gray),
-            containerColor = colorResource(id = R.color.background_color)
-        ),
-        modifier = Modifier
-            .width(300.dp)
-            .height(60.dp),
-        value = text, onValueChange = { newText ->
-        text = newText
-        },
-        textStyle = TextStyle(
-            fontSize = 18.sp
-        ),
-        label = {
-            Text(title)
-        },
-        placeholder = {
-            Text(title)
-        },
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
-    )
 }
 
 @Composable
-fun RoundedButton(text: String, onClick: () -> Unit) {
+fun RoundedButton(text: String, onClick: () -> Unit, enabled: Boolean = true) {
     Button(onClick = onClick,
+        enabled = enabled,
         modifier = Modifier
             .width(220.dp)
             .height(45.dp),
@@ -195,7 +201,7 @@ fun ClickableNavigationText(
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RestrictedApi")
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
