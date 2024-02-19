@@ -2,6 +2,7 @@ package com.echelon.upickup.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.echelon.upickup.model.ForgotPassword
 import com.echelon.upickup.navigation.Screen
 import com.echelon.upickup.uistate.ForgotPasswordUIState
 import com.echelon.upickup.validation.ForgotPasswordValidation
@@ -18,7 +19,7 @@ class ForgotPasswordViewModel(private val navController: NavController) : ViewMo
     }
 
     fun resetPassword() {
-        val email = _uiState.value.email
+        val email = ForgotPassword(_uiState.value.email)
         //reset pass logic
         //can send a reset password link to the provided email address
         navController.navigate(Screen.SignInScreen.route)
