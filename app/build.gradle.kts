@@ -73,4 +73,8 @@ dependencies {
     implementation ("androidx.navigation:navigation-compose:2.7.5")
     // for image loading
     implementation("io.coil-kt:coil-compose:2.5.0")
+    //for retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    //for gson converter
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }
