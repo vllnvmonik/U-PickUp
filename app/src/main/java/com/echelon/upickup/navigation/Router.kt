@@ -1,5 +1,6 @@
 package com.echelon.upickup.navigation
 
+import SignInViewModel
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,6 +13,8 @@ import com.echelon.upickup.appscreens.ForgotPasswordScreen
 import com.echelon.upickup.appscreens.ProfileScreen
 import com.echelon.upickup.appscreens.SignInScreen
 import com.echelon.upickup.appscreens.SignUpScreen
+import com.echelon.upickup.viewmodel.ForgotPasswordViewModel
+import com.echelon.upickup.viewmodel.SignUpViewModel
 
 sealed class Screen (val route: String) {
     object SignUpScreen: Screen("signup")
@@ -47,13 +50,13 @@ fun NavController(navController: NavHostController) {
         // application navigation route before logging in
         navigation(startDestination = Screen.SignInScreen.route, route = Screen.AuthRoute.route){
             composable(Screen.SignUpScreen.route) {
-                SignUpScreen(navController = navController)
+                SignUpScreen(navController = navController, viewModel = SignUpViewModel(navController))
             }
             composable(Screen.SignInScreen.route) {
-                SignInScreen(navController = navController)
+                SignInScreen(navController = navController, viewModel = SignInViewModel(navController))
             }
             composable(Screen.ForgotPasswordScreen.route){
-                ForgotPasswordScreen(navController = navController)
+                ForgotPasswordScreen(navController = navController, viewModel = ForgotPasswordViewModel(navController))
             }
         }
         // application navigation route after successful log in
