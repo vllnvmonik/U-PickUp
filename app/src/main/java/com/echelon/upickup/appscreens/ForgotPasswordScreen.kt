@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -26,9 +28,13 @@ import com.echelon.upickup.components.LogoImage
 import com.echelon.upickup.components.RoundedButton
 import com.echelon.upickup.components.TitleText
 import com.echelon.upickup.navigation.Screen
+import com.echelon.upickup.validation.ForgotPasswordValidation
+import com.echelon.upickup.viewmodel.ForgotPasswordViewModel
 
 @Composable
-fun ForgotPasswordScreen(navController: NavHostController){
+fun ForgotPasswordScreen(navController: NavHostController, viewModel: ForgotPasswordViewModel){
+    val uiState by viewModel.uiState.collectAsState()
+
     Surface (modifier = Modifier
         .fillMaxSize(),
         color = colorResource(id = R.color.background_color)
@@ -41,13 +47,20 @@ fun ForgotPasswordScreen(navController: NavHostController){
             Spacer(modifier = Modifier.height(20.dp))
             TitleText(text = stringResource(R.string.forgot_password_uppercase))
             Spacer(modifier = Modifier.height(40.dp))
-            EditText(title = stringResource(id = R.string.e_mail), KeyboardType.Text)
+            EditText(
+                value = uiState.email,
+                onValueChange = viewModel::onEmailChanged,
+                title = stringResource(R.string.e_mail),
+                keyboardType = KeyboardType.Text,
+                isError =  uiState.email.isNotBlank() && !ForgotPasswordValidation.isEmailValid(uiState.email),
+                errorMessage = "Must be in abc.up@phinmaed.com format"
+            )
             Spacer(modifier = Modifier.height(50.dp))
             RoundedButton(
-                text = "RESET PASSWORD"
-            ) {
-                navController.navigate(Screen.DashboardScreen.route)
-            }
+                text = stringResource(R.string.reset_password),
+                onClick = { viewModel.resetPassword() },
+                enabled = uiState.isEmailValid
+            )
             Spacer(modifier = Modifier.height(50.dp))
             Column (
 
