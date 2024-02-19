@@ -1,6 +1,5 @@
 package com.echelon.upickup.navigation
 
-import SignInViewModel
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -14,6 +13,7 @@ import com.echelon.upickup.appscreens.ProfileScreen
 import com.echelon.upickup.appscreens.SignInScreen
 import com.echelon.upickup.appscreens.SignUpScreen
 import com.echelon.upickup.viewmodel.ForgotPasswordViewModel
+import com.echelon.upickup.viewmodel.SignInViewModel
 import com.echelon.upickup.viewmodel.SignUpViewModel
 
 sealed class Screen (val route: String) {
