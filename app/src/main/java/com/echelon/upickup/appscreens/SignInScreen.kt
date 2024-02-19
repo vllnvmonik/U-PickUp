@@ -1,6 +1,5 @@
 package com.echelon.upickup.appscreens
 
-import SignInViewModel
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +25,7 @@ import com.echelon.upickup.components.RoundedButton
 import com.echelon.upickup.components.TitleText
 import com.echelon.upickup.navigation.Screen
 import com.echelon.upickup.validation.SignInValidation
+import com.echelon.upickup.viewmodel.SignInViewModel
 
 @Composable
 fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
@@ -60,7 +60,7 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChanged,
                 title = stringResource(R.string.password),
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Password,
                 isError = uiState.password.isNotBlank() && !SignInValidation.isPasswordValid(uiState.password)
             )
 
