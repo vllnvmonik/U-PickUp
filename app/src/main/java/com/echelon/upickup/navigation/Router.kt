@@ -13,6 +13,7 @@ import com.echelon.upickup.appscreens.ProfileScreen
 import com.echelon.upickup.appscreens.SignInScreen
 import com.echelon.upickup.appscreens.SignUpScreen
 import com.echelon.upickup.viewmodel.ForgotPasswordViewModel
+import com.echelon.upickup.viewmodel.ProfileViewModel
 import com.echelon.upickup.viewmodel.SignInViewModel
 import com.echelon.upickup.viewmodel.SignUpViewModel
 
@@ -71,7 +72,7 @@ fun NavController(navController: NavHostController) {
 //                ChatScreen(navController = navController)
 //            }
             composable(Screen.ProfileScreen.route) {
-                ProfileScreen(navController = navController)
+                ProfileScreen(navController = navController, viewModel = ProfileViewModel())
             }
         }
     }

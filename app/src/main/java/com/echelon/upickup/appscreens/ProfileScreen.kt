@@ -31,46 +31,62 @@ import com.echelon.upickup.viewmodel.ProfileViewModel
 @Composable
 fun ProfileScreen(navController: NavHostController, viewModel: ProfileViewModel) {
     val studentDetails by viewModel.studentDetails.collectAsState()
-    Log.d("ProfileScreen", "Student details: $studentDetails") // Add this line for debugging
+    Log.d("ProfileScreen", "Student details: $studentDetails")
 
-    Surface (modifier = Modifier
-        .fillMaxSize()
-        .verticalScroll(rememberScrollState()), // for scrollable screen
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()), // for scrollable screen
         color = colorResource(id = R.color.background_color)
-    ){
+    ) {
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center)
+            contentAlignment = Alignment.Center
+        )
         {
-            Column (
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(10.dp),
                 Arrangement.Center,
                 Alignment.CenterHorizontally
-            ){
+            ) {
                 Spacer(modifier = Modifier.height(10.dp))
 //                ProfileImage()
                 StaticProfile()
                 Spacer(modifier = Modifier.height(20.dp))
-                studentDetails?.let { CustomColorTitleText(text = it.first_name, color = R.color.dark_green, 22, fontWeight = FontWeight.Medium) }
-                studentDetails?.let { CustomColorTitleText(text = it.program, color = R.color.dark_green, 16, FontWeight.Medium) }
-                Spacer(modifier = Modifier.height(20.dp))
                 studentDetails.let { details ->
                     if (details != null) {
-                        ClassDetailsBox(
-                            email = details.email_ad,
-                            studentId = details.student_id,
-                            gender = details.gender,
-                            age = details.age,
-                            program = details.program,
-                            department = details.department,
+                        CustomColorTitleText(
+                            text = details.student.first_name + " " + details.student.last_name,
+                            color = R.color.dark_green,
+                            22,
+                            fontWeight = FontWeight.Medium
+                        )
+                        CustomColorTitleText(
+                            text = details.student.program,
+                            color = R.color.dark_green,
+                            16,
+                            FontWeight.Medium
                         )
                     }
-                }
-                Spacer(modifier = Modifier.height(20.dp))
-                LogoutButton(text = stringResource(R.string.logout)) {
+                    Spacer(modifier = Modifier.height(20.dp))
+                    studentDetails.let { details ->
+                        if (details != null) {
+                            ClassDetailsBox(
+                                email = details.student.email_ad,
+                                studentId = details.student.student_id,
+                                gender = details.student.gender,
+                                age = details.student.age,
+                                program = details.student.program,
+                                department = details.student.department,
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(20.dp))
+                    LogoutButton(text = stringResource(R.string.logout)) {
 
+                    }
                 }
             }
         }

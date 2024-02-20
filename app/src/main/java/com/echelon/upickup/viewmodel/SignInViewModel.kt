@@ -17,6 +17,7 @@ class SignInViewModel(private val navController: NavController) : ViewModel() {
     private val signInRepository = SignInRepository()
     private val _uiState = MutableStateFlow(SignInUIState())
     val uiState: StateFlow<SignInUIState> = _uiState
+    private val profileViewModel = ProfileViewModel()
 
 
     fun onIdNumberChanged(idNumber: String) {
@@ -62,7 +63,7 @@ class SignInViewModel(private val navController: NavController) : ViewModel() {
                         "SignInViewModel",
                         "Sign-in successful. Token: $token, User ID: $id, Student ID: $studentId, Email: $email, First Name: $firstName, Middle Name: $middleName, Last Name: $lastName, Age: $age, Gender: $gender, Department: $department, Program: $program"
                     )
-
+                    profileViewModel.getStudentDetails(id)
                     navController.navigate(Screen.DashboardScreen.route)
                 } else {
                     Toast.makeText(
