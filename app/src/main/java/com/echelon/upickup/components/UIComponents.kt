@@ -208,6 +208,7 @@ fun BottomNavigationBar(navController: NavHostController) {
         BottomNavItem.DashboardItems,
         BottomNavItem.CalendarItems,
 //        BottomNavItem.ChatItems,
+        BottomNavItem.InventoryItems,
         BottomNavItem.ProfileItems
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
