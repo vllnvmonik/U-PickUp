@@ -460,7 +460,15 @@ fun StaticProfile() {
 }
 
 @Composable
-fun ClassDetailsBox() {
+fun ClassDetailsBox(
+    email: String,
+    studentId: String,
+    gender: String,
+    age: Int,
+    program: String,
+    department: String,
+
+    ) {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -511,7 +519,7 @@ fun ClassDetailsBox() {
                             fontWeight = FontWeight.Normal
                         )
                         CustomColorTitleText(
-                            text = "abcd.up@phinmaed.com",
+                            text = email,
                             color = R.color.dark_green,
                             weight = 16,
                             fontWeight = FontWeight.Medium
@@ -524,7 +532,7 @@ fun ClassDetailsBox() {
                             fontWeight = FontWeight.Normal
                         )
                         CustomColorTitleText(
-                            text = "01-2345-678900",
+                            text = studentId,
                             color = R.color.dark_green,
                             weight = 16,
                             fontWeight = FontWeight.Medium
@@ -537,7 +545,7 @@ fun ClassDetailsBox() {
                             fontWeight = FontWeight.Normal
                         )
                         CustomColorTitleText(
-                            text = "Female",
+                            text = gender,
                             color = R.color.dark_green,
                             weight = 16,
                             fontWeight = FontWeight.Medium
@@ -550,7 +558,7 @@ fun ClassDetailsBox() {
                             fontWeight = FontWeight.Normal
                         )
                         CustomColorTitleText(
-                            text = "21",
+                            text = "$age",
                             color = R.color.dark_green,
                             weight = 16,
                             fontWeight = FontWeight.Medium
@@ -567,7 +575,7 @@ fun ClassDetailsBox() {
                             fontWeight = FontWeight.Normal
                         )
                         CustomColorTitleText(
-                            text = "IT",
+                            text = program,
                             color = R.color.dark_green,
                             weight = 16,
                             fontWeight = FontWeight.Medium
@@ -580,7 +588,7 @@ fun ClassDetailsBox() {
                             fontWeight = FontWeight.Normal
                         )
                         CustomColorTitleText(
-                            text = "CITE",
+                            text = department,
                             color = R.color.dark_green,
                             weight = 16,
                             fontWeight = FontWeight.Medium
