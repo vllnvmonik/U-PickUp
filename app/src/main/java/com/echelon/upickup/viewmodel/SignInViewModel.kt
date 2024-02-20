@@ -1,4 +1,5 @@
 package com.echelon.upickup.viewmodel
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,12 +36,41 @@ class SignInViewModel(private val navController: NavController) : ViewModel() {
     }
 
     fun signIn() {
-        // the credentials will be used for authentication
         val credentials = SignIn(_uiState.value.idNumber, _uiState.value.password)
         viewModelScope.launch {
             val response = signInRepository.signIn(credentials)
-            if (response != null) {
-                navController.navigate(Screen.DashboardScreen.route)
+
+            if (response.isSuccessful) {
+                val signInResponse = response.body()
+
+                if (signInResponse != null) {
+                    val token = signInResponse.token
+                    val studentData = signInResponse.data
+
+                    val id = studentData.id
+                    val studentId = studentData.student_id
+                    val email = studentData.email_ad
+                    val firstName = studentData.first_name
+                    val middleName = studentData.middle_name
+                    val lastName = studentData.last_name
+                    val age = studentData.age
+                    val gender = studentData.gender
+                    val department = studentData.department
+                    val program = studentData.program
+
+                    Log.d(
+                        "SignInViewModel",
+                        "Sign-in successful. Token: $token, User ID: $id, Student ID: $studentId, Email: $email, First Name: $firstName, Middle Name: $middleName, Last Name: $lastName, Age: $age, Gender: $gender, Department: $department, Program: $program"
+                    )
+
+                    navController.navigate(Screen.DashboardScreen.route)
+                } else {
+                    Toast.makeText(
+                        navController.context,
+                        "Sign-in failed. Please try again.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             } else {
                 Toast.makeText(
                     navController.context,
