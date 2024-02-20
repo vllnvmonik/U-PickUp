@@ -300,13 +300,14 @@ fun FeedBoxLayout(modifier: Modifier) {
 fun CustomColorTitleText(
     text: String,
     color: Int,
-    weight: Int
+    weight: Int,
+    fontWeight: FontWeight
 ) {
     Text(
         text = text,
         style = TextStyle(
             fontSize = weight.sp,
-            fontWeight = FontWeight.Bold,
+            fontWeight = fontWeight,
             color = colorResource(id = color)
         )
     )
@@ -373,7 +374,7 @@ fun CalendarAnnouncementBox() {
                         tint = colorResource(id = R.color.slate)
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
-                    CustomColorTitleText(text = "Announcements will appear here!", R.color.slate, 16)
+                    CustomColorTitleText(text = "Announcements will appear here!", R.color.slate, 16, fontWeight = FontWeight.Normal)
                 }
                 Column (
                     modifier = Modifier
@@ -433,8 +434,8 @@ fun StaticProfile() {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
-            .width(300.dp)
-            .height(300.dp),
+            .width(200.dp)
+            .height(200.dp),
         shape = RoundedCornerShape(500.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.dark_green)
@@ -450,8 +451,8 @@ fun StaticProfile() {
                 painter = painterResource(id = R.drawable.user_solid),
                 contentDescription = "user",
                 modifier = Modifier
-                    .height(130.dp)
-                    .width(130.dp),
+                    .height(80.dp)
+                    .width(80.dp),
                 tint = colorResource(id = R.color.user_icon)
             )
         }
@@ -464,7 +465,7 @@ fun ClassDetailsBox() {
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
             .width(350.dp)
-            .height(250.dp),
+            .height(440.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.class_details_box)
@@ -484,7 +485,7 @@ fun ClassDetailsBox() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CustomImage(width = 70, height = 70, imageResourceID = R.drawable.logo)
-                    CustomColorTitleText(text = "CLASS DETAILS", R.color.dark_green, 16)
+                    CustomColorTitleText(text = "CLASS DETAILS", R.color.dark_green, 16, fontWeight = FontWeight.Medium)
                 }
                 Column {
                     Row(
@@ -497,57 +498,92 @@ fun ClassDetailsBox() {
                 }
                 Row(
                     modifier = Modifier
-                        .padding(15.dp),
+                        .padding(5.dp),
                 ) {
                     Column(
                         modifier = Modifier
                             .padding(10.dp)
                     ) {
                         CustomColorTitleText(
-                            text = "DEPARTMENT",
-                            color = R.color.dark_green,
-                            weight = 16
+                            text = "Email",
+                            color = R.color.edit_text_gray,
+                            weight = 14,
+                            fontWeight = FontWeight.Normal
                         )
-                        Spacer(modifier = Modifier.height(5.dp))
                         CustomColorTitleText(
-                            text = "YEAR",
+                            text = "abcd.up@phinmaed.com",
                             color = R.color.dark_green,
-                            weight = 16
+                            weight = 16,
+                            fontWeight = FontWeight.Medium
                         )
-                        Spacer(modifier = Modifier.height(5.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
                         CustomColorTitleText(
-                            text = "BLOCK",
-                            color = R.color.dark_green,
-                            weight = 16
+                            text = "Student ID",
+                            color = R.color.edit_text_gray,
+                            weight = 14,
+                            fontWeight = FontWeight.Normal
                         )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Spacer(modifier = Modifier.width(10.dp))
-                        CustomDivider(height = 100, width = 2, color = R.color.border_gray)
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-                    Column(
-                        modifier = Modifier
-                            .padding(10.dp)
-                    ) {
+                        CustomColorTitleText(
+                            text = "01-2345-678900",
+                            color = R.color.dark_green,
+                            weight = 16,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        CustomColorTitleText(
+                            text = "Gender",
+                            color = R.color.edit_text_gray,
+                            weight = 14,
+                            fontWeight = FontWeight.Normal
+                        )
+                        CustomColorTitleText(
+                            text = "Female",
+                            color = R.color.dark_green,
+                            weight = 16,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        CustomColorTitleText(
+                            text = "Age",
+                            color = R.color.edit_text_gray,
+                            weight = 14,
+                            fontWeight = FontWeight.Normal
+                        )
+                        CustomColorTitleText(
+                            text = "21",
+                            color = R.color.dark_green,
+                            weight = 16,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        CustomDivider(height = 2, width = 270, color = R.color.border_gray)
+
+                        Spacer(modifier = Modifier.height(8.dp))
+                        CustomColorTitleText(
+                            text = "Program",
+                            color = R.color.edit_text_gray,
+                            weight = 14,
+                            fontWeight = FontWeight.Normal
+                        )
+                        CustomColorTitleText(
+                            text = "IT",
+                            color = R.color.dark_green,
+                            weight = 16,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        CustomColorTitleText(
+                            text = "Department",
+                            color = R.color.edit_text_gray,
+                            weight = 14,
+                            fontWeight = FontWeight.Normal
+                        )
                         CustomColorTitleText(
                             text = "CITE",
                             color = R.color.dark_green,
-                            weight = 16
-                        )
-                        Spacer(modifier = Modifier.height(5.dp))
-                        CustomColorTitleText(
-                            text = "2",
-                            color = R.color.dark_green,
-                            weight = 16
-                        )
-                        Spacer(modifier = Modifier.height(5.dp))
-                        CustomColorTitleText(
-                            text = "3",
-                            color = R.color.dark_green,
-                            weight = 16
+                            weight = 16,
+                            fontWeight = FontWeight.Medium
                         )
                     }
                 }
