@@ -21,9 +21,7 @@ import com.echelon.upickup.components.CalendarAnnouncementBox
 import com.echelon.upickup.components.CalendarBox
 import com.echelon.upickup.components.CustomImage
 import com.echelon.upickup.network.apimodel.Event
-import com.echelon.upickup.network.apimodel.Post
 import com.echelon.upickup.viewmodel.CalendarViewModel
-import com.echelon.upickup.viewmodel.PostViewModel
 
 @Composable
 fun CalendarScreen(navController: NavHostController, viewModel: CalendarViewModel) {
