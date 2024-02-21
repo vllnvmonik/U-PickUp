@@ -13,6 +13,7 @@ import com.echelon.upickup.appscreens.InventoryScreen
 import com.echelon.upickup.appscreens.ProfileScreen
 import com.echelon.upickup.appscreens.SignInScreen
 import com.echelon.upickup.appscreens.SignUpScreen
+import com.echelon.upickup.viewmodel.PostViewModel
 import com.echelon.upickup.sharedprefs.AuthManager
 import com.echelon.upickup.viewmodel.ForgotPasswordViewModel
 import com.echelon.upickup.viewmodel.ProfileViewModel
@@ -67,7 +68,7 @@ fun NavController(navController: NavHostController) {
         // application navigation route after successful log in
         navigation(startDestination = Screen.DashboardScreen.route, route = Screen.AppRoute.route){
             composable(Screen.DashboardScreen.route) {
-                DashboardScreen(navController = navController)
+                DashboardScreen(navController = navController, viewModel = PostViewModel())
             }
             composable(Screen.CalendarScreen.route) {
                 CalendarScreen(navController = navController)
