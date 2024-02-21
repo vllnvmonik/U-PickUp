@@ -1,5 +1,7 @@
 package com.echelon.upickup.network
 
+import com.echelon.upickup.network.apiservice.ForgotPasswordApiService
+import com.echelon.upickup.network.apiservice.LogoutApiService
 import com.echelon.upickup.network.apiservice.SignInApiService
 import com.echelon.upickup.network.apiservice.StudentDetailsApiService
 import retrofit2.Retrofit
@@ -24,5 +26,11 @@ object RetrofitInstance {
 
     val studentDetailsApiService: StudentDetailsApiService by lazy {
         retrofit.create(StudentDetailsApiService::class.java)
+    }
+    val logoutApiService: LogoutApiService by lazy {
+        retrofit.create(LogoutApiService::class.java)
+    }
+    val forgotPasswordApiService: ForgotPasswordApiService by lazy {
+        retrofit.create(ForgotPasswordApiService::class.java)
     }
 }
