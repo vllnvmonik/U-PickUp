@@ -27,6 +27,7 @@ import com.echelon.upickup.components.CustomColorTitleText
 import com.echelon.upickup.components.LogoutButton
 import com.echelon.upickup.components.StaticProfile
 import com.echelon.upickup.navigation.Screen
+import com.echelon.upickup.sharedprefs.AuthManager
 import com.echelon.upickup.sharedprefs.StudentDetailsManager
 import com.echelon.upickup.sharedprefs.TokenManager
 import com.echelon.upickup.viewmodel.LogoutViewModel
@@ -91,13 +92,13 @@ fun ProfileScreen(navController: NavHostController, viewModel: ProfileViewModel)
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     LogoutButton(text = stringResource(R.string.logout)) {
-                        val token = TokenManager.getToken()
+                        val token = AuthManager.getAuthToken()
                         if (token != null) {
                             Log.d("tokeennnnnn", token)
                         }
                         if (!token.isNullOrBlank()) {
                             logoutViewModel.logout(token)
-                            TokenManager.clearToken()
+                            AuthManager.clearAuthToken()
                             StudentDetailsManager.clearStudentDetails()
                             navController.navigate(Screen.SignInScreen.route) {
                                 popUpTo(Screen.SignInScreen.route) {

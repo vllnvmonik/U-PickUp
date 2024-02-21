@@ -13,6 +13,7 @@ import com.echelon.upickup.appscreens.InventoryScreen
 import com.echelon.upickup.appscreens.ProfileScreen
 import com.echelon.upickup.appscreens.SignInScreen
 import com.echelon.upickup.appscreens.SignUpScreen
+import com.echelon.upickup.sharedprefs.AuthManager
 import com.echelon.upickup.viewmodel.ForgotPasswordViewModel
 import com.echelon.upickup.viewmodel.ProfileViewModel
 import com.echelon.upickup.viewmodel.SignInViewModel
@@ -49,7 +50,7 @@ fun NavController(navController: NavHostController) {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.AuthRoute.route
+        startDestination = determineStartDestination()
     ) {
         // application navigation route before logging in
         navigation(startDestination = Screen.SignInScreen.route, route = Screen.AuthRoute.route){
@@ -71,9 +72,6 @@ fun NavController(navController: NavHostController) {
             composable(Screen.CalendarScreen.route) {
                 CalendarScreen(navController = navController)
             }
-//            composable(Screen.ChatScreen.route) {
-//                ChatScreen(navController = navController)
-//            }
             composable(Screen.InventoryScreen.route){
                 InventoryScreen(navController = navController)
             }
@@ -81,5 +79,14 @@ fun NavController(navController: NavHostController) {
                 ProfileScreen(navController = navController, viewModel = ProfileViewModel())
             }
         }
+    }
+}
+
+@Composable
+fun determineStartDestination(): String {
+    return if (AuthManager.isLoggedIn()) {
+        Screen.AppRoute.route
+    } else {
+        Screen.AuthRoute.route
     }
 }

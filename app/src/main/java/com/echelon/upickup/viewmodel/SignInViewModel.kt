@@ -8,6 +8,7 @@ import com.echelon.upickup.model.SignIn
 import com.echelon.upickup.model.StudentDetails
 import com.echelon.upickup.navigation.Screen
 import com.echelon.upickup.repository.SignInRepository
+import com.echelon.upickup.sharedprefs.AuthManager
 import com.echelon.upickup.sharedprefs.StudentDetailsManager
 import com.echelon.upickup.sharedprefs.TokenManager
 import com.echelon.upickup.uistate.SignInUIState
@@ -48,7 +49,7 @@ class SignInViewModel(private val navController: NavController) : ViewModel() {
                 if (signInResponse != null) {
                     val token = signInResponse.token
                     val studentData = signInResponse.data
-                    TokenManager.saveToken(token) // Save the token in SharedPreferences
+                    AuthManager.saveAuthToken(token)
 
                     val id = studentData.id
                     val studentId = studentData.student_id
@@ -79,8 +80,16 @@ class SignInViewModel(private val navController: NavController) : ViewModel() {
                         "SignInViewModel",
                         "Sign-in successful. Token: $token, User ID: $id, Student ID: $studentId, Email: $email, First Name: $firstName, Middle Name: $middleName, Last Name: $lastName, Age: $age, Gender: $gender, Department: $department, Program: $program"
                     )
-                    profileViewModel.getStudentDetails(id)
-                    navController.navigate(Screen.DashboardScreen.route)
+                    if (AuthManager.isLoggedIn()) {
+                        profileViewModel.getStudentDetails(id)
+                        navController.navigate(Screen.DashboardScreen.route)
+                    } else {
+                        Toast.makeText(
+                            navController.context,
+                            "Sign-in failed. Please try again.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 } else {
                     Toast.makeText(
                         navController.context,
