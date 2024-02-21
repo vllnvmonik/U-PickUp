@@ -2,6 +2,9 @@ package com.echelon.upickup.network
 
 import com.echelon.upickup.network.apiservice.CalendarApiService
 import com.echelon.upickup.network.apiservice.ForgotPasswordApiService
+import com.echelon.upickup.network.apiservice.InventoryBooksApiService
+import com.echelon.upickup.network.apiservice.InventoryModulesApiService
+import com.echelon.upickup.network.apiservice.InventoryUniformsApiService
 import com.echelon.upickup.network.apiservice.LogoutApiService
 import com.echelon.upickup.network.apiservice.SignInApiService
 import com.echelon.upickup.network.apiservice.StudentDetailsApiService
@@ -40,5 +43,15 @@ object RetrofitInstance {
     }
     val calendarApiService: CalendarApiService by lazy {
         retrofit.create(CalendarApiService::class.java)
+    }
+    // inventory items
+    val inventoryBooksApiService: InventoryBooksApiService by lazy {
+        retrofit.create(InventoryBooksApiService::class.java)
+    }
+    val inventoryModulesApiService: InventoryModulesApiService by lazy {
+        retrofit.create(InventoryModulesApiService::class.java)
+    }
+    val inventoryUniformsApiService: InventoryUniformsApiService by lazy {
+        retrofit.create(InventoryUniformsApiService::class.java)
     }
 }
