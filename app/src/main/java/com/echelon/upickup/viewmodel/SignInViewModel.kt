@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.echelon.upickup.model.SignIn
+import com.echelon.upickup.model.StudentDetails
 import com.echelon.upickup.navigation.Screen
 import com.echelon.upickup.repository.SignInRepository
+import com.echelon.upickup.sharedprefs.StudentDetailsManager
+import com.echelon.upickup.sharedprefs.TokenManager
 import com.echelon.upickup.uistate.SignInUIState
 import com.echelon.upickup.validation.SignInValidation
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,8 +21,6 @@ class SignInViewModel(private val navController: NavController) : ViewModel() {
     private val _uiState = MutableStateFlow(SignInUIState())
     val uiState: StateFlow<SignInUIState> = _uiState
     private val profileViewModel = ProfileViewModel()
-
-
     fun onIdNumberChanged(idNumber: String) {
         val uiState = _uiState.value.copy(idNumber = idNumber)
         _uiState.value = uiState.updateValidationState()
@@ -47,6 +48,7 @@ class SignInViewModel(private val navController: NavController) : ViewModel() {
                 if (signInResponse != null) {
                     val token = signInResponse.token
                     val studentData = signInResponse.data
+                    TokenManager.saveToken(token) // Save the token in SharedPreferences
 
                     val id = studentData.id
                     val studentId = studentData.student_id
@@ -58,6 +60,20 @@ class SignInViewModel(private val navController: NavController) : ViewModel() {
                     val gender = studentData.gender
                     val department = studentData.department
                     val program = studentData.program
+
+                    val studentDetails = StudentDetails(
+                        id.toString(),
+                        studentId,
+                        email,
+                        firstName,
+                        middleName,
+                        lastName,
+                        age,
+                        gender,
+                        department,
+                        program
+                    )
+                    StudentDetailsManager.saveStudentDetails(studentDetails)
 
                     Log.d(
                         "SignInViewModel",

@@ -26,12 +26,18 @@ import com.echelon.upickup.components.ClassDetailsBox
 import com.echelon.upickup.components.CustomColorTitleText
 import com.echelon.upickup.components.LogoutButton
 import com.echelon.upickup.components.StaticProfile
+import com.echelon.upickup.navigation.Screen
+import com.echelon.upickup.sharedprefs.StudentDetailsManager
+import com.echelon.upickup.sharedprefs.TokenManager
+import com.echelon.upickup.viewmodel.LogoutViewModel
 import com.echelon.upickup.viewmodel.ProfileViewModel
 
 @Composable
 fun ProfileScreen(navController: NavHostController, viewModel: ProfileViewModel) {
-    val studentDetails by viewModel.studentDetails.collectAsState()
+    val studentDetails = StudentDetailsManager.getStudentDetails()
     Log.d("ProfileScreen", "Student details: $studentDetails")
+    val logoutViewModel = LogoutViewModel()
+
 
     Surface(
         modifier = Modifier
@@ -58,13 +64,13 @@ fun ProfileScreen(navController: NavHostController, viewModel: ProfileViewModel)
                 studentDetails.let { details ->
                     if (details != null) {
                         CustomColorTitleText(
-                            text = details.student.first_name + " " + details.student.last_name,
+                            text = details.firstName + " " + details.lastName,
                             color = R.color.dark_green,
                             22,
                             fontWeight = FontWeight.Medium
                         )
                         CustomColorTitleText(
-                            text = details.student.program,
+                            text = details.program,
                             color = R.color.dark_green,
                             16,
                             FontWeight.Medium
@@ -74,21 +80,37 @@ fun ProfileScreen(navController: NavHostController, viewModel: ProfileViewModel)
                     studentDetails.let { details ->
                         if (details != null) {
                             ClassDetailsBox(
-                                email = details.student.email_ad,
-                                studentId = details.student.student_id,
-                                gender = details.student.gender,
-                                age = details.student.age,
-                                program = details.student.program,
-                                department = details.student.department,
+                                email = details.email,
+                                studentId = details.studentId,
+                                gender = details.gender,
+                                age = details.age,
+                                program = details.program,
+                                department = details.department,
                             )
                         }
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     LogoutButton(text = stringResource(R.string.logout)) {
-
+                        val token = TokenManager.getToken()
+                        if (token != null) {
+                            Log.d("tokeennnnnn", token)
+                        }
+                        if (!token.isNullOrBlank()) {
+                            logoutViewModel.logout(token)
+                            TokenManager.clearToken()
+                            StudentDetailsManager.clearStudentDetails()
+                            navController.navigate(Screen.SignInScreen.route) {
+                                popUpTo(Screen.SignInScreen.route) {
+                                    inclusive = true
+                                }
+                            }
+                        } else {
+                            Log.e("ProfileScreen", "Token is null or blank")
+                        }
                     }
                 }
             }
         }
     }
 }
+
