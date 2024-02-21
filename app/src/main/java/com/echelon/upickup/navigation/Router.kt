@@ -9,7 +9,10 @@ import com.echelon.upickup.R
 import com.echelon.upickup.appscreens.CalendarScreen
 import com.echelon.upickup.appscreens.DashboardScreen
 import com.echelon.upickup.appscreens.ForgotPasswordScreen
+import com.echelon.upickup.appscreens.InventoryBooksScreen
+import com.echelon.upickup.appscreens.InventoryModulesScreen
 import com.echelon.upickup.appscreens.InventoryScreen
+import com.echelon.upickup.appscreens.InventoryUniformScreen
 import com.echelon.upickup.appscreens.ProfileScreen
 import com.echelon.upickup.appscreens.SignInScreen
 import com.echelon.upickup.appscreens.SignUpScreen
@@ -30,6 +33,10 @@ sealed class Screen (val route: String) {
     object CalendarScreen: Screen("calendar")
 //    object ChatScreen: Screen("chat")
     object InventoryScreen: Screen("inventory")
+    object InventoryBookScreen: Screen("inventory-books")
+    object InventoryModulesScreen: Screen("inventory-modules")
+    object InventoryUniformScreen: Screen("inventory-uniform")
+
     object ProfileScreen: Screen("profile")
     object AuthRoute: Screen("auth")
     object AppRoute: Screen("app")
@@ -76,6 +83,15 @@ fun NavController(navController: NavHostController) {
             }
             composable(Screen.InventoryScreen.route){
                 InventoryScreen(navController = navController)
+            }
+            composable(Screen.InventoryBookScreen.route){
+                InventoryBooksScreen(navController = navController)
+            }
+            composable(Screen.InventoryModulesScreen.route){
+                InventoryModulesScreen(navController = navController)
+            }
+            composable(Screen.InventoryUniformScreen.route){
+                InventoryUniformScreen(navController = navController)
             }
             composable(Screen.ProfileScreen.route) {
                 ProfileScreen(navController = navController, viewModel = ProfileViewModel())
