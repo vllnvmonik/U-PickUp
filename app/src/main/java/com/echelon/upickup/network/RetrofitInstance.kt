@@ -1,5 +1,6 @@
 package com.echelon.upickup.network
 
+import com.echelon.upickup.network.apiservice.CalendarApiService
 import com.echelon.upickup.network.apiservice.ForgotPasswordApiService
 import com.echelon.upickup.network.apiservice.LogoutApiService
 import com.echelon.upickup.network.apiservice.SignInApiService
@@ -34,8 +35,10 @@ object RetrofitInstance {
     val forgotPasswordApiService: ForgotPasswordApiService by lazy {
         retrofit.create(ForgotPasswordApiService::class.java)
     }
-
     val postApiService: PostApiService by lazy {
         retrofit.create(PostApiService::class.java)
+    }
+    val calendarApiService: CalendarApiService by lazy {
+        retrofit.create(CalendarApiService::class.java)
     }
 }
