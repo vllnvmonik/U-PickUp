@@ -15,6 +15,7 @@ import com.echelon.upickup.appscreens.SignInScreen
 import com.echelon.upickup.appscreens.SignUpScreen
 import com.echelon.upickup.viewmodel.PostViewModel
 import com.echelon.upickup.sharedprefs.AuthManager
+import com.echelon.upickup.viewmodel.CalendarViewModel
 import com.echelon.upickup.viewmodel.ForgotPasswordViewModel
 import com.echelon.upickup.viewmodel.ProfileViewModel
 import com.echelon.upickup.viewmodel.SignInViewModel
@@ -71,7 +72,7 @@ fun NavController(navController: NavHostController) {
                 DashboardScreen(navController = navController, viewModel = PostViewModel())
             }
             composable(Screen.CalendarScreen.route) {
-                CalendarScreen(navController = navController)
+                CalendarScreen(navController = navController, viewModel = CalendarViewModel())
             }
             composable(Screen.InventoryScreen.route){
                 InventoryScreen(navController = navController)
