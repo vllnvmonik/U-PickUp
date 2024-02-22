@@ -15,7 +15,12 @@ class PostViewModel: ViewModel() {
     private val _posts = MutableLiveData<List<Post>>()
     val posts: LiveData<List<Post>> = _posts
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun fetchPosts() {
+        _isLoading.value = true
+
         viewModelScope.launch {
             try {
                 val response = postRepository.getPosts()
@@ -25,11 +30,11 @@ class PostViewModel: ViewModel() {
                     Log.d("PostViewModel", "Fetched posts: $details")
                 } else {
                     Log.e("PostViewModel", "Failed to fetch posts: ${response.code()}")
-                    // Handle error response
                 }
             } catch (e: Exception) {
                 Log.e("PostViewModel", "Error fetching posts: ${e.message}", e)
-                // Handle network exceptions
+            } finally {
+                _isLoading.value = false
             }
         }
     }

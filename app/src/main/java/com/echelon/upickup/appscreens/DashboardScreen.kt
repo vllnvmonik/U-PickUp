@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +30,7 @@ import androidx.compose.runtime.livedata.observeAsState
 fun DashboardScreen(navController: NavHostController, viewModel: PostViewModel) {
     val posts: List<Post> by viewModel.posts.observeAsState(emptyList())
     Log.d("PostScreen", "show em: $posts")
+    val isLoading: Boolean by viewModel.isLoading.observeAsState(false)
 
 
     LaunchedEffect(Unit) {
@@ -51,7 +53,11 @@ fun DashboardScreen(navController: NavHostController, viewModel: PostViewModel) 
             ){
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomImage(100,100, R.drawable.logo)
-                FeedBox()
+                if (isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    FeedBox(posts = posts)
+                }
             }
         }
     }

@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -69,6 +70,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.echelon.upickup.R
 import com.echelon.upickup.navigation.BottomNavItem
 import com.echelon.upickup.navigation.Screen
+import com.echelon.upickup.network.apimodel.Post
 
 
 @Composable
@@ -214,7 +216,7 @@ fun BottomNavigationBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    if (currentRoute !in listOf(Screen.AuthRoute.route, Screen.SignInScreen.route, Screen.SignUpScreen.route, Screen.ForgotPasswordScreen.route)) {
+    if (currentRoute !in listOf(Screen.AuthRoute.route, Screen.SignInScreen.route, Screen.SignUpScreen.route, Screen.ForgotPasswordScreen.route, Screen.SignUpScreenOne.route, Screen.SignUpScreenTwo.route, Screen.SignUpScreenThree.route)) {
         var selectedItem by rememberSaveable {
             mutableIntStateOf(0)
         }
@@ -266,15 +268,15 @@ fun CustomImage(width: Int, height: Int, imageResourceID: Int) {
 }
 // dashboard screen components
 @Composable
-fun FeedBox() {
+fun FeedBox(posts: List<Post>) {
     LazyColumn(contentPadding = PaddingValues(16.dp)){
-        items(10){ item ->
-            FeedBoxLayout(modifier = Modifier)
+        items(posts) { post ->
+            FeedBoxLayout(modifier = Modifier, post = post)
         }
     }
 }
 @Composable
-fun FeedBoxLayout(modifier: Modifier) {
+fun FeedBoxLayout(modifier: Modifier, post: Post) {
     Card(
         modifier = Modifier
             .padding(bottom = 15.dp)
@@ -292,6 +294,27 @@ fun FeedBoxLayout(modifier: Modifier) {
                 .padding(10.dp)
                 .fillMaxSize(),
         ){
+            Column (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.Start
+            ){
+//                Spacer(modifier = Modifier.height(20.dp))
+                CustomColorTitleText(
+                    text = post.post_content,
+                    color = R.color.black,
+                    16,
+                    FontWeight.Medium
+                )
+                Spacer(modifier = Modifier.height(130.dp))
+                CustomColorTitleText(
+                    text = post.likes_count.toString(),
+                    color = R.color.black,
+                    16,
+                    FontWeight.Medium
+                )
+            }
         }
     }
 }
