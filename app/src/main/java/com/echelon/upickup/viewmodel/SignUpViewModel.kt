@@ -1,9 +1,11 @@
 package com.echelon.upickup.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.echelon.upickup.model.SignUp
 import com.echelon.upickup.navigation.Screen
+import com.echelon.upickup.sharedprefs.SignUpDataManager
 import com.echelon.upickup.uistate.SignUpUIState
 import com.echelon.upickup.validation.SignUpValidation
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,38 +15,84 @@ class SignUpViewModel(private val navController: NavController) : ViewModel() {
     private val _uiState = MutableStateFlow(SignUpUIState())
     val uiState: StateFlow<SignUpUIState> = _uiState
 
-    fun onNameChanged(name: String) {
-        val uiState = _uiState.value.copy(name = name)
-        _uiState.value = uiState.updateValidationState()
+    private var isFormInitialized: Boolean = false
+
+    fun initializeForm() {
+        Log.d("SignUpViewModel", "Initializing form")
+        if (!isFormInitialized) {
+            val savedData = SignUpDataManager.loadSignUpData(navController.context)
+            Log.d("SignUpViewModel", "Loaded data: $savedData")
+            _uiState.value = savedData
+            isFormInitialized = true
+        }
     }
 
-    fun onIdNumberChanged(idNumber: String) {
-        val uiState = _uiState.value.copy(idNumber = idNumber)
-        _uiState.value = uiState.updateValidationState()
+    fun loadSavedData() {
+        Log.d("SignUpViewModel", "Initializing form")
+        val savedData = SignUpDataManager.loadSignUpData(navController.context)
+        Log.d("SignUpViewModel", "Loaded data: $savedData")
+        _uiState.value = savedData
+    }
+    fun onNameChanged(name: String) {
+        _uiState.value = _uiState.value.copy(name = name)
+    }
+    fun onMiddleNameChanged(middleName: String) {
+        _uiState.value = _uiState.value.copy(middleName = middleName)
+    }
+    fun onLastNameChanged(lastName: String) {
+        _uiState.value = _uiState.value.copy(lastName = lastName)
+
+    }
+    fun onProgramChanged(program: String) {
+        _uiState.value = _uiState.value.copy(program = program)
+
+    }
+    fun onDepartmentChanged(department: String) {
+        _uiState.value = _uiState.value.copy(department = department)
+    }
+    fun onGenderChanged(gender: String) {
+        _uiState.value = _uiState.value.copy(gender = gender)
+    }
+    fun onAgeChanged(age: String) {
+        _uiState.value = _uiState.value.copy(age = age)
+    }
+    fun onEmailChanged(email: String) {
+        _uiState.value = _uiState.value.copy(email = email)
+    }
+    fun onStudentIdChanged(idNumber: String) {
+        _uiState.value = _uiState.value.copy(idNumber = idNumber)
     }
 
     fun onPasswordChanged(password: String) {
-        val uiState = _uiState.value.copy(password = password)
-        _uiState.value = uiState.updateValidationState()
+        _uiState.value = _uiState.value.copy(password = password)
     }
 
     fun onConfirmPasswordChanged(confirmPassword: String) {
-        val uiState = _uiState.value.copy(confirmPassword = confirmPassword)
-        _uiState.value = uiState.updateValidationState()
-    }
-
-    private fun SignUpUIState.updateValidationState(): SignUpUIState {
-        val isNameValid = SignUpValidation.isNameValid(name)
-        val isIdNumberValid = SignUpValidation.isIdNumberValid(idNumber)
-        val isPasswordValid = SignUpValidation.isPasswordValid(password)
-        val isConfirmPasswordValid = SignUpValidation.isConfirmPasswordValid(password, confirmPassword)
-        return copy(isFormValid = isNameValid && isIdNumberValid && isPasswordValid && isConfirmPasswordValid)
+        _uiState.value = _uiState.value.copy(confirmPassword = confirmPassword)
     }
 
     fun signUp() {
-        val signUpData = SignUp(_uiState.value.name, _uiState.value.idNumber, _uiState.value.password, _uiState.value.confirmPassword)
-        // navigate
+        val signUpData = SignUp(
+            name = _uiState.value.name,
+            middleName = _uiState.value.middleName,
+            lastName = _uiState.value.lastName,
+            gender = _uiState.value.gender,
+            age = _uiState.value.age,
+            program = _uiState.value.program,
+            department = _uiState.value.department,
+            email = _uiState.value.email,
+            idNumber = _uiState.value.idNumber,
+            password = _uiState.value.password,
+            confirmPassword = _uiState.value.confirmPassword
+        )
+        SignUpDataManager.saveSignUpData(navController.context, _uiState.value)
+        Log.d("SignUpViewModel", "Sign up data saved: $signUpData")
         navController.navigate(Screen.SignInScreen.route)
-        //show later on if sign up is successful
+        resetFormState()
+    }
+
+    private fun resetFormState() {
+        _uiState.value = SignUpUIState()
+        isFormInitialized = false
     }
 }
