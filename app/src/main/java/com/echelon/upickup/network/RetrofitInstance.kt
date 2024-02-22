@@ -1,6 +1,9 @@
 package com.echelon.upickup.network
 
 import com.echelon.upickup.network.apiservice.CalendarApiService
+import com.echelon.upickup.network.apiservice.FilterBooksApiService
+import com.echelon.upickup.network.apiservice.FilterModulesApiService
+import com.echelon.upickup.network.apiservice.FilterUniformApiService
 import com.echelon.upickup.network.apiservice.ForgotPasswordApiService
 import com.echelon.upickup.network.apiservice.InventoryBooksApiService
 import com.echelon.upickup.network.apiservice.InventoryModulesApiService
@@ -48,10 +51,21 @@ object RetrofitInstance {
     val inventoryBooksApiService: InventoryBooksApiService by lazy {
         retrofit.create(InventoryBooksApiService::class.java)
     }
+    val filterBooksApiService: FilterBooksApiService by lazy {
+        retrofit.create(FilterBooksApiService::class.java)
+    }
+
     val inventoryModulesApiService: InventoryModulesApiService by lazy {
         retrofit.create(InventoryModulesApiService::class.java)
     }
+    val filterModulesApiService: FilterModulesApiService by lazy {
+        retrofit.create(FilterModulesApiService::class.java)
+    }
+
     val inventoryUniformsApiService: InventoryUniformsApiService by lazy {
         retrofit.create(InventoryUniformsApiService::class.java)
+    }
+    val filterUniformApiService: FilterUniformApiService by lazy {
+        retrofit.create(FilterUniformApiService::class.java)
     }
 }

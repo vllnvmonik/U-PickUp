@@ -15,6 +15,9 @@ class InventoryUniformsViewModel: ViewModel() {
     private val _uniforms = MutableLiveData<List<Uniform>>()
     val uniform: LiveData<List<Uniform>> = _uniforms
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun fetchUniforms() {
         viewModelScope.launch {
             try {

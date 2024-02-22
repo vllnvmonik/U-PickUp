@@ -21,4 +21,7 @@
     <color name="class_details_box">#EDEDED</color>
     <color name="dark_red">#981616</color>
     <color name="user_icon">#CCCCCC</color>
+    <color name="inventory_text">#454545</color>
+    <color name="inventory_border">#9E9E9E</color>
+
 </resources>

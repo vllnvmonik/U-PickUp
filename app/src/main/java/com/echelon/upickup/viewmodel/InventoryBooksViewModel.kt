@@ -15,6 +15,9 @@ class InventoryBooksViewModel: ViewModel() {
     private val _books = MutableLiveData<List<Books>>()
     val books: LiveData<List<Books>> = _books
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun fetchBooks() {
         viewModelScope.launch {
             try {

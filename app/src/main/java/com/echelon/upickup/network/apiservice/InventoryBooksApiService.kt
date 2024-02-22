@@ -8,3 +8,8 @@ interface InventoryBooksApiService {
     @GET("books")
     suspend fun getBooks(): Response<List<Books>>
 }
+
+interface FilterBooksApiService {
+    @GET("books/{course}/{year_level}")
+    suspend fun getBooks(): Response<List<Books>>
+}

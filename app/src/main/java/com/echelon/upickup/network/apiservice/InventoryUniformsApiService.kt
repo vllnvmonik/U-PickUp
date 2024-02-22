@@ -8,3 +8,8 @@ interface InventoryUniformsApiService {
     @GET("uniforms")
     suspend fun getUniforms(): Response<List<Uniform>>
 }
+
+interface FilterUniformApiService {
+    @GET("uniforms/{course}/{year_level}")
+    suspend fun getUniforms(): Response<List<Uniform>>
+}

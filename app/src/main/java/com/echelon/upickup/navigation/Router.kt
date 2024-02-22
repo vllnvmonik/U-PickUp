@@ -22,6 +22,9 @@ import com.echelon.upickup.viewmodel.PostViewModel
 import com.echelon.upickup.sharedprefs.AuthManager
 import com.echelon.upickup.viewmodel.CalendarViewModel
 import com.echelon.upickup.viewmodel.ForgotPasswordViewModel
+import com.echelon.upickup.viewmodel.InventoryBooksViewModel
+import com.echelon.upickup.viewmodel.InventoryModulesViewModel
+import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
 import com.echelon.upickup.viewmodel.ProfileViewModel
 import com.echelon.upickup.viewmodel.SignInViewModel
 import com.echelon.upickup.viewmodel.SignUpViewModel
@@ -96,13 +99,13 @@ fun NavController(navController: NavHostController) {
                 InventoryScreen(navController = navController)
             }
             composable(Screen.InventoryBookScreen.route){
-                InventoryBooksScreen(navController = navController)
+                InventoryBooksScreen(navController = navController, viewModel = InventoryBooksViewModel())
             }
             composable(Screen.InventoryModulesScreen.route){
-                InventoryModulesScreen(navController = navController)
+                InventoryModulesScreen(navController = navController, viewModel = InventoryModulesViewModel())
             }
             composable(Screen.InventoryUniformScreen.route){
-                InventoryUniformScreen(navController = navController)
+                InventoryUniformScreen(navController = navController, viewModel = InventoryUniformsViewModel())
             }
             composable(Screen.ProfileScreen.route) {
                 ProfileScreen(navController = navController, viewModel = ProfileViewModel())

@@ -9,3 +9,4 @@ interface StudentDetailsApiService {
     @GET("students/{id}")
     suspend fun studentDetails(@Path("id") id: Int): Response<StudentDetailsResponse>
 }
+

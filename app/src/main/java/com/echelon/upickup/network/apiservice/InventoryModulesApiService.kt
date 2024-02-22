@@ -8,3 +8,8 @@ interface InventoryModulesApiService {
     @GET("modules")
     suspend fun getModules(): Response<List<Modules>>
 }
+
+interface FilterModulesApiService {
+    @GET("modules/{course}/{year_level}")
+    suspend fun getModules(): Response<List<Modules>>
+}
