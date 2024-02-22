@@ -44,7 +44,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -71,6 +70,7 @@ import com.echelon.upickup.R
 import com.echelon.upickup.navigation.BottomNavItem
 import com.echelon.upickup.navigation.Screen
 import com.echelon.upickup.network.apimodel.Post
+import androidx.compose.runtime.remember as remember
 
 
 @Composable
@@ -216,7 +216,7 @@ fun BottomNavigationBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    if (currentRoute !in listOf(Screen.AuthRoute.route, Screen.SignInScreen.route, Screen.SignUpScreen.route, Screen.ForgotPasswordScreen.route, Screen.SignUpScreenOne.route, Screen.SignUpScreenTwo.route, Screen.SignUpScreenThree.route)) {
+    if (currentRoute !in listOf(Screen.AuthRoute.route, Screen.SignInScreen.route, Screen.SignUpScreen.route, Screen.ForgotPasswordScreen.route, Screen.SignUpScreenTwo.route, Screen.SignUpScreenThree.route)) {
         var selectedItem by rememberSaveable {
             mutableIntStateOf(0)
         }

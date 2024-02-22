@@ -16,6 +16,8 @@ import com.echelon.upickup.appscreens.InventoryUniformScreen
 import com.echelon.upickup.appscreens.ProfileScreen
 import com.echelon.upickup.appscreens.SignInScreen
 import com.echelon.upickup.appscreens.SignUpScreen
+import com.echelon.upickup.appscreens.SignUpScreenThree
+import com.echelon.upickup.appscreens.SignUpScreenTwo
 import com.echelon.upickup.viewmodel.PostViewModel
 import com.echelon.upickup.sharedprefs.AuthManager
 import com.echelon.upickup.viewmodel.CalendarViewModel
@@ -26,6 +28,9 @@ import com.echelon.upickup.viewmodel.SignUpViewModel
 
 sealed class Screen (val route: String) {
     object SignUpScreen: Screen("signup")
+    object SignUpScreenTwo: Screen("signupTwo")
+    object SignUpScreenThree: Screen("signupThree")
+
     object SignInScreen: Screen("signin")
     object ForgotPasswordScreen: Screen("forgot")
 
@@ -71,6 +76,12 @@ fun NavController(navController: NavHostController) {
             }
             composable(Screen.ForgotPasswordScreen.route){
                 ForgotPasswordScreen(navController = navController, viewModel = ForgotPasswordViewModel(navController))
+            }
+            composable(Screen.SignUpScreenTwo.route){
+                SignUpScreenTwo(navController, viewModel = SignUpViewModel(navController))
+            }
+            composable(Screen.SignUpScreenThree.route){
+                SignUpScreenThree(navController, viewModel = SignUpViewModel(navController))
             }
         }
         // application navigation route after successful log in
