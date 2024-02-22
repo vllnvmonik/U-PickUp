@@ -4,5 +4,5 @@ import java.time.LocalDateTime
 
 data class Event(
     val event_title: String,
-    val event_date: LocalDateTime
+    val event_date: String
 )
