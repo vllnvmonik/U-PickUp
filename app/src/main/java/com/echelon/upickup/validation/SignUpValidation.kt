@@ -24,4 +24,24 @@ object SignUpValidation {
     fun isConfirmPasswordValid(password: String, confirmPassword: String): Boolean {
         return password == confirmPassword
     }
+
+    fun isProgramValid(program: String): Boolean {
+        return program.isNotEmpty()
+    }
+
+    fun isDepartmentValid(department: String): Boolean {
+        return department.isNotEmpty()
+    }
+
+    fun isGenderValid(gender: String): Boolean {
+        return gender.isNotEmpty()
+    }
+
+    fun isAgeValid(age: String): Boolean {
+        return age.isNotEmpty()
+    }
+
+    fun isEmailValid(email: String): Boolean {
+        return email.isNotEmpty()
+    }
 }
