@@ -286,7 +286,7 @@ fun FeedBoxLayout(modifier: Modifier, post: Post) {
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.background_color)
         ),
-        elevation = CardDefaults.cardElevation(5.dp),
+        elevation = CardDefaults.cardElevation(1.dp),
 //        border = BorderStroke(2.dp, colorResource(id = R.color.border_gray))
     ) {
         Box(
@@ -305,14 +305,14 @@ fun FeedBoxLayout(modifier: Modifier, post: Post) {
                     text = post.post_content,
                     color = R.color.black,
                     16,
-                    FontWeight.Medium
+                    FontWeight.Normal
                 )
                 Spacer(modifier = Modifier.height(130.dp))
                 CustomColorTitleText(
                     text = post.likes_count.toString(),
                     color = R.color.black,
                     16,
-                    FontWeight.Medium
+                    FontWeight.Normal
                 )
             }
         }
@@ -458,8 +458,8 @@ fun StaticProfile() {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
-            .width(200.dp)
-            .height(200.dp),
+            .width(150.dp)
+            .height(150.dp),
         shape = RoundedCornerShape(500.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.dark_green)
@@ -475,8 +475,8 @@ fun StaticProfile() {
                 painter = painterResource(id = R.drawable.user_solid),
                 contentDescription = "user",
                 modifier = Modifier
-                    .height(80.dp)
-                    .width(80.dp),
+                    .height(60.dp)
+                    .width(60.dp),
                 tint = colorResource(id = R.color.user_icon)
             )
         }
@@ -500,9 +500,9 @@ fun ClassDetailsBox(
             .height(440.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(id = R.color.class_details_box)
+            containerColor = colorResource(R.color.background_color)
         ),
-        elevation = CardDefaults.cardElevation(3.dp),
+//        elevation = CardDefaults.cardElevation(3.dp),
 //        border = BorderStroke(1.dp, colorResource(id = R.color.border_gray))
     ) {
         Box(
@@ -512,12 +512,13 @@ fun ClassDetailsBox(
         ) {
             Column {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(10.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CustomImage(width = 70, height = 70, imageResourceID = R.drawable.logo)
-                    CustomColorTitleText(text = "CLASS DETAILS", R.color.dark_green, 16, fontWeight = FontWeight.Medium)
+//                    CustomImage(width = 70, height = 70, imageResourceID = R.drawable.logo)
+                    CustomColorTitleText(text = "CLASS DETAILS", R.color.dark_green, 20, fontWeight = FontWeight.Medium)
                 }
                 Column {
                     Row(
@@ -544,9 +545,9 @@ fun ClassDetailsBox(
                         )
                         CustomColorTitleText(
                             text = email,
-                            color = R.color.dark_green,
+                            color = R.color.profile_texts,
                             weight = 16,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Normal
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         CustomColorTitleText(
@@ -557,9 +558,9 @@ fun ClassDetailsBox(
                         )
                         CustomColorTitleText(
                             text = studentId,
-                            color = R.color.dark_green,
+                            color = R.color.profile_texts,
                             weight = 16,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Normal
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         CustomColorTitleText(
@@ -570,9 +571,9 @@ fun ClassDetailsBox(
                         )
                         CustomColorTitleText(
                             text = gender,
-                            color = R.color.dark_green,
+                            color = R.color.profile_texts,
                             weight = 16,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Normal
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         CustomColorTitleText(
@@ -583,9 +584,9 @@ fun ClassDetailsBox(
                         )
                         CustomColorTitleText(
                             text = "$age",
-                            color = R.color.dark_green,
+                            color = R.color.profile_texts,
                             weight = 16,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Normal
                         )
                         Spacer(modifier = Modifier.height(8.dp))
 
@@ -602,7 +603,7 @@ fun ClassDetailsBox(
                             text = program,
                             color = R.color.dark_green,
                             weight = 16,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Normal
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         CustomColorTitleText(
@@ -613,9 +614,9 @@ fun ClassDetailsBox(
                         )
                         CustomColorTitleText(
                             text = department,
-                            color = R.color.dark_green,
+                            color = R.color.profile_texts,
                             weight = 16,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Normal
                         )
                     }
                 }
@@ -644,3 +645,6 @@ fun LogoutButton(text: String, onClick: () -> Unit) {
         ButtonText(text = text)
     }
 }
+
+// for inventory screen
+

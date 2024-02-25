@@ -1,6 +1,8 @@
 package com.echelon.upickup.appscreens
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +25,7 @@ import com.echelon.upickup.components.CustomImage
 import com.echelon.upickup.network.apimodel.Event
 import com.echelon.upickup.viewmodel.CalendarViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarScreen(navController: NavHostController, viewModel: CalendarViewModel) {
     val events: List<Event> by viewModel.events.observeAsState(emptyList())
