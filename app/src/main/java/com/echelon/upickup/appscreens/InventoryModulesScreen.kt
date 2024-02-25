@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,6 +48,7 @@ fun InventoryModulesScreen(navController: NavHostController, viewModel: Inventor
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
+                Text(text = "Inventory Modules Screen")
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomImage(100,100, R.drawable.logo)
                 if (isLoading) {

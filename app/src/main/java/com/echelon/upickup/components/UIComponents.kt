@@ -277,7 +277,11 @@ fun BottomNavigationBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    if (currentRoute !in listOf(Screen.AuthRoute.route, Screen.SignInScreen.route, Screen.SignUpScreen.route, Screen.ForgotPasswordScreen.route, Screen.SignUpScreenTwo.route, Screen.SignUpScreenThree.route)) {
+    if (currentRoute !in listOf(Screen.AuthRoute.route,
+            Screen.SignInScreen.route, Screen.SignUpScreen.route,
+            Screen.ForgotPasswordScreen.route, Screen.SignUpScreenTwo.route,
+            Screen.SignUpScreenThree.route, Screen.InventoryBookScreen.route,
+            Screen.InventoryModulesScreen.route, Screen.InventoryUniformScreen.route)) {
         var selectedItem by rememberSaveable {
             mutableIntStateOf(0)
         }
@@ -573,7 +577,8 @@ fun ClassDetailsBox(
         ) {
             Column {
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(10.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
@@ -709,3 +714,55 @@ fun LogoutButton(text: String, onClick: () -> Unit) {
 
 // for inventory screen
 
+
+@Composable
+fun ClickableBoxNavigation(
+    onClick: () -> Unit,
+    text: String,
+    icon: Int
+) {
+
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .width(350.dp)
+            .height(85.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.background_color)),
+        border = BorderStroke(1.dp, colorResource(id = R.color.inventory_border))
+
+    ) {
+        Row (
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Icon(painterResource(icon),
+                contentDescription = "icons",
+                tint = colorResource(
+                    id = R.color.inventory_text
+                )
+            )
+            Spacer(modifier = Modifier.width(30.dp))
+            CustomColorTitleText(
+                text = text,
+                color = R.color.profile_texts,
+                16,
+                FontWeight.Normal
+            )
+            Row (
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(painterResource(id = R.drawable.chevron_right_solid),
+                    contentDescription = "arrow",
+                    tint = colorResource(
+                        id = R.color.inventory_text
+                    )
+                )
+            }
+        }
+    }
+}
