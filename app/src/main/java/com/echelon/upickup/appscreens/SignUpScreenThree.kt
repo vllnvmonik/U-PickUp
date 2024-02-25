@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.EditText
+import com.echelon.upickup.components.EditTextPassword
 import com.echelon.upickup.components.LogoImage
 import com.echelon.upickup.components.RoundedButton
 import com.echelon.upickup.components.TitleText
@@ -69,20 +70,18 @@ fun SignUpScreenThree(navController:NavHostController, viewModel: SignUpViewMode
                 errorMessage = stringResource(R.string.must_be_in_xx_xxxx_xxxxx_format)
             )
             Spacer(modifier = Modifier.height(10.dp))
-            EditText(
+            EditTextPassword(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChanged,
                 title = stringResource(id = R.string.password),
-                keyboardType = KeyboardType.Password,
                 isError = uiState.password.isNotBlank() && !SignUpValidation.isNameValid(uiState.password)
             )
             Spacer(modifier = Modifier.height(10.dp))
 
-            EditText(
+            EditTextPassword(
                 value = uiState.confirmPassword,
                 onValueChange = viewModel::onConfirmPasswordChanged,
                 title = stringResource(id = R.string.confirm_password),
-                keyboardType = KeyboardType.Password,
                 isError = uiState.confirmPassword.isNotBlank() && !SignUpValidation.isNameValid(uiState.confirmPassword)
             )
             Spacer(modifier = Modifier.height(40.dp))

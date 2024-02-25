@@ -20,6 +20,7 @@ import androidx.navigation.NavHostController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.ClickableNavigationText
 import com.echelon.upickup.components.EditText
+import com.echelon.upickup.components.EditTextPassword
 import com.echelon.upickup.components.LogoImage
 import com.echelon.upickup.components.RoundedButton
 import com.echelon.upickup.components.TitleText
@@ -56,11 +57,10 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            EditText(
+            EditTextPassword(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChanged,
                 title = stringResource(R.string.password),
-                keyboardType = KeyboardType.Password,
                 isError = uiState.password.isNotBlank() && !SignInValidation.isPasswordValid(uiState.password)
             )
 

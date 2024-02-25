@@ -51,7 +51,7 @@ fun CalendarScreen(navController: NavHostController, viewModel: CalendarViewMode
                 Arrangement.Center,
                 Alignment.CenterHorizontally
             ){
-                CustomImage(100,100, R.drawable.logo)
+//                CustomImage(100,100, R.drawable.logo)
                 CalendarBox()
                 CalendarAnnouncementBox()
             }

@@ -34,6 +34,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -58,6 +59,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -147,6 +150,64 @@ fun EditText(
                 color = Color.Red
             )
         }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditTextPassword(
+    value: String,
+    onValueChange: (String) -> Unit,
+    title: String,
+    isError: Boolean = false,
+    errorMessage: String? = null
+) {
+    Column {
+        var passwordVisibility by remember { mutableStateOf(false) }
+
+        val icon = if (passwordVisibility)
+            painterResource(id = R.drawable.eye_solid)
+        else
+            painterResource(id = R.drawable.eye_slash_solid)
+
+        TextField(
+            colors = TextFieldDefaults.textFieldColors(
+                unfocusedLabelColor = colorResource(id = R.color.edit_text_gray),
+                focusedLabelColor = colorResource(id = R.color.edit_text_gray),
+                containerColor = colorResource(id = R.color.background_color),
+            ),
+            modifier = Modifier
+                .width(300.dp)
+                .height(60.dp),
+            value = value,
+            onValueChange = onValueChange,
+            textStyle = TextStyle(fontSize = 18.sp),
+            label = { Text(title) },
+            placeholder = { Text(title) },
+            isError = isError,
+
+            trailingIcon = {
+                IconButton(onClick = {
+                    passwordVisibility = !passwordVisibility
+                }) {
+                    Icon(
+                        painter = icon,
+                        contentDescription = "Visibility Icon"
+                    )
+                }
+                if (isError && !errorMessage.isNullOrBlank()) {
+                    Text(
+                        text = errorMessage,
+                        modifier = Modifier.padding(start = 12.dp),
+                        color = Color.Red
+                    )
+                }
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ),
+            visualTransformation = if (passwordVisibility) VisualTransformation.None
+            else PasswordVisualTransformation()
+        )
     }
 }
 

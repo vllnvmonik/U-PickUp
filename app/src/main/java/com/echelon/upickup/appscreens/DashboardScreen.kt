@@ -52,7 +52,7 @@ fun DashboardScreen(navController: NavHostController, viewModel: PostViewModel) 
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Spacer(modifier = Modifier.height(10.dp))
-                CustomImage(100,100, R.drawable.logo)
+//                CustomImage(100,100, R.drawable.logo)
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {
