@@ -26,4 +26,8 @@
     <string name="must_be_in_xx_xxxx_xxxxx_format">Must be in XX-XXXX-XXXXX format</string>
     <string name="go_back">Go back</string>
     <string name="email">Email</string>
+    <string name="inventory">Inventory</string>
+    <string name="uniforms">Uniforms</string>
+    <string name="modules">Modules</string>
+    <string name="books">Books</string>
 </resources>
