@@ -29,12 +29,13 @@ import com.echelon.upickup.components.InventoryModulesBox
 import com.echelon.upickup.components.InventoryUniformsBox
 import com.echelon.upickup.network.apimodel.Uniform
 import com.echelon.upickup.network.apimodel.UniformsResponse
+import com.echelon.upickup.sharedprefs.UniformsManager
 import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
 
 @Composable
 fun InventoryUniformScreen(navController: NavHostController, viewModel: InventoryUniformsViewModel) {
-    val uniforms: List<UniformsResponse> by viewModel.uniform.observeAsState(emptyList())
+    val uniforms = UniformsManager.getUniformsResponse()
     Log.d("InventoryUniformScreen", "show em: $uniforms")
     val isLoading: Boolean by viewModel.isLoading.observeAsState(false)
 
@@ -66,7 +67,9 @@ fun InventoryUniformScreen(navController: NavHostController, viewModel: Inventor
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(30.dp))
-                InventoryUniformsBox(uniforms = uniforms)
+                uniforms?.let { response ->
+                    InventoryUniformsBox(uniforms = response)
+                }
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {

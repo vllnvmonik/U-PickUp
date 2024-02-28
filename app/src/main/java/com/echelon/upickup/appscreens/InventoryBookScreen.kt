@@ -24,12 +24,14 @@ import androidx.navigation.compose.rememberNavController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.CustomColorTitleText
 import com.echelon.upickup.components.InventoryBooksBox
+import com.echelon.upickup.components.InventoryUniformsBox
 import com.echelon.upickup.network.apimodel.BooksResponse
+import com.echelon.upickup.sharedprefs.BooksManager
 import com.echelon.upickup.viewmodel.InventoryBooksViewModel
 
 @Composable
 fun InventoryBooksScreen(navController: NavHostController, viewModel: InventoryBooksViewModel) {
-    val books: List<BooksResponse> by viewModel.books.observeAsState(emptyList())
+    val books = BooksManager.getBooksResponse()
     Log.d("InventoryBooksScreen", "show em: $books")
     val isLoading: Boolean by viewModel.isLoading.observeAsState(false)
 
@@ -60,7 +62,9 @@ fun InventoryBooksScreen(navController: NavHostController, viewModel: InventoryB
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(30.dp))
-                InventoryBooksBox(books = books)
+                books?.let { response ->
+                    InventoryBooksBox(books = response)
+                }
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {
