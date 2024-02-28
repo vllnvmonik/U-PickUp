@@ -83,15 +83,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.rememberAsyncImagePainter
 import com.echelon.upickup.R
+import com.echelon.upickup.model.StudentDetails
 import com.echelon.upickup.navigation.BottomNavItem
 import com.echelon.upickup.navigation.Screen
-import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.BooksResponse
-import com.echelon.upickup.network.apimodel.Modules
 import com.echelon.upickup.network.apimodel.ModulesResponse
 import com.echelon.upickup.network.apimodel.Post
 import com.echelon.upickup.network.apimodel.UniformsResponse
-import com.echelon.upickup.sharedprefs.UniformsManager
 
 
 @Composable
@@ -787,7 +785,7 @@ fun ClickableBoxNavigation(
 
 // inventory BOOKS screen
 @Composable
-fun InventoryBooksBox(books: BooksResponse?) {
+fun InventoryBooksBox(books: BooksResponse?, studentDetails: StudentDetails?) {
 
     Card(
         modifier = Modifier
@@ -817,12 +815,14 @@ fun InventoryBooksBox(books: BooksResponse?) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CustomColorTitleText(
-                        text = "BSIT",
-                        R.color.profile_texts,
-                        16,
-                        fontWeight = FontWeight.Normal
-                    )
+                    studentDetails?.let {
+                        CustomColorTitleText(
+                            text = it.program,
+                            R.color.profile_texts,
+                            16,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
                     InventoryDropdown()
                 }
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
@@ -939,7 +939,7 @@ fun InventoryDropdown() {
 
 // inventory MODULES screen
 @Composable
-fun InventoryModulesBox(modules: ModulesResponse?) {
+fun InventoryModulesBox(modules: ModulesResponse?, studentDetails: StudentDetails?) {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -968,12 +968,14 @@ fun InventoryModulesBox(modules: ModulesResponse?) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CustomColorTitleText(
-                        text = "BSIT",
-                        R.color.profile_texts,
-                        16,
-                        fontWeight = FontWeight.Normal
-                    )
+                    studentDetails?.let {
+                        CustomColorTitleText(
+                            text = it.program,
+                            R.color.profile_texts,
+                            16,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
                     InventoryDropdown()
                 }
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
@@ -1034,7 +1036,7 @@ fun InventoryModulesBox(modules: ModulesResponse?) {
 // inventory UNIFORMS screen
 
 @Composable
-fun InventoryUniformsBox(uniforms: UniformsResponse?) {
+fun InventoryUniformsBox(uniforms: UniformsResponse?, studentDetails: StudentDetails?) {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -1063,12 +1065,14 @@ fun InventoryUniformsBox(uniforms: UniformsResponse?) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CustomColorTitleText(
-                        text = "BSIT",
-                        R.color.profile_texts,
-                        16,
-                        fontWeight = FontWeight.Normal
-                    )
+                    studentDetails?.let {
+                        CustomColorTitleText(
+                            text = it.program,
+                            R.color.profile_texts,
+                            16,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
                     InventoryDropdown()
                 }
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)

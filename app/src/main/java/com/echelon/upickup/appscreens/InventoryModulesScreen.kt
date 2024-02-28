@@ -31,12 +31,14 @@ import com.echelon.upickup.components.InventoryUniformsBox
 import com.echelon.upickup.network.apimodel.Modules
 import com.echelon.upickup.network.apimodel.ModulesResponse
 import com.echelon.upickup.sharedprefs.ModulesManager
+import com.echelon.upickup.sharedprefs.StudentDetailsManager
 import com.echelon.upickup.viewmodel.InventoryBooksViewModel
 import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 
 @Composable
 fun InventoryModulesScreen(navController: NavHostController, viewModel: InventoryModulesViewModel) {
     val modules = ModulesManager.getModulesResponse()
+    val studentDetails = StudentDetailsManager.getStudentDetails()
     Log.d("InventoryModulesScreen", "show em: $modules")
     val isLoading: Boolean by viewModel.isLoading.observeAsState(false)
 
@@ -68,7 +70,7 @@ fun InventoryModulesScreen(navController: NavHostController, viewModel: Inventor
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 modules?.let { response ->
-                    InventoryModulesBox(modules = response)
+                    InventoryModulesBox(modules = response, studentDetails = studentDetails)
                 }
                 if (isLoading) {
                     CircularProgressIndicator()
