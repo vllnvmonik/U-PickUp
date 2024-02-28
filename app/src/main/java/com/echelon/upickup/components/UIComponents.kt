@@ -2,6 +2,7 @@ package com.echelon.upickup.components
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import android.widget.CalendarView
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,16 +29,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -45,16 +52,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -64,6 +76,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -73,7 +86,6 @@ import com.echelon.upickup.R
 import com.echelon.upickup.navigation.BottomNavItem
 import com.echelon.upickup.navigation.Screen
 import com.echelon.upickup.network.apimodel.Post
-import androidx.compose.runtime.remember as remember
 
 
 @Composable
@@ -762,6 +774,340 @@ fun ClickableBoxNavigation(
                         id = R.color.inventory_text
                     )
                 )
+            }
+        }
+    }
+}
+
+// inventory BOOKS screen
+@Composable
+fun InventoryBooksBox() {
+    Card(
+        modifier = Modifier
+            .padding(start = 15.dp, end = 15.dp)
+            .fillMaxSize(),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(R.color.background_color)
+        ),
+        elevation = CardDefaults.cardElevation(3.dp),
+//        border = BorderStroke(1.dp, colorResource(id = R.color.border_gray))
+    ) {
+        Box(
+            Modifier
+                .padding(start = 15.dp, end = 15.dp)
+                .fillMaxSize(),
+        ) {
+            Column (
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CustomColorTitleText(
+                        text = "BSIT",
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                    InventoryDropdown()
+                }
+                CustomDivider(height = 2, width = 330, color = R.color.border_gray)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CustomColorTitleText(
+                        text = stringResource(R.string.subject_code),
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                    CustomColorTitleText(
+                        text = stringResource(R.string.available),
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+                CustomDivider(height = 2, width = 330, color = R.color.border_gray)
+                Spacer(modifier = Modifier.height(20.dp))
+
+                LazyColumn{
+                    items(3) { details ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CustomColorTitleText(
+                                text = "ITE 400",
+                                R.color.profile_texts,
+                                16,
+                                fontWeight = FontWeight.Normal
+                            )
+                            CustomColorTitleText(
+                                text = "100",
+                                R.color.profile_texts,
+                                16,
+                                fontWeight = FontWeight.Normal
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InventoryDropdown() {
+
+    var expanded by remember { mutableStateOf(false) }
+    val suggestions = listOf("1", "2", "3", "4")
+
+    var selectedText by remember { mutableStateOf("") }
+
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+
+    val icon = if (expanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
+
+
+    Column(Modifier.padding(15.dp)) {
+        OutlinedTextField(
+            value = selectedText,
+            onValueChange = { },
+            modifier = Modifier
+                .width(200.dp)
+                .height(60.dp)
+                .onGloballyPositioned { coordinates ->
+                    //this value is used to assign to the Dropdown the same width
+                    textFieldSize = coordinates.size.toSize()
+                },
+            shape = RoundedCornerShape(10.dp),
+            label = { Text("Year Level") },
+            readOnly = true,
+            trailingIcon = {
+                Icon(icon, "contentDescription",
+                    Modifier.clickable { expanded = !expanded })
+            }
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+        ) {
+            suggestions.forEach { yearlvl ->
+
+                DropdownMenuItem(
+                    text = { Text(text = yearlvl) },
+                    onClick = {
+                        selectedText = yearlvl
+                        expanded = false
+                        Log.d("Selected Dropdown Item", yearlvl)
+
+                    }
+                )
+            }
+        }
+    }
+}
+
+// inventory MODULES screen
+@Composable
+fun InventoryModulesBox() {
+    Card(
+        modifier = Modifier
+            .padding(start = 15.dp, end = 15.dp)
+            .fillMaxSize(),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(R.color.background_color)
+        ),
+        elevation = CardDefaults.cardElevation(3.dp),
+//        border = BorderStroke(1.dp, colorResource(id = R.color.border_gray))
+    ) {
+        Box(
+            Modifier
+                .padding(start = 15.dp, end = 15.dp)
+                .fillMaxSize(),
+        ) {
+            Column (
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CustomColorTitleText(
+                        text = "BSIT",
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                    InventoryDropdown()
+                }
+                CustomDivider(height = 2, width = 330, color = R.color.border_gray)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CustomColorTitleText(
+                        text = stringResource(R.string.subject_code),
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                    CustomColorTitleText(
+                        text = stringResource(R.string.available),
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+                CustomDivider(height = 2, width = 330, color = R.color.border_gray)
+                Spacer(modifier = Modifier.height(20.dp))
+
+                LazyColumn{
+                    items(3) { details ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CustomColorTitleText(
+                                text = "ITE 400",
+                                R.color.profile_texts,
+                                16,
+                                fontWeight = FontWeight.Normal
+                            )
+                            CustomColorTitleText(
+                                text = "100",
+                                R.color.profile_texts,
+                                16,
+                                fontWeight = FontWeight.Normal
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// inventory UNIFORMS screen
+
+@Composable
+fun InventoryUniformsBox() {
+    Card(
+        modifier = Modifier
+            .padding(start = 15.dp, end = 15.dp)
+            .fillMaxSize(),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(R.color.background_color)
+        ),
+        elevation = CardDefaults.cardElevation(3.dp),
+//        border = BorderStroke(1.dp, colorResource(id = R.color.border_gray))
+    ) {
+        Box(
+            Modifier
+                .padding(start = 15.dp, end = 15.dp)
+                .fillMaxSize(),
+        ) {
+            Column (
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CustomColorTitleText(
+                        text = "BSIT",
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                    InventoryDropdown()
+                }
+                CustomDivider(height = 2, width = 330, color = R.color.border_gray)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CustomColorTitleText(
+                        text = stringResource(R.string.uniform_type),
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                    CustomColorTitleText(
+                        text = stringResource(R.string.available),
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+                CustomDivider(height = 2, width = 330, color = R.color.border_gray)
+                Spacer(modifier = Modifier.height(20.dp))
+
+                LazyColumn{
+                    items(3) { details ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CustomColorTitleText(
+                                text = "ITE 400",
+                                R.color.profile_texts,
+                                16,
+                                fontWeight = FontWeight.Normal
+                            )
+                            CustomColorTitleText(
+                                text = "100",
+                                R.color.profile_texts,
+                                16,
+                                fontWeight = FontWeight.Normal
+                            )
+                        }
+                    }
+                }
             }
         }
     }
