@@ -7,3 +7,6 @@ data class Uniform(
     val available: Int,
     val quantity: Int
 )
+data class UniformsResponse(
+    val results: List<Uniform>
+)

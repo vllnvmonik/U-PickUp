@@ -6,14 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echelon.upickup.network.apimodel.Modules
+import com.echelon.upickup.network.apimodel.ModulesResponse
 import com.echelon.upickup.repository.InventoryModulesRepository
 import kotlinx.coroutines.launch
 
 class InventoryModulesViewModel: ViewModel() {
     private val inventoryModulesRepository = InventoryModulesRepository()
 
-    private val _modules = MutableLiveData<List<Modules>>()
-    val modules: LiveData<List<Modules>> = _modules
+    private val _modules = MutableLiveData<List<ModulesResponse>>()
+    val modules: LiveData<List<ModulesResponse>> = _modules
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -24,8 +25,10 @@ class InventoryModulesViewModel: ViewModel() {
                 val response = inventoryModulesRepository.getModules()
                 if (response.isSuccessful){
                     val details = response.body()
-                    _modules.value = details
-                    Log.d("InventoryModulesViewModel", "Fetched modules: $details")
+                    details?.let {
+                        _modules.value = listOf(it)
+                        Log.d("InventoryModulesViewModel", "Fetched modules: $details")
+                    }
                 } else {
                     Log.e("InventoryModulesViewModel", "Failed to fetch modules: ${response.code()}")
                     // Handle error response

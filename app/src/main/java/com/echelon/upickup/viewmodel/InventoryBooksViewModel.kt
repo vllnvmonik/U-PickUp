@@ -6,14 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echelon.upickup.network.apimodel.Books
+import com.echelon.upickup.network.apimodel.BooksResponse
 import com.echelon.upickup.repository.InventoryBooksRepository
 import kotlinx.coroutines.launch
 
 class InventoryBooksViewModel: ViewModel() {
     private val inventoryBooksRepository = InventoryBooksRepository()
 
-    private val _books = MutableLiveData<List<Books>>()
-    val books: LiveData<List<Books>> = _books
+    private val _books = MutableLiveData<List<BooksResponse>>()
+    val books: LiveData<List<BooksResponse>> = _books
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -24,8 +25,10 @@ class InventoryBooksViewModel: ViewModel() {
                 val response = inventoryBooksRepository.getBooks()
                 if (response.isSuccessful){
                     val details = response.body()
-                    _books.value = details
-                    Log.d("InventoryBooksViewModel", "Fetched books: $details")
+                    details?.let {
+                        _books.value = listOf(it)
+                        Log.d("InventoryBooksViewModel", "Fetched books: $details")
+                    }
                 } else {
                     Log.e("InventoryBooksViewModel", "Failed to fetch books: ${response.code()}")
                     // Handle error response

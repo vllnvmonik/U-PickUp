@@ -6,14 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echelon.upickup.network.apimodel.Uniform
+import com.echelon.upickup.network.apimodel.UniformsResponse
 import com.echelon.upickup.repository.InventoryUniformsRepository
 import kotlinx.coroutines.launch
 
 class InventoryUniformsViewModel: ViewModel() {
     private val inventoryUniformsRepository = InventoryUniformsRepository()
 
-    private val _uniforms = MutableLiveData<List<Uniform>>()
-    val uniform: LiveData<List<Uniform>> = _uniforms
+    private val _uniforms = MutableLiveData<List<UniformsResponse>>()
+    val uniform: LiveData<List<UniformsResponse>> = _uniforms
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -24,8 +25,10 @@ class InventoryUniformsViewModel: ViewModel() {
                 val response = inventoryUniformsRepository.getUniforms()
                 if (response.isSuccessful){
                     val details = response.body()
-                    _uniforms.value = details
-                    Log.d("InventoryUniformsViewModel", "Fetched uniforms: $details")
+                    details?.let {
+                        _uniforms.value = listOf(it)
+                        Log.d("InventoryUniformsViewModel", "Fetched uniforms: $details")
+                    }
                 } else {
                     Log.e("InventoryUniformsViewModel", "Failed to fetch uniforms: ${response.code()}")
                     // Handle error response

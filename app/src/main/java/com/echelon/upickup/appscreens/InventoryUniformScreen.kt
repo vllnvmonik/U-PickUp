@@ -28,12 +28,13 @@ import com.echelon.upickup.components.CustomImage
 import com.echelon.upickup.components.InventoryModulesBox
 import com.echelon.upickup.components.InventoryUniformsBox
 import com.echelon.upickup.network.apimodel.Uniform
+import com.echelon.upickup.network.apimodel.UniformsResponse
 import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
 
 @Composable
 fun InventoryUniformScreen(navController: NavHostController, viewModel: InventoryUniformsViewModel) {
-    val uniforms: List<Uniform> by viewModel.uniform.observeAsState(emptyList())
+    val uniforms: List<UniformsResponse> by viewModel.uniform.observeAsState(emptyList())
     Log.d("InventoryUniformScreen", "show em: $uniforms")
     val isLoading: Boolean by viewModel.isLoading.observeAsState(false)
 

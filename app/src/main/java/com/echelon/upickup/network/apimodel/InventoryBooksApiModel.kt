@@ -7,3 +7,6 @@ data class Books(
     val available: Int,
     val quantity: Int
 )
+data class BooksResponse(
+    val results: List<Books>
+)

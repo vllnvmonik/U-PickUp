@@ -8,3 +8,6 @@ data class Modules(
     val available: Int,
     val quantity: Int
 )
+data class ModulesResponse(
+    val results: List<Modules>
+)
