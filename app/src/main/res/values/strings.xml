@@ -33,4 +33,5 @@
     <string name="subject_code">Subject Code</string>
     <string name="available">Available</string>
     <string name="uniform_type">Uniform Type</string>
+    <string name="no_events">No Events</string>
 </resources>
