@@ -91,6 +91,7 @@ import com.echelon.upickup.network.apimodel.Modules
 import com.echelon.upickup.network.apimodel.ModulesResponse
 import com.echelon.upickup.network.apimodel.Post
 import com.echelon.upickup.network.apimodel.UniformsResponse
+import com.echelon.upickup.sharedprefs.UniformsManager
 
 
 @Composable
@@ -786,7 +787,7 @@ fun ClickableBoxNavigation(
 
 // inventory BOOKS screen
 @Composable
-fun InventoryBooksBox(books: List<BooksResponse>) {
+fun InventoryBooksBox(books: BooksResponse?) {
 
     Card(
         modifier = Modifier
@@ -848,9 +849,9 @@ fun InventoryBooksBox(books: List<BooksResponse>) {
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Spacer(modifier = Modifier.height(20.dp))
 
-                LazyColumn{
-                    items(books) { booksResponse ->
-                        booksResponse.results.forEach { book ->
+                books?.let { response ->
+                    LazyColumn{
+                        items(response.results) { book ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -938,7 +939,7 @@ fun InventoryDropdown() {
 
 // inventory MODULES screen
 @Composable
-fun InventoryModulesBox(modules: List<ModulesResponse>) {
+fun InventoryModulesBox(modules: ModulesResponse?) {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -999,9 +1000,9 @@ fun InventoryModulesBox(modules: List<ModulesResponse>) {
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Spacer(modifier = Modifier.height(20.dp))
 
-                LazyColumn{
-                    items(modules) { modulesResponse ->
-                        modulesResponse.results.forEach { module ->
+                modules?.let { response ->
+                    LazyColumn{
+                        items(response.results) { module ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -1033,7 +1034,7 @@ fun InventoryModulesBox(modules: List<ModulesResponse>) {
 // inventory UNIFORMS screen
 
 @Composable
-fun InventoryUniformsBox(uniforms: List<UniformsResponse>) {
+fun InventoryUniformsBox(uniforms: UniformsResponse?) {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -1094,9 +1095,9 @@ fun InventoryUniformsBox(uniforms: List<UniformsResponse>) {
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Spacer(modifier = Modifier.height(20.dp))
 
-                LazyColumn{
-                    items(uniforms) { uniformsResponse ->
-                        uniformsResponse.results.forEach { uniform ->
+                uniforms?.let { response ->
+                    LazyColumn{
+                        items(response.results) { uniform ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
