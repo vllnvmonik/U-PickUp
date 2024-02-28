@@ -349,7 +349,7 @@ fun CustomImage(width: Int, height: Int, imageResourceID: Int) {
 }
 // dashboard screen components
 @Composable
-fun FeedBox(posts: List<Post>) {
+fun FeedBox(posts: List<com.echelon.upickup.model.Post>) {
     LazyColumn(contentPadding = PaddingValues(16.dp)){
         items(posts) { post ->
             FeedBoxLayout(modifier = Modifier, post = post)
@@ -357,7 +357,7 @@ fun FeedBox(posts: List<Post>) {
     }
 }
 @Composable
-fun FeedBoxLayout(modifier: Modifier, post: Post) {
+fun FeedBoxLayout(modifier: Modifier, post: com.echelon.upickup.model.Post) {
     Card(
         modifier = Modifier
             .padding(bottom = 15.dp)
