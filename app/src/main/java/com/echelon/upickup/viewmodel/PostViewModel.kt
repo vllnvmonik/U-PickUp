@@ -7,13 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echelon.upickup.network.apimodel.Post
 import com.echelon.upickup.repository.PostRepository
+import com.echelon.upickup.sharedprefs.PostManager
 import kotlinx.coroutines.launch
 
 class PostViewModel: ViewModel() {
     private val postRepository = PostRepository()
 
     private val _posts = MutableLiveData<List<Post>>()
-    val posts: LiveData<List<Post>> = _posts
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -27,6 +27,9 @@ class PostViewModel: ViewModel() {
                 if (response.isSuccessful){
                     val details = response.body()
                     _posts.value = details
+                    details?.let {
+                        PostManager.savePosts(it)
+                    }
                     Log.d("PostViewModel", "Fetched posts: $details")
                 } else {
                     Log.e("PostViewModel", "Failed to fetch posts: ${response.code()}")
