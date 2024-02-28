@@ -12,6 +12,9 @@ import com.echelon.upickup.network.apiservice.LogoutApiService
 import com.echelon.upickup.network.apiservice.SignInApiService
 import com.echelon.upickup.network.apiservice.StudentDetailsApiService
 import com.echelon.upickup.network.apiservice.PostApiService
+import com.echelon.upickup.network.apiservice.SignUpApiService
+import com.echelon.upickup.network.apiservice.CheckStudentEmail
+import com.echelon.upickup.network.apiservice.CheckStudentID
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -30,6 +33,18 @@ object RetrofitInstance {
     // dito naman, create kapag nagcreate doon sa taas, dapat partner sila
     val signInApiService: SignInApiService by lazy {
         retrofit.create(SignInApiService::class.java)
+    }
+
+    val signUpApiService: SignUpApiService by lazy {
+        retrofit.create(SignUpApiService::class.java)
+    }
+
+    val checkStudentID: CheckStudentID by lazy {
+        retrofit.create(CheckStudentID::class.java)
+    }
+
+    val checkStudentEmail: CheckStudentEmail by lazy {
+        retrofit.create(CheckStudentEmail::class.java)
     }
 
     val studentDetailsApiService: StudentDetailsApiService by lazy {
