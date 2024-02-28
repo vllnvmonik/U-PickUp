@@ -30,4 +30,7 @@
     <string name="uniforms">Uniforms</string>
     <string name="modules">Modules</string>
     <string name="books">Books</string>
+    <string name="subject_code">Subject Code</string>
+    <string name="available">Available</string>
+    <string name="uniform_type">Uniform Type</string>
 </resources>
