@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.BooksResponse
 import com.echelon.upickup.repository.InventoryBooksRepository
+import com.echelon.upickup.sharedprefs.BooksManager
 import kotlinx.coroutines.launch
 
 class InventoryBooksViewModel: ViewModel() {
@@ -29,6 +30,7 @@ class InventoryBooksViewModel: ViewModel() {
                         _books.value = listOf(it)
                         Log.d("InventoryBooksViewModel", "Fetched books: $details")
                     }
+                    BooksManager.saveBooksResponse(details)
                 } else {
                     Log.e("InventoryBooksViewModel", "Failed to fetch books: ${response.code()}")
                     // Handle error response

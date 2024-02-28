@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.echelon.upickup.network.apimodel.Uniform
 import com.echelon.upickup.network.apimodel.UniformsResponse
 import com.echelon.upickup.repository.InventoryUniformsRepository
+import com.echelon.upickup.sharedprefs.UniformsManager
 import kotlinx.coroutines.launch
 
 class InventoryUniformsViewModel: ViewModel() {
@@ -29,6 +29,7 @@ class InventoryUniformsViewModel: ViewModel() {
                         _uniforms.value = listOf(it)
                         Log.d("InventoryUniformsViewModel", "Fetched uniforms: $details")
                     }
+                    UniformsManager.saveUniformsResponse(details)
                 } else {
                     Log.e("InventoryUniformsViewModel", "Failed to fetch uniforms: ${response.code()}")
                     // Handle error response
