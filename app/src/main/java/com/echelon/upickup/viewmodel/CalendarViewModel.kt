@@ -7,8 +7,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.echelon.upickup.appscreens.CalendarScreen
 import com.echelon.upickup.network.apimodel.Event
 import com.echelon.upickup.repository.CalendarRepository
+import com.echelon.upickup.sharedprefs.CalendarManager
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -34,6 +36,7 @@ class CalendarViewModel: ViewModel() {
                         }
                         Log.d("CalendarViewModel", "Fetched events: $details")
                     }
+                    details?.let { CalendarManager.saveEvents(it) }
                 } else {
                     Log.e("CalendarViewModel", "Failed to fetch events: ${response.code()}")
                     // Handle error response

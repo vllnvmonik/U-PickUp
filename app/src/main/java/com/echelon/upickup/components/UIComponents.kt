@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -63,6 +62,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -73,7 +73,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
@@ -87,9 +86,12 @@ import com.echelon.upickup.model.StudentDetails
 import com.echelon.upickup.navigation.BottomNavItem
 import com.echelon.upickup.navigation.Screen
 import com.echelon.upickup.network.apimodel.BooksResponse
+import com.echelon.upickup.network.apimodel.Event
 import com.echelon.upickup.network.apimodel.ModulesResponse
-import com.echelon.upickup.network.apimodel.Post
 import com.echelon.upickup.network.apimodel.UniformsResponse
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 
 
 @Composable
@@ -418,35 +420,40 @@ fun CustomColorTitleText(
     )
 }
 
+@SuppressLint("SimpleDateFormat")
 @Composable
-fun CalendarBox() {
-    var date by remember {
-        mutableStateOf("")
-    }
+fun CalendarBox(events: List<Event>, onDateSelected: (Date) -> Unit) {
+    var selectedDate by remember { mutableStateOf<Date?>(null) }
 
     Column(
-        modifier = Modifier
-            .padding(16.dp)
+        modifier = Modifier.padding(16.dp)
     ) {
-        AndroidView(factory = { context ->
-            CalendarView(context).apply {
-//                setDateTextAppearance(R.style.calendar_date_text) // changes the color of the dates text
-            }
-        }, modifier = Modifier
-            .width(400.dp)
-            .height(330.dp)
-            .border(
-                1.5.dp, colorResource(id = R.color.border_gray),
-                shape = RoundedCornerShape(10.dp)
-            )
-        ) { calendarView ->
+        val context = LocalContext.current
+        val calendarView = remember { CalendarView(context) }
 
+        AndroidView(factory = { calendarView }) { view ->
+            view.setOnDateChangeListener { _, year, month, dayOfMonth ->
+                val calendar = Calendar.getInstance().apply {
+                    set(year, month, dayOfMonth)
+                }
+                selectedDate = calendar.time
+                selectedDate?.let { onDateSelected(it) }
+            }
+        }
+        selectedDate?.let { selected ->
+            val formatter = SimpleDateFormat("yyyy-MM-dd")
+            val selectedDateString = formatter.format(selected)
+
+            val eventsForSelectedDate = events.filter { event ->
+                event.event_date.startsWith(selectedDateString)
+            }
+            CalendarAnnouncementBox(eventsForSelectedDate, selectedDateString)
         }
     }
 }
 
 @Composable
-fun CalendarAnnouncementBox() {
+fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>, selectedDateString: String) {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -464,7 +471,10 @@ fun CalendarAnnouncementBox() {
                 .padding(20.dp)
                 .fillMaxSize(),
         ){
-            Column {
+            Column (
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
                 Spacer(modifier = Modifier.height(10.dp))
                 Row (
                     modifier = Modifier.fillMaxWidth(),
@@ -479,7 +489,7 @@ fun CalendarAnnouncementBox() {
                         tint = colorResource(id = R.color.slate)
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
-                    CustomColorTitleText(text = "Announcements will appear here!", R.color.slate, 16, fontWeight = FontWeight.Normal)
+                    CustomColorTitleText(text = "Announcement!", R.color.slate, 18, fontWeight = FontWeight.Normal)
                 }
                 Column (
                     modifier = Modifier
@@ -487,12 +497,32 @@ fun CalendarAnnouncementBox() {
                 ){
                     Spacer(modifier = Modifier.height(10.dp))
                     Spacer(modifier = Modifier.padding(5.dp))
-                    Text(text = "Announcements will appear here! Announcements will appear here! Announcements will appear here! Announcements will appear here!Announcements will appear here!",
-                        overflow = TextOverflow.Clip,
-                        style = TextStyle(
-                            fontSize = 14.sp
-                        )
-                    )
+                    Column {
+//                        CustomColorTitleText(
+//                            text = "Event for ${selectedDateString}:",
+//                            color = R.color.slate,
+//                            weight = 20,
+//                            fontWeight = FontWeight.Normal
+//                        )
+                        Spacer(modifier = Modifier.padding(5.dp))
+                        if (eventsForSelectedDate.isEmpty()) {
+                            CustomColorTitleText(text = stringResource(R.string.no_events),
+                                color = R.color.slate,
+                                weight = 20,
+                                fontWeight = FontWeight.Normal
+                            )
+                            Spacer(modifier = Modifier.padding(5.dp))
+                        } else {
+                            eventsForSelectedDate.forEach { event ->
+                                CustomColorTitleText(
+                                    text = event.event_title,
+                                    color = R.color.slate,
+                                    weight = 20,
+                                    fontWeight = FontWeight.Normal
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -735,7 +765,7 @@ fun LogoutButton(text: String, onClick: () -> Unit) {
 fun ClickableBoxNavigation(
     onClick: () -> Unit,
     text: String,
-    icon: Int
+    icon: Int,
 ) {
 
     Button(

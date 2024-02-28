@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,14 +24,14 @@ import com.echelon.upickup.components.CalendarAnnouncementBox
 import com.echelon.upickup.components.CalendarBox
 import com.echelon.upickup.components.CustomImage
 import com.echelon.upickup.network.apimodel.Event
+import com.echelon.upickup.sharedprefs.CalendarManager
 import com.echelon.upickup.viewmodel.CalendarViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarScreen(navController: NavHostController, viewModel: CalendarViewModel) {
-    val events: List<Event> by viewModel.events.observeAsState(emptyList())
+    val events = CalendarManager.getEvents()
     Log.d("CalendarScreen", "show em: $events")
-
 
     LaunchedEffect(Unit) {
         viewModel.fetchEvents()
@@ -52,8 +53,12 @@ fun CalendarScreen(navController: NavHostController, viewModel: CalendarViewMode
                 Alignment.CenterHorizontally
             ){
 //                CustomImage(100,100, R.drawable.logo)
-                CalendarBox()
-                CalendarAnnouncementBox()
+                CalendarBox(
+                    events = events,
+                    onDateSelected = { selectedDate ->
+                        Log.d("CalendarScreen", "Selected date: $selectedDate")
+                    }
+                )
             }
         }
     }
