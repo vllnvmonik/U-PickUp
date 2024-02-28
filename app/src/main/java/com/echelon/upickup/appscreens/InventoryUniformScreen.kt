@@ -66,7 +66,7 @@ fun InventoryUniformScreen(navController: NavHostController, viewModel: Inventor
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(30.dp))
-                InventoryUniformsBox()
+                InventoryUniformsBox(uniforms = uniforms)
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {

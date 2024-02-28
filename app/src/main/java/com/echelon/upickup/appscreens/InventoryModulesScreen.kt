@@ -65,7 +65,7 @@ fun InventoryModulesScreen(navController: NavHostController, viewModel: Inventor
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(30.dp))
-                InventoryModulesBox()
+                InventoryModulesBox(modules = modules)
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {

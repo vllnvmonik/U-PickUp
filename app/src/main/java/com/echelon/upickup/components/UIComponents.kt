@@ -85,7 +85,12 @@ import coil.compose.rememberAsyncImagePainter
 import com.echelon.upickup.R
 import com.echelon.upickup.navigation.BottomNavItem
 import com.echelon.upickup.navigation.Screen
+import com.echelon.upickup.network.apimodel.Books
+import com.echelon.upickup.network.apimodel.BooksResponse
+import com.echelon.upickup.network.apimodel.Modules
+import com.echelon.upickup.network.apimodel.ModulesResponse
 import com.echelon.upickup.network.apimodel.Post
+import com.echelon.upickup.network.apimodel.UniformsResponse
 
 
 @Composable
@@ -781,7 +786,8 @@ fun ClickableBoxNavigation(
 
 // inventory BOOKS screen
 @Composable
-fun InventoryBooksBox() {
+fun InventoryBooksBox(books: List<BooksResponse>) {
+
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -843,26 +849,28 @@ fun InventoryBooksBox() {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn{
-                    items(3) { details ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            CustomColorTitleText(
-                                text = "ITE 400",
-                                R.color.profile_texts,
-                                16,
-                                fontWeight = FontWeight.Normal
-                            )
-                            CustomColorTitleText(
-                                text = "100",
-                                R.color.profile_texts,
-                                16,
-                                fontWeight = FontWeight.Normal
-                            )
+                    items(books) { booksResponse ->
+                        booksResponse.results.forEach { book ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                CustomColorTitleText(
+                                    text = book.subject_name,
+                                    R.color.profile_texts,
+                                    16,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                CustomColorTitleText(
+                                    text = book.available.toString(),
+                                    R.color.profile_texts,
+                                    16,
+                                    fontWeight = FontWeight.Normal
+                                )
+                            }
                         }
                     }
                 }
@@ -930,7 +938,7 @@ fun InventoryDropdown() {
 
 // inventory MODULES screen
 @Composable
-fun InventoryModulesBox() {
+fun InventoryModulesBox(modules: List<ModulesResponse>) {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -992,26 +1000,28 @@ fun InventoryModulesBox() {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn{
-                    items(3) { details ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            CustomColorTitleText(
-                                text = "ITE 400",
-                                R.color.profile_texts,
-                                16,
-                                fontWeight = FontWeight.Normal
-                            )
-                            CustomColorTitleText(
-                                text = "100",
-                                R.color.profile_texts,
-                                16,
-                                fontWeight = FontWeight.Normal
-                            )
+                    items(modules) { modulesResponse ->
+                        modulesResponse.results.forEach { module ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                CustomColorTitleText(
+                                    text = module.subject_code,
+                                    R.color.profile_texts,
+                                    16,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                CustomColorTitleText(
+                                    text = module.available.toString(),
+                                    R.color.profile_texts,
+                                    16,
+                                    fontWeight = FontWeight.Normal
+                                )
+                            }
                         }
                     }
                 }
@@ -1023,7 +1033,7 @@ fun InventoryModulesBox() {
 // inventory UNIFORMS screen
 
 @Composable
-fun InventoryUniformsBox() {
+fun InventoryUniformsBox(uniforms: List<UniformsResponse>) {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -1085,26 +1095,28 @@ fun InventoryUniformsBox() {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn{
-                    items(3) { details ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            CustomColorTitleText(
-                                text = "ITE 400",
-                                R.color.profile_texts,
-                                16,
-                                fontWeight = FontWeight.Normal
-                            )
-                            CustomColorTitleText(
-                                text = "100",
-                                R.color.profile_texts,
-                                16,
-                                fontWeight = FontWeight.Normal
-                            )
+                    items(uniforms) { uniformsResponse ->
+                        uniformsResponse.results.forEach { uniform ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                CustomColorTitleText(
+                                    text = uniform.uniform_type,
+                                    R.color.profile_texts,
+                                    16,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                CustomColorTitleText(
+                                    text = uniform.available.toString(),
+                                    R.color.profile_texts,
+                                    16,
+                                    fontWeight = FontWeight.Normal
+                                )
+                            }
                         }
                     }
                 }
