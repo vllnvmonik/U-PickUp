@@ -16,11 +16,19 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.echelon.upickup.R
+import com.echelon.upickup.components.CustomColorTitleText
 import com.echelon.upickup.components.CustomImage
+import com.echelon.upickup.components.InventoryModulesBox
+import com.echelon.upickup.components.InventoryUniformsBox
 import com.echelon.upickup.network.apimodel.Uniform
+import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
 
 @Composable
@@ -49,9 +57,15 @@ fun InventoryUniformScreen(navController: NavHostController, viewModel: Inventor
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
-                Text(text = "Inventory Uniform Screen")
-                Spacer(modifier = Modifier.height(10.dp))
-                CustomImage(100,100, R.drawable.logo)
+                Spacer(modifier = Modifier.height(50.dp))
+                CustomColorTitleText(
+                    text =  stringResource(R.string.uniforms),
+                    R.color.inventory_text,
+                    20,
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+                InventoryUniformsBox()
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {
@@ -62,3 +76,8 @@ fun InventoryUniformScreen(navController: NavHostController, viewModel: Inventor
     }
 }
 
+@Preview
+@Composable
+fun InventoryUniformsScreenPreview() {
+    InventoryUniformScreen(navController = rememberNavController(), viewModel = InventoryUniformsViewModel())
+}

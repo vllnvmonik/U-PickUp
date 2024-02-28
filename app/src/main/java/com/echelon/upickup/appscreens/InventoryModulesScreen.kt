@@ -16,11 +16,19 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.echelon.upickup.R
+import com.echelon.upickup.components.CustomColorTitleText
 import com.echelon.upickup.components.CustomImage
+import com.echelon.upickup.components.InventoryBooksBox
+import com.echelon.upickup.components.InventoryModulesBox
 import com.echelon.upickup.network.apimodel.Modules
+import com.echelon.upickup.viewmodel.InventoryBooksViewModel
 import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 
 @Composable
@@ -48,9 +56,15 @@ fun InventoryModulesScreen(navController: NavHostController, viewModel: Inventor
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
-                Text(text = "Inventory Modules Screen")
-                Spacer(modifier = Modifier.height(10.dp))
-                CustomImage(100,100, R.drawable.logo)
+                Spacer(modifier = Modifier.height(50.dp))
+                CustomColorTitleText(
+                    text =  stringResource(R.string.modules),
+                    R.color.inventory_text,
+                    20,
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+                InventoryModulesBox()
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {
@@ -61,3 +75,8 @@ fun InventoryModulesScreen(navController: NavHostController, viewModel: Inventor
     }
 }
 
+@Preview
+@Composable
+fun InventoryModulesScreenPreview() {
+    InventoryModulesScreen(navController = rememberNavController(), viewModel = InventoryModulesViewModel())
+}
