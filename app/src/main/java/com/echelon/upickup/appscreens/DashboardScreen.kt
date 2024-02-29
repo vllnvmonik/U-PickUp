@@ -20,6 +20,8 @@ import com.echelon.upickup.components.FeedBox
 import com.echelon.upickup.viewmodel.PostViewModel
 import androidx.compose.runtime.livedata.observeAsState
 import com.echelon.upickup.sharedprefs.PostManager
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 
 @Composable
@@ -27,39 +29,46 @@ fun DashboardScreen(navController: NavHostController, viewModel: PostViewModel) 
 //    val posts = viewModel.posts.observeAsState(emptyList())
     val isLoading = viewModel.isLoading.observeAsState(false)
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchPosts()
-    }
+//    LaunchedEffect(Unit) {
+//        viewModel.fetchPosts()
+//    }
 
     // Retrieve posts from SharedPrefs
     val postDetails = PostManager.getPosts()?.sortedByDescending { it.created_at }
     Log.d("DashboardScreen", "Post details from sharedprefs: $postDetails")
+    //refreshhs
+    val refreshingState = rememberSwipeRefreshState(isRefreshing = isLoading.value)
 
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = colorResource(id = R.color.background_color)
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+        SwipeRefresh(
+            state = refreshingState,
+            onRefresh = { viewModel.fetchPosts() }
         ) {
-            Column(
+            Box(
                 modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                contentAlignment = Alignment.Center
             ) {
-                Spacer(modifier = Modifier.height(10.dp))
-                postDetails?.let { response ->
-                    FeedBox(posts = response)
-                }
-                if (isLoading.value) {
-                    CircularProgressIndicator()
-                } else {
-                    // Display posts using FeedBox or any other UI component
-//                    FeedBox(posts = posts.value)
-//                    postDetails?.let { response ->
-//                        FeedBox(posts = response)
-//                    }
-                    Log.d("DashboardScreen", "show em: $postDetails")
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    postDetails?.let { response ->
+                        FeedBox(posts = response)
+                    }
+                    if (isLoading.value) {
+                        CircularProgressIndicator()
+                    } else {
+                        // Display posts using FeedBox or any other UI component
+                        //                    FeedBox(posts = posts.value)
+                        //                    postDetails?.let { response ->
+                        //                        FeedBox(posts = response)
+                        //                    }
+                        Log.d("DashboardScreen", "show em: $postDetails")
+                    }
                 }
             }
         }

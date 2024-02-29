@@ -79,4 +79,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     // live data
     implementation ("androidx.compose.runtime:runtime-livedata:1.0.5")
+    //pull refresh
+    implementation ("com.google.accompanist:accompanist-swiperefresh:0.24.13-rc")
 }
