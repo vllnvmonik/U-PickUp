@@ -29,9 +29,9 @@ fun DashboardScreen(navController: NavHostController, viewModel: PostViewModel) 
 //    val posts = viewModel.posts.observeAsState(emptyList())
     val isLoading = viewModel.isLoading.observeAsState(false)
 
-//    LaunchedEffect(Unit) {
-//        viewModel.fetchPosts()
-//    }
+    LaunchedEffect(Unit) {
+        viewModel.fetchPosts()
+    }
 
     // Retrieve posts from SharedPrefs
     val postDetails = PostManager.getPosts()?.sortedByDescending { it.created_at }

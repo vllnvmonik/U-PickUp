@@ -2,6 +2,7 @@ package com.echelon.upickup.components
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.CalendarView
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -36,6 +37,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,6 +51,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -86,11 +89,16 @@ import com.echelon.upickup.R
 import com.echelon.upickup.model.StudentDetails
 import com.echelon.upickup.navigation.BottomNavItem
 import com.echelon.upickup.navigation.Screen
-import com.echelon.upickup.network.apimodel.BooksResponse
+import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.Event
-import com.echelon.upickup.network.apimodel.ModulesResponse
-import com.echelon.upickup.network.apimodel.UniformsResponse
+import com.echelon.upickup.network.apimodel.Modules
+import com.echelon.upickup.network.apimodel.Uniform
+import com.echelon.upickup.sharedprefs.UniformsManager
+import com.echelon.upickup.viewmodel.InventoryBooksViewModel
+import com.echelon.upickup.viewmodel.InventoryModulesViewModel
+import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
 import com.github.marlonlom.utilities.timeago.TimeAgo
+import kotlinx.coroutines.channels.BroadcastChannel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -877,7 +885,7 @@ fun ClickableBoxNavigation(
 
 // inventory BOOKS screen
 @Composable
-fun InventoryBooksBox(books: BooksResponse?, studentDetails: StudentDetails?) {
+fun InventoryBooksBox(books: List<Books>, studentDetails: StudentDetails?) {
 
     Card(
         modifier = Modifier
@@ -907,15 +915,14 @@ fun InventoryBooksBox(books: BooksResponse?, studentDetails: StudentDetails?) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    studentDetails?.let {
-                        CustomColorTitleText(
-                            text = it.program,
-                            R.color.profile_texts,
-                            16,
-                            fontWeight = FontWeight.Normal
-                        )
-                    }
-                    InventoryDropdown()
+                    val yearLevel = studentDetails?.program ?: "Select a year level"
+                    CustomColorTitleText(
+                        text = yearLevel,
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                    InventoryBooksDropdown(studentDetails, InventoryBooksViewModel())
                 }
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Row(
@@ -941,28 +948,38 @@ fun InventoryBooksBox(books: BooksResponse?, studentDetails: StudentDetails?) {
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Spacer(modifier = Modifier.height(20.dp))
 
-                books?.let { response ->
-                    LazyColumn{
-                        items(response.results) { book ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                CustomColorTitleText(
-                                    text = book.subject_name,
-                                    R.color.profile_texts,
-                                    16,
-                                    fontWeight = FontWeight.Normal
-                                )
-                                CustomColorTitleText(
-                                    text = book.available.toString(),
-                                    R.color.profile_texts,
-                                    16,
-                                    fontWeight = FontWeight.Normal
-                                )
+                if (books.isEmpty()) {
+                    CustomColorTitleText(
+                        text = "No books available",
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                } else {
+                    books.let { response ->
+                        LazyColumn{
+                            items(response) { book ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    CustomColorTitleText(
+                                        text = book.subject_name,
+                                        R.color.profile_texts,
+                                        16,
+                                        fontWeight = FontWeight.Normal
+                                    )
+                                    CustomColorTitleText(
+                                        text = book.available.toString(),
+                                        R.color.profile_texts,
+                                        16,
+                                        fontWeight = FontWeight.Normal
+                                    )
+                                }
                             }
                         }
                     }
@@ -974,7 +991,7 @@ fun InventoryBooksBox(books: BooksResponse?, studentDetails: StudentDetails?) {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InventoryDropdown() {
+fun InventoryBooksDropdown(studentDetails: StudentDetails?, viewModel: InventoryBooksViewModel) {
 
     var expanded by remember { mutableStateOf(false) }
     val suggestions = listOf("1", "2", "3", "4")
@@ -1022,7 +1039,7 @@ fun InventoryDropdown() {
                         selectedText = yearlvl
                         expanded = false
                         Log.d("Selected Dropdown Item", yearlvl)
-
+                        studentDetails?.let { viewModel.fetchBooksByYr(it.program, yearlvl.toInt()) }
                     }
                 )
             }
@@ -1032,7 +1049,7 @@ fun InventoryDropdown() {
 
 // inventory MODULES screen
 @Composable
-fun InventoryModulesBox(modules: ModulesResponse?, studentDetails: StudentDetails?) {
+fun InventoryModulesBox(modules: List<Modules>, studentDetails: StudentDetails?) {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -1061,15 +1078,14 @@ fun InventoryModulesBox(modules: ModulesResponse?, studentDetails: StudentDetail
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    studentDetails?.let {
-                        CustomColorTitleText(
-                            text = it.program,
-                            R.color.profile_texts,
-                            16,
-                            fontWeight = FontWeight.Normal
-                        )
-                    }
-                    InventoryDropdown()
+                    val yearLevel = studentDetails?.program ?: "Select a year level"
+                    CustomColorTitleText(
+                        text = yearLevel,
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                    InventoryModulesDropdown(studentDetails, InventoryModulesViewModel())
                 }
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Row(
@@ -1094,29 +1110,43 @@ fun InventoryModulesBox(modules: ModulesResponse?, studentDetails: StudentDetail
                 }
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Spacer(modifier = Modifier.height(20.dp))
-
-                modules?.let { response ->
-                    LazyColumn{
-                        items(response.results) { module ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                CustomColorTitleText(
-                                    text = module.subject_code,
-                                    R.color.profile_texts,
-                                    16,
-                                    fontWeight = FontWeight.Normal
-                                )
-                                CustomColorTitleText(
-                                    text = module.available.toString(),
-                                    R.color.profile_texts,
-                                    16,
-                                    fontWeight = FontWeight.Normal
-                                )
+                if (modules.isEmpty()) {
+                    CustomColorTitleText(
+                        text = "No modules available",
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                } else {
+                    modules.let { response ->
+                        LazyColumn {
+                            items(response) { module ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            start = 20.dp,
+                                            top = 5.dp,
+                                            bottom = 5.dp,
+                                            end = 35.dp
+                                        ),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    CustomColorTitleText(
+                                        text = module.subject_code,
+                                        R.color.profile_texts,
+                                        16,
+                                        fontWeight = FontWeight.Normal
+                                    )
+                                    CustomColorTitleText(
+                                        text = module.available.toString(),
+                                        R.color.profile_texts,
+                                        16,
+                                        fontWeight = FontWeight.Normal
+                                    )
+                                }
                             }
                         }
                     }
@@ -1126,11 +1156,69 @@ fun InventoryModulesBox(modules: ModulesResponse?, studentDetails: StudentDetail
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InventoryModulesDropdown(studentDetails: StudentDetails?, viewModel: InventoryModulesViewModel) {
+
+    var expanded by remember { mutableStateOf(false) }
+    val suggestions = listOf("1", "2", "3", "4")
+
+    var selectedText by remember { mutableStateOf("") }
+
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+
+    val icon = if (expanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
+
+
+    Column(Modifier.padding(15.dp)) {
+        OutlinedTextField(
+            value = selectedText,
+            onValueChange = { },
+            modifier = Modifier
+                .width(200.dp)
+                .height(60.dp)
+                .onGloballyPositioned { coordinates ->
+                    //this value is used to assign to the Dropdown the same width
+                    textFieldSize = coordinates.size.toSize()
+                },
+            shape = RoundedCornerShape(10.dp),
+            label = { Text("Year Level") },
+            readOnly = true,
+            trailingIcon = {
+                Icon(icon, "contentDescription",
+                    Modifier.clickable { expanded = !expanded })
+            }
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+        ) {
+            suggestions.forEach { yearlvl ->
+
+                DropdownMenuItem(
+                    text = { Text(text = yearlvl) },
+                    onClick = {
+                        selectedText = yearlvl
+                        expanded = false
+                        Log.d("Selected Dropdown Item", yearlvl)
+                        studentDetails?.let { viewModel.fetchModulesByYr(it.program, yearlvl.toInt()) }
+                    }
+                )
+            }
+        }
+    }
+}
 
 // inventory UNIFORMS screen
 
 @Composable
-fun InventoryUniformsBox(uniforms: UniformsResponse?, studentDetails: StudentDetails?) {
+fun InventoryUniformsBox(uniforms: List<Uniform>, studentDetails: StudentDetails?) {
+
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -1167,7 +1255,7 @@ fun InventoryUniformsBox(uniforms: UniformsResponse?, studentDetails: StudentDet
                             fontWeight = FontWeight.Normal
                         )
                     }
-                    InventoryDropdown()
+                    InventoryUniformsDropdown(studentDetails, InventoryUniformsViewModel())
                 }
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Row(
@@ -1193,33 +1281,97 @@ fun InventoryUniformsBox(uniforms: UniformsResponse?, studentDetails: StudentDet
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Spacer(modifier = Modifier.height(20.dp))
 
-                uniforms?.let { response ->
-                    LazyColumn{
-                        items(response.results) { uniform ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                CustomColorTitleText(
-                                    text = uniform.uniform_type,
-                                    R.color.profile_texts,
-                                    16,
-                                    fontWeight = FontWeight.Normal
-                                )
-                                CustomColorTitleText(
-                                    text = uniform.available.toString(),
-                                    R.color.profile_texts,
-                                    16,
-                                    fontWeight = FontWeight.Normal
-                                )
+                if (uniforms.isEmpty()) {
+                    CustomColorTitleText(
+                        text = "No uniforms available",
+                        R.color.profile_texts,
+                        16,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                } else {
+                    uniforms.let { response ->
+                        LazyColumn{
+                            items(response) { uniform ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    CustomColorTitleText(
+                                        text = uniform.uniform_type,
+                                        R.color.profile_texts,
+                                        16,
+                                        fontWeight = FontWeight.Normal
+                                    )
+                                    CustomColorTitleText(
+                                        text = uniform.available.toString(),
+                                        R.color.profile_texts,
+                                        16,
+                                        fontWeight = FontWeight.Normal
+                                    )
+                                }
                             }
                         }
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                 }
+            }
+        }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InventoryUniformsDropdown(studentDetails: StudentDetails?, viewModel: InventoryUniformsViewModel) {
+    var expanded by remember { mutableStateOf(false) }
+    val suggestions = listOf("1", "2", "3", "4")
+
+    var selectedText by remember { mutableStateOf("") }
+
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+
+    val icon = if (expanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
+
+    Column(Modifier.padding(15.dp)) {
+        OutlinedTextField(
+            value = selectedText,
+            onValueChange = { },
+            modifier = Modifier
+                .width(200.dp)
+                .height(60.dp)
+                .onGloballyPositioned { coordinates ->
+                    //this value is used to assign to the Dropdown the same width
+                    textFieldSize = coordinates.size.toSize()
+                },
+            shape = RoundedCornerShape(10.dp),
+            label = { Text("Year Level") },
+            readOnly = true,
+            trailingIcon = {
+                Icon(icon, "contentDescription",
+                    Modifier.clickable { expanded = !expanded })
+            }
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+        ) {
+            suggestions.forEach { yearlvl ->
+                DropdownMenuItem(
+                    text = { Text(text = yearlvl) },
+                    onClick = {
+                        selectedText = yearlvl
+                        expanded = false
+                        Log.d("Selected Dropdown Item", yearlvl)
+                        studentDetails?.let { viewModel.fetchUniformsByYr(it.program, selectedText.toInt()) }
+                    }
+                )
             }
         }
     }
