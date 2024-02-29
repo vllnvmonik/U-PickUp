@@ -32,7 +32,7 @@ fun DashboardScreen(navController: NavHostController, viewModel: PostViewModel) 
     }
 
     // Retrieve posts from SharedPrefs
-    val postDetails = PostManager.getPosts()
+    val postDetails = PostManager.getPosts()?.sortedByDescending { it.created_at }
     Log.d("DashboardScreen", "Post details from sharedprefs: $postDetails")
 
     Surface(

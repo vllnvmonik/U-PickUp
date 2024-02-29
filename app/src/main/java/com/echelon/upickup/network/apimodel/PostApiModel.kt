@@ -3,6 +3,7 @@ package com.echelon.upickup.network.apimodel
 
 data class Post(
     val post_content: String,
-    val likes_count: Int
+    val likes_count: Int,
+    val created_at: String
 )
 
