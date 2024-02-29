@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,27 +23,21 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.CustomColorTitleText
-import com.echelon.upickup.components.CustomImage
-import com.echelon.upickup.components.InventoryBooksBox
 import com.echelon.upickup.components.InventoryModulesBox
-import com.echelon.upickup.components.InventoryUniformsBox
-import com.echelon.upickup.network.apimodel.Modules
-import com.echelon.upickup.network.apimodel.ModulesResponse
 import com.echelon.upickup.sharedprefs.ModulesManager
 import com.echelon.upickup.sharedprefs.StudentDetailsManager
-import com.echelon.upickup.viewmodel.InventoryBooksViewModel
 import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 
 @Composable
 fun InventoryModulesScreen(navController: NavHostController, viewModel: InventoryModulesViewModel) {
-    val modules = ModulesManager.getModulesResponse()
+    val modules = ModulesManager.getModulesByYear()
     val studentDetails = StudentDetailsManager.getStudentDetails()
     Log.d("InventoryModulesScreen", "show em: $modules")
     val isLoading: Boolean by viewModel.isLoading.observeAsState(false)
 
 
     LaunchedEffect(Unit) {
-        viewModel.fetchModules()
+        ModulesManager.getModulesByYear()
     }
 
 
