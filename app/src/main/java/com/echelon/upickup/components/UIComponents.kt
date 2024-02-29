@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -89,10 +90,12 @@ import com.echelon.upickup.network.apimodel.BooksResponse
 import com.echelon.upickup.network.apimodel.Event
 import com.echelon.upickup.network.apimodel.ModulesResponse
 import com.echelon.upickup.network.apimodel.UniformsResponse
+import com.github.marlonlom.utilities.timeago.TimeAgo
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-
+import java.util.Locale
+import java.util.TimeZone
 
 @Composable
 fun LogoImage() {
@@ -360,11 +363,24 @@ fun FeedBox(posts: List<com.echelon.upickup.model.Post>) {
 }
 @Composable
 fun FeedBoxLayout(modifier: Modifier, post: com.echelon.upickup.model.Post) {
+    //format the created_at
+    val dateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())
+    dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
+    val createdAtDate = dateFormatter.parse(post.created_at)
+
+    // convert utc to localtimezone
+    val localCalendar = Calendar.getInstance()
+    localCalendar.time = createdAtDate
+    val localCreatedAtMillis = localCalendar.timeInMillis
+
+    // format the timestamp using timeago lib
+    val relativeTime = TimeAgo.using(localCreatedAtMillis)
+
     Card(
         modifier = Modifier
             .padding(bottom = 15.dp)
             .fillMaxWidth()
-            .height(250.dp),
+            .wrapContentSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.background_color)
@@ -383,20 +399,49 @@ fun FeedBoxLayout(modifier: Modifier, post: com.echelon.upickup.model.Post) {
                     .padding(20.dp),
                 horizontalAlignment = Alignment.Start
             ){
-//                Spacer(modifier = Modifier.height(20.dp))
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    CustomImage(
+                        width = 50,
+                        height = 50,
+                        imageResourceID = R.drawable.phinma_logo
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    CustomColorTitleText(
+                        text = relativeTime,
+                        color = R.color.black,
+                        16,
+                        FontWeight.Normal
+                    )
+                }
+                Spacer(modifier = Modifier.height(20.dp))
                 CustomColorTitleText(
                     text = post.post_content,
                     color = R.color.black,
                     16,
                     FontWeight.Normal
                 )
-                Spacer(modifier = Modifier.height(130.dp))
-                CustomColorTitleText(
-                    text = post.likes_count.toString(),
-                    color = R.color.black,
-                    16,
-                    FontWeight.Normal
-                )
+                Spacer(modifier = Modifier.height(30.dp))
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    CustomImage(
+                        width = 20,
+                        height = 20,
+                        imageResourceID = R.drawable.heart_regular
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    CustomColorTitleText(
+                        text = post.likes_count.toString(),
+                        color = R.color.black,
+                        16,
+                        FontWeight.Normal
+                    )
+                }
+
             }
         }
     }
@@ -417,6 +462,24 @@ fun CustomColorTitleText(
             fontWeight = fontWeight,
             color = colorResource(id = color)
         )
+    )
+}
+@Composable
+fun DashboardText(
+    text: String,
+    color: Int,
+    weight: Int,
+    fontWeight: FontWeight,
+    modifier: Modifier
+) {
+    Text(
+        text = text,
+        style = TextStyle(
+            fontSize = weight.sp,
+            fontWeight = fontWeight,
+            color = colorResource(id = color),
+        ),
+        modifier = modifier
     )
 }
 

@@ -81,4 +81,8 @@ dependencies {
     implementation ("androidx.compose.runtime:runtime-livedata:1.0.5")
     //pull refresh
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.24.13-rc")
+    //time
+    implementation ("com.github.marlonlom:timeago:4.0.0")
+
+
 }
