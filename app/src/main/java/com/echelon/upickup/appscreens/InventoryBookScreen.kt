@@ -30,14 +30,14 @@ import com.echelon.upickup.viewmodel.InventoryBooksViewModel
 
 @Composable
 fun InventoryBooksScreen(navController: NavHostController, viewModel: InventoryBooksViewModel) {
-    val books = BooksManager.getBooksResponse()
+    val books = BooksManager.getBooksByYear()
     val studentDetails = StudentDetailsManager.getStudentDetails()
     Log.d("InventoryBooksScreen", "show em: $books")
     val isLoading: Boolean by viewModel.isLoading.observeAsState(false)
 
 
     LaunchedEffect(Unit) {
-        viewModel.fetchBooks()
+        BooksManager.getBooksByYear()
     }
 
 
@@ -68,7 +68,7 @@ fun InventoryBooksScreen(navController: NavHostController, viewModel: InventoryB
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {
-                    Log.d("InventoryBooksScreen", "show em: $books")
+//                    Log.d("InventoryBooksScreen", "show em: $books")
                 }
             }
         }

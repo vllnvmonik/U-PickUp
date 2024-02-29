@@ -4,6 +4,7 @@ import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.BooksResponse
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface InventoryBooksApiService {
     @GET("books")
@@ -12,5 +13,5 @@ interface InventoryBooksApiService {
 
 interface FilterBooksApiService {
     @GET("books/{course}/{year_level}")
-    suspend fun getBooks(): Response<List<Books>>
+    suspend fun getBooks(@Path("course") course: String, @Path("year_level") year_level: Int): Response<List<Books>>
 }
