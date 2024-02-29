@@ -670,8 +670,7 @@ fun ClassDetailsBox(
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
-            .width(350.dp)
-            .height(440.dp),
+            .wrapContentSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.background_color)
@@ -883,7 +882,7 @@ fun InventoryBooksBox(books: BooksResponse?, studentDetails: StudentDetails?) {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
-            .fillMaxSize(),
+            .wrapContentSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.background_color)
@@ -894,11 +893,11 @@ fun InventoryBooksBox(books: BooksResponse?, studentDetails: StudentDetails?) {
         Box(
             Modifier
                 .padding(start = 15.dp, end = 15.dp)
-                .fillMaxSize(),
+                .wrapContentSize(),
         ) {
             Column (
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .wrapContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Row(
@@ -967,6 +966,7 @@ fun InventoryBooksBox(books: BooksResponse?, studentDetails: StudentDetails?) {
                             }
                         }
                     }
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
         }
@@ -1036,7 +1036,7 @@ fun InventoryModulesBox(modules: ModulesResponse?, studentDetails: StudentDetail
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
-            .fillMaxSize(),
+            .wrapContentSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.background_color)
@@ -1047,11 +1047,11 @@ fun InventoryModulesBox(modules: ModulesResponse?, studentDetails: StudentDetail
         Box(
             Modifier
                 .padding(start = 15.dp, end = 15.dp)
-                .fillMaxSize(),
+                .wrapContentSize(),
         ) {
             Column (
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .wrapContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Row(
@@ -1120,6 +1120,7 @@ fun InventoryModulesBox(modules: ModulesResponse?, studentDetails: StudentDetail
                             }
                         }
                     }
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
         }
@@ -1133,7 +1134,7 @@ fun InventoryUniformsBox(uniforms: UniformsResponse?, studentDetails: StudentDet
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
-            .fillMaxSize(),
+            .wrapContentSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = colorResource(R.color.background_color)
@@ -1144,11 +1145,11 @@ fun InventoryUniformsBox(uniforms: UniformsResponse?, studentDetails: StudentDet
         Box(
             Modifier
                 .padding(start = 15.dp, end = 15.dp)
-                .fillMaxSize(),
+                .wrapContentSize(),
         ) {
             Column (
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .wrapContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Row(
@@ -1217,6 +1218,7 @@ fun InventoryUniformsBox(uniforms: UniformsResponse?, studentDetails: StudentDet
                             }
                         }
                     }
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
         }
