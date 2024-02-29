@@ -2,8 +2,12 @@ package com.echelon.upickup.sharedprefs
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
+import com.echelon.upickup.network.apimodel.Modules
+import com.echelon.upickup.network.apimodel.Uniform
 import com.echelon.upickup.network.apimodel.UniformsResponse
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 object UniformsManager {
     private const val PREF_NAME = "UniformsPrefs"
@@ -26,6 +30,19 @@ object UniformsManager {
     fun getUniformsResponse(): UniformsResponse? {
         val serializedUniformsResponse = sharedPreferences.getString(KEY_UNIFORMS_RESPONSE, null)
         return gson.fromJson(serializedUniformsResponse, UniformsResponse::class.java)
+    }
+
+    fun saveUniformsByYear(uniformsByYear: List<Uniform>?) {
+        val serializedUniformsByYear = gson.toJson(uniformsByYear)
+        val editor = sharedPreferences.edit()
+        editor.putString(KEY_UNIFORMS_RESPONSE, serializedUniformsByYear)
+        editor.apply()
+        Log.d("uniformsByYear", " $serializedUniformsByYear")
+    }
+    fun getUniformsByYear(): List<Uniform>? {
+        val serializedUniformsByYear = sharedPreferences.getString(KEY_UNIFORMS_RESPONSE, null)
+        val type = object : TypeToken<List<Uniform>>() {}.type
+        return gson.fromJson<List<Uniform>>(serializedUniformsByYear, type)
     }
 
     fun clearUniformsResponse() {
