@@ -15,6 +15,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -26,6 +28,7 @@ import com.echelon.upickup.R
 import com.echelon.upickup.components.ClassDetailsBox
 import com.echelon.upickup.components.CustomColorTitleText
 import com.echelon.upickup.components.LogoutButton
+import com.echelon.upickup.components.LogoutDialog
 import com.echelon.upickup.components.StaticProfile
 import com.echelon.upickup.navigation.Screen
 import com.echelon.upickup.sharedprefs.AuthManager
@@ -40,6 +43,7 @@ fun ProfileScreen(navController: NavHostController, viewModel: ProfileViewModel)
     Log.d("ProfileScreen", "Student details: $studentDetails")
     val logoutViewModel = LogoutViewModel()
 
+    val showDialog = remember { mutableStateOf(false) }
 
     Surface(
         modifier = Modifier
@@ -93,26 +97,37 @@ fun ProfileScreen(navController: NavHostController, viewModel: ProfileViewModel)
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     LogoutButton(text = stringResource(R.string.logout)) {
-                        val token = AuthManager.getAuthToken()
-                        if (token != null) {
-                            Log.d("tokeennnnnn", token)
-                        }
-                        if (!token.isNullOrBlank()) {
-                            logoutViewModel.logout(token)
-                            AuthManager.clearAuthToken()
-                            StudentDetailsManager.clearStudentDetails()
-                            navController.navigate(Screen.SignInScreen.route) {
-                                popUpTo(Screen.SignInScreen.route) {
-                                    inclusive = true
-                                }
-                            }
-                        } else {
-                            Log.e("ProfileScreen", "Token is null or blank")
-                        }
+                        showDialog.value = true
                     }
                 }
             }
         }
+    }
+    if (showDialog.value) {
+        LogoutDialog(
+            onConfirm = {
+                showDialog.value = false
+                val token = AuthManager.getAuthToken()
+                if (token != null) {
+                    Log.d("tokeennnnnn", token)
+                }
+                if (!token.isNullOrBlank()) {
+                    logoutViewModel.logout(token)
+                    AuthManager.clearAuthToken()
+                    StudentDetailsManager.clearStudentDetails()
+                    navController.navigate(Screen.SignInScreen.route) {
+                        popUpTo(Screen.SignInScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                } else {
+                    Log.e("ProfileScreen", "Token is null or blank")
+                }
+            },
+            onDismiss = {
+                showDialog.value = false
+            }
+        )
     }
 }
 

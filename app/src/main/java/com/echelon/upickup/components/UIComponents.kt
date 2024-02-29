@@ -33,6 +33,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -815,6 +816,74 @@ fun CustomDivider(height: Int, width: Int, color: Int) {
             .background(colorResource(id = color))
     )
 }
+// logout dialog box
+@Composable
+fun LogoutDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = {
+            CustomColorTitleText(
+                text = "Logout",
+                color = R.color.profile_texts,
+                16,
+                FontWeight.Normal
+            )
+        },
+        text = {
+            CustomColorTitleText(
+                text = "Are you sure you want to logout?",
+                color = R.color.profile_texts,
+                16,
+                FontWeight.Normal
+            )
+        },
+        confirmButton = {
+            Button(
+                onClick = { onConfirm() },
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.dark_green)),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier
+                    .height(40.dp)
+                    .width(80.dp)
+            ) {
+                CustomColorTitleText(
+                    text = "Yes",
+                    color = R.color.background_color,
+                    14,
+                    FontWeight.Normal
+                )
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = { onDismiss() },
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.dark_red)),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier
+                    .height(40.dp)
+                    .width(80.dp)
+
+            ) {
+                CustomColorTitleText(
+                    text = "No",
+                    color = R.color.background_color,
+                    14,
+                    FontWeight.Normal
+                )
+            }
+        },
+        containerColor = colorResource(id = R.color.background_color),
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier.padding(5.dp)
+            .wrapContentSize()
+
+    )
+}
+
+
 @Composable
 fun LogoutButton(text: String, onClick: () -> Unit) {
     Button(onClick = onClick,
@@ -963,7 +1032,12 @@ fun InventoryBooksBox(books: List<Books>, studentDetails: StudentDetails?) {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
+                                        .padding(
+                                            start = 20.dp,
+                                            top = 5.dp,
+                                            bottom = 5.dp,
+                                            end = 35.dp
+                                        ),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
@@ -1296,7 +1370,12 @@ fun InventoryUniformsBox(uniforms: List<Uniform>, studentDetails: StudentDetails
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 35.dp),
+                                        .padding(
+                                            start = 20.dp,
+                                            top = 5.dp,
+                                            bottom = 5.dp,
+                                            end = 35.dp
+                                        ),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
