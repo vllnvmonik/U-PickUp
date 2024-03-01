@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.Modules
 import com.echelon.upickup.network.apimodel.ModulesResponse
 import com.echelon.upickup.repository.InventoryModulesRepository
@@ -17,6 +18,9 @@ class InventoryModulesViewModel: ViewModel() {
 
     private val _modules = MutableLiveData<List<ModulesResponse>>()
     val modules: LiveData<List<ModulesResponse>> = _modules
+
+    private val _getYear = MutableLiveData<List<Modules>>()
+    val getYear: LiveData<List<Modules>> = _getYear
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -31,7 +35,6 @@ class InventoryModulesViewModel: ViewModel() {
                         _modules.value = listOf(it)
                         Log.d("InventoryModulesViewModel", "Fetched modules: $details")
                     }
-                    ModulesManager.saveModulesResponse(details)
                 } else {
                     Log.e("InventoryModulesViewModel", "Failed to fetch modules: ${response.code()}")
                     // Handle error response
@@ -39,6 +42,25 @@ class InventoryModulesViewModel: ViewModel() {
             } catch (e: Exception) {
                 Log.e("InventoryModulesViewModel", "Error fetching modules: ${e.message}", e)
                 // Handle network exceptions
+            }
+        }
+    }
+    fun fetchModulesByYr(course: String, year_level: Int) {
+        viewModelScope.launch {
+            try {
+                val response = inventoryModulesRepository.getModulesYr(course, year_level)
+                if (response.isSuccessful){
+                    val details = response.body()
+                    details?.let {
+                        _getYear.value = it
+                        Log.d("InventoryModulesViewModel", "Fetched modules: $details")
+                    }
+                    ModulesManager.saveModulesByYear(details)
+                } else {
+                    Log.e("getbyyearrmodds", "Failed tsdsfsfo sdfsdf mods:${response.code()}")
+                }
+            } catch (e: Exception) {
+                Log.e("sdfsdfsdfsdmodds", "Error sdfsd dssdfsdfs: ${e.message}", e)
             }
         }
     }

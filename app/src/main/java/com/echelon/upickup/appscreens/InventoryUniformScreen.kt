@@ -36,7 +36,7 @@ import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
 
 @Composable
 fun InventoryUniformScreen(navController: NavHostController, viewModel: InventoryUniformsViewModel) {
-    val uniforms = UniformsManager.getUniformsResponse()
+    val uniforms = UniformsManager.getUniformsByYear()
     val studentDetails = StudentDetailsManager.getStudentDetails()
     Log.d("InventoryUniformScreen", "show em: $uniforms")
     val isLoading: Boolean by viewModel.isLoading.observeAsState(false)
@@ -44,7 +44,7 @@ fun InventoryUniformScreen(navController: NavHostController, viewModel: Inventor
 
 
     LaunchedEffect(Unit) {
-        viewModel.fetchUniforms()
+        UniformsManager.getUniformsByYear()
     }
 
 
@@ -75,7 +75,7 @@ fun InventoryUniformScreen(navController: NavHostController, viewModel: Inventor
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {
-                    Log.d("InventoryUniformScreen", "show em: $uniforms")
+                    Log.d("unifscreen", "show em: $uniforms")
                 }
             }
         }
