@@ -29,9 +29,9 @@ fun DashboardScreen(navController: NavHostController, viewModel: PostViewModel) 
 //    val posts = viewModel.posts.observeAsState(emptyList())
     val isLoading = viewModel.isLoading.observeAsState(false)
 
-//    LaunchedEffect(Unit) {
-//        viewModel.fetchPosts()
-//    }
+    LaunchedEffect(Unit) {
+        viewModel.fetchPosts()
+    }
 
     // Retrieve posts from SharedPrefs
     val postDetails = PostManager.getPosts()?.sortedByDescending { it.created_at }
@@ -57,16 +57,16 @@ fun DashboardScreen(navController: NavHostController, viewModel: PostViewModel) 
                 ) {
                     Spacer(modifier = Modifier.height(10.dp))
                     postDetails?.let { response ->
-                        FeedBox(posts = response)
-                    }
+                        FeedBox(
+                            posts = response,
+                            onLikeClicked = { postId->
+                                viewModel.likePost(postId)
+                                viewModel.fetchPosts()
+                            }
+                        )                    }
                     if (isLoading.value) {
                         CircularProgressIndicator()
                     } else {
-                        // Display posts using FeedBox or any other UI component
-                        //                    FeedBox(posts = posts.value)
-                        //                    postDetails?.let { response ->
-                        //                        FeedBox(posts = response)
-                        //                    }
                         Log.d("DashboardScreen", "show em: $postDetails")
                     }
                 }

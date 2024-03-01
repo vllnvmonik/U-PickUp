@@ -83,6 +83,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.rememberAsyncImagePainter
 import com.echelon.upickup.R
+import com.echelon.upickup.model.Post
 import com.echelon.upickup.model.StudentDetails
 import com.echelon.upickup.navigation.BottomNavItem
 import com.echelon.upickup.navigation.Screen
@@ -353,16 +354,43 @@ fun CustomImage(width: Int, height: Int, imageResourceID: Int) {
     )
 }
 // dashboard screen components
+//@Composable
+//fun FeedBox(posts: List<com.echelon.upickup.model.Post>) {
+//    LazyColumn(contentPadding = PaddingValues(16.dp)){
+//        items(posts) { post ->
+//            FeedBoxLayout(modifier = Modifier, post = post)
+//        }
+//    }
+//}
+
 @Composable
-fun FeedBox(posts: List<com.echelon.upickup.model.Post>) {
-    LazyColumn(contentPadding = PaddingValues(16.dp)){
+fun FeedBox(
+    posts: List<com.echelon.upickup.model.Post>,
+    onLikeClicked: (postId: String) -> Unit
+) {
+    LazyColumn(contentPadding = PaddingValues(16.dp)) {
         items(posts) { post ->
-            FeedBoxLayout(modifier = Modifier, post = post)
+            FeedBoxLayout(
+                modifier = Modifier,
+                post = post,
+                onLikeClicked = onLikeClicked // Pass onLikeClicked parameter here
+            )
         }
     }
 }
+
+
+
+
 @Composable
-fun FeedBoxLayout(modifier: Modifier, post: com.echelon.upickup.model.Post) {
+fun FeedBoxLayout(
+    modifier: Modifier,
+    post: com.echelon.upickup.model.Post,
+    onLikeClicked: (postId: String) -> Unit
+) {
+
+    var isLiked by remember { mutableStateOf(false) }
+
     //format the created_at
     val dateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())
     dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
@@ -424,14 +452,24 @@ fun FeedBoxLayout(modifier: Modifier, post: com.echelon.upickup.model.Post) {
                     FontWeight.Normal
                 )
                 Spacer(modifier = Modifier.height(30.dp))
-                Row (
+                Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
-                ){
-                    CustomImage(
-                        width = 20,
-                        height = 20,
-                        imageResourceID = R.drawable.heart_regular
+                ) {
+                    val heartIcon = if (isLiked) {
+                        R.drawable.heart_liked
+                    } else {
+                        R.drawable.heart_regular
+                    }
+                    Image(
+                        painter = painterResource(id = heartIcon),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable {
+                                isLiked = !isLiked
+                                onLikeClicked(post.id)
+                            }
+                            .size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     CustomColorTitleText(
@@ -441,7 +479,6 @@ fun FeedBoxLayout(modifier: Modifier, post: com.echelon.upickup.model.Post) {
                         FontWeight.Normal
                     )
                 }
-
             }
         }
     }

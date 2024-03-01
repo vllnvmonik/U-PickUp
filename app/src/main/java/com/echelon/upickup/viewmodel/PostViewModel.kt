@@ -6,12 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echelon.upickup.network.apimodel.Post
+import com.echelon.upickup.network.apimodel.PostLikeResponse
 import com.echelon.upickup.repository.PostRepository
+import com.echelon.upickup.repository.StudentRepository
 import com.echelon.upickup.sharedprefs.PostManager
 import kotlinx.coroutines.launch
 
 class PostViewModel: ViewModel() {
+
     private val postRepository = PostRepository()
+
 
     private val _posts = MutableLiveData<List<Post>>()
 
@@ -41,4 +45,33 @@ class PostViewModel: ViewModel() {
             }
         }
     }
+
+    private val _likePostResult = MutableLiveData<Result<PostLikeResponse>>()
+    val likePostResult: LiveData<Result<PostLikeResponse>> = _likePostResult
+
+    fun likePost(postId: String) {
+        viewModelScope.launch {
+            _likePostResult.value = postRepository.likePost(postId)
+        }
+        Log.d("PostViewModel", "like clicked ye, post id: $postId")
+    }
+
+
+//    fun likePost(postId: String) {
+//        viewModelScope.launch {
+//            try {
+//                val response = postRepository.likePost(postId)
+//                val updatedPosts = _posts.value?.map { post ->
+//                    if (post.id == postId) {
+//                        // Update likes count for the specific post
+//                        post.copy(likes_count = post.likes_count + 1)
+//                    } else {
+//                        post
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                Log.e("PostViewModel", "Error liking post: ${e.message}", e)
+//            }
+//        }
+//    }
 }

@@ -15,6 +15,7 @@ import com.echelon.upickup.network.apiservice.PostApiService
 import com.echelon.upickup.network.apiservice.SignUpApiService
 import com.echelon.upickup.network.apiservice.CheckStudentEmail
 import com.echelon.upickup.network.apiservice.CheckStudentID
+import com.echelon.upickup.network.apiservice.PostLikesApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -58,6 +59,10 @@ object RetrofitInstance {
     }
     val postApiService: PostApiService by lazy {
         retrofit.create(PostApiService::class.java)
+    }
+
+    val postLikesApiService: PostLikesApiService by lazy {
+        retrofit.create(PostLikesApiService::class.java)
     }
     val calendarApiService: CalendarApiService by lazy {
         retrofit.create(CalendarApiService::class.java)
