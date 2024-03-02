@@ -43,7 +43,7 @@ fun InventoryBooksScreen(navController: NavHostController, viewModel: InventoryB
 
     Surface (modifier = Modifier
         .fillMaxSize(),
-        color = colorResource(id = R.color.background_color)
+        color = colorResource(id = R.color.whitee)
     ){
         Box(
             modifier = Modifier.fillMaxSize(),

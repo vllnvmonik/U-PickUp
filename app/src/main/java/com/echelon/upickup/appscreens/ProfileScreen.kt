@@ -49,7 +49,7 @@ fun ProfileScreen(navController: NavHostController, viewModel: ProfileViewModel)
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()), // for scrollable screen
-        color = colorResource(id = R.color.background_color)
+        color = colorResource(id = R.color.whitee)
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

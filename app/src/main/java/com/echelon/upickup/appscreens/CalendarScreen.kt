@@ -34,13 +34,14 @@ fun CalendarScreen(navController: NavHostController, viewModel: CalendarViewMode
     Log.d("CalendarScreen", "show em: $events")
 
     LaunchedEffect(Unit) {
+        CalendarManager.getEvents()
         viewModel.fetchEvents()
     }
 
 
     Surface (modifier = Modifier
         .fillMaxSize(),
-        color = colorResource(id = R.color.background_color)
+        color = colorResource(id = R.color.whitee)
     ){
         Box(
             modifier = Modifier.fillMaxSize())

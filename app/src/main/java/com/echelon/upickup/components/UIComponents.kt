@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -318,8 +319,8 @@ fun BottomNavigationBar(navController: NavHostController) {
         }
         NavigationBar (
             modifier = Modifier
-                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
-            containerColor = colorResource(id = R.color.bottom_bar)
+                .clip(RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp)),
+            containerColor = colorResource(id = R.color.white),
         ){
             items.forEachIndexed{ index, item ->
                 NavigationBarItem(
@@ -342,7 +343,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                     },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = colorResource(id = R.color.selected_nav_icon),
-                        indicatorColor = colorResource(id = R.color.bottom_bar),
+                        indicatorColor = colorResource(id = R.color.white),
                         unselectedIconColor = colorResource(id = R.color.unselected_nav_icon),
                     )
                 )
@@ -420,9 +421,9 @@ fun FeedBoxLayout(
             .wrapContentSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(id = R.color.background_color)
+            containerColor = colorResource(id = R.color.white)
         ),
-        elevation = CardDefaults.cardElevation(1.dp),
+        elevation = CardDefaults.cardElevation(0.5.dp),
 //        border = BorderStroke(2.dp, colorResource(id = R.color.border_gray))
     ) {
         Box(
@@ -466,7 +467,7 @@ fun FeedBoxLayout(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     val heartIcon = if (isLiked) {
-                        R.drawable.heart_liked
+                        R.drawable.heart_solid
                     } else {
                         R.drawable.heart_regular
                     }
@@ -556,6 +557,7 @@ fun CalendarBox(events: List<Event>, onDateSelected: (Date) -> Unit) {
             val eventsForSelectedDate = events.filter { event ->
                 event.event_date.startsWith(selectedDateString)
             }
+            Spacer(modifier = Modifier.height(10.dp))
             CalendarAnnouncementBox(eventsForSelectedDate, selectedDateString)
         }
     }
@@ -565,15 +567,16 @@ fun CalendarBox(events: List<Event>, onDateSelected: (Date) -> Unit) {
 fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>, selectedDateString: String) {
     Card(
         modifier = Modifier
-            .padding(start = 15.dp, end = 15.dp)
-            .width(400.dp)
-            .height(320.dp),
-        shape = RoundedCornerShape(10.dp),
+//            .padding(start = 15.dp, end = 15.dp)
+//            .width(400.dp)
+//            .height(320.dp),
+            .wrapContentSize(),
+//        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(id = R.color.calendar_announcement_box)
+            containerColor = colorResource(id = R.color.whitee)
         ),
-        elevation = CardDefaults.cardElevation(3.dp),
-        border = BorderStroke(2.dp, colorResource(id = R.color.unselected_nav_icon))
+//        elevation = CardDefaults.cardElevation(3.dp),
+//        border = BorderStroke(2.dp, colorResource(id = R.color.whitee))
     ) {
         Box(
             Modifier
@@ -598,7 +601,7 @@ fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>, selectedDateStri
                         tint = colorResource(id = R.color.slate)
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
-                    CustomColorTitleText(text = "Announcement!", R.color.slate, 18, fontWeight = FontWeight.Normal)
+                    CustomColorTitleText(text = "Announcement!", R.color.slate, 20, fontWeight = FontWeight.Normal)
                 }
                 Column (
                     modifier = Modifier
@@ -615,7 +618,7 @@ fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>, selectedDateStri
 //                        )
                         Spacer(modifier = Modifier.padding(5.dp))
                         if (eventsForSelectedDate.isEmpty()) {
-                            CustomColorTitleText(text = stringResource(R.string.no_events),
+                            CustomColorTitleText(text = stringResource(R.string.no_events_for_today),
                                 color = R.color.slate,
                                 weight = 20,
                                 fontWeight = FontWeight.Normal
@@ -719,7 +722,7 @@ fun ClassDetailsBox(
             .wrapContentSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.background_color)
+            containerColor = colorResource(R.color.whitee)
         ),
 //        elevation = CardDefaults.cardElevation(3.dp),
 //        border = BorderStroke(1.dp, colorResource(id = R.color.border_gray))
@@ -888,7 +891,7 @@ fun LogoutDialog(
             ) {
                 CustomColorTitleText(
                     text = "Yes",
-                    color = R.color.background_color,
+                    color = R.color.whitee,
                     14,
                     FontWeight.Normal
                 )
@@ -906,15 +909,16 @@ fun LogoutDialog(
             ) {
                 CustomColorTitleText(
                     text = "No",
-                    color = R.color.background_color,
+                    color = R.color.whitee,
                     14,
                     FontWeight.Normal
                 )
             }
         },
-        containerColor = colorResource(id = R.color.background_color),
+        containerColor = colorResource(id = R.color.whitee),
         shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.padding(5.dp)
+        modifier = Modifier
+            .padding(5.dp)
             .wrapContentSize()
 
     )
@@ -950,8 +954,9 @@ fun ClickableBoxNavigation(
             .width(350.dp)
             .height(85.dp),
         shape = RoundedCornerShape(10.dp),
-        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.background_color)),
-        border = BorderStroke(1.dp, colorResource(id = R.color.inventory_border))
+        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
+        elevation = ButtonDefaults.buttonElevation(1.dp)
+//        border = BorderStroke(1.dp, colorResource(id = R.color.inventory_border))
 
     ) {
         Row (
@@ -999,9 +1004,9 @@ fun InventoryBooksBox(books: List<Books>, studentDetails: StudentDetails?) {
             .wrapContentSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.background_color)
+            containerColor = colorResource(R.color.white)
         ),
-        elevation = CardDefaults.cardElevation(3.dp),
+        elevation = CardDefaults.cardElevation(1.dp),
 //        border = BorderStroke(1.dp, colorResource(id = R.color.border_gray))
     ) {
         Box(
@@ -1167,7 +1172,7 @@ fun InventoryModulesBox(modules: List<Modules>, studentDetails: StudentDetails?)
             .wrapContentSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.background_color)
+            containerColor = colorResource(R.color.white)
         ),
         elevation = CardDefaults.cardElevation(3.dp),
 //        border = BorderStroke(1.dp, colorResource(id = R.color.border_gray))
@@ -1336,7 +1341,7 @@ fun InventoryUniformsBox(uniforms: List<Uniform>, studentDetails: StudentDetails
             .wrapContentSize(),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.background_color)
+            containerColor = colorResource(R.color.white)
         ),
         elevation = CardDefaults.cardElevation(3.dp),
 //        border = BorderStroke(1.dp, colorResource(id = R.color.border_gray))

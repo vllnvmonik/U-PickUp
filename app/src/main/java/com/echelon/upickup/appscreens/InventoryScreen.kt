@@ -38,7 +38,7 @@ fun InventoryScreenPreview() {
 fun InventoryScreen(navController: NavHostController) {
     Surface (modifier = Modifier
         .fillMaxSize(),
-        color = colorResource(id = R.color.background_color)
+        color = colorResource(id = R.color.whitee)
     ){
         Column (
             modifier = Modifier
