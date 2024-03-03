@@ -557,14 +557,23 @@ fun CalendarBox(events: List<Event>, onDateSelected: (Date) -> Unit) {
             val eventsForSelectedDate = events.filter { event ->
                 event.event_date.startsWith(selectedDateString)
             }
-            Spacer(modifier = Modifier.height(10.dp))
-            CalendarAnnouncementBox(eventsForSelectedDate, selectedDateString)
+//            Spacer(modifier = Modifier.height(10.dp))
+            CalendarAnnouncementBox(eventsForSelectedDate)
         }
     }
 }
 
+@SuppressLint("SimpleDateFormat")
 @Composable
-fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>, selectedDateString: String) {
+fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>) {
+    val currentDate = Calendar.getInstance().time
+
+    //format the date to utc
+//    val dateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+//    dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
+//    val formattedCurrentDate = dateFormatter.format(currentDate)
+//    val parsedDate = dateFormatter.parse(formattedCurrentDate)
+
     Card(
         modifier = Modifier
 //            .padding(start = 15.dp, end = 15.dp)
@@ -582,33 +591,29 @@ fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>, selectedDateStri
             Modifier
                 .padding(20.dp)
                 .fillMaxSize(),
-        ){
-            Column (
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
+        ) {
+            Column {
                 Spacer(modifier = Modifier.height(10.dp))
-                Row (
+                Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
-                ){
-                    Icon(
-                        painter = painterResource(id = R.drawable.bullhorn_solid),
-                        contentDescription = "announcement",
-                        modifier = Modifier
-                            .height(30.dp)
-                            .width(30.dp),
-                        tint = colorResource(id = R.color.slate)
-                    )
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    CustomColorTitleText(text = "Announcement!", R.color.slate, 20, fontWeight = FontWeight.Normal)
+                ) {
+//                    Icon(
+//                        painter = painterResource(id = R.drawable.bullhorn_solid),
+//                        contentDescription = "announcement",
+//                        modifier = Modifier
+//                            .height(30.dp)
+//                            .width(30.dp),
+//                        tint = colorResource(id = R.color.slate)
+//                    )
+//                    Spacer(modifier = Modifier.padding(10.dp))
+//                    CustomColorTitleText(text = "Events", R.color.slate, 20, FontWeight.Normal)
                 }
-                Column (
+                Column(
                     modifier = Modifier
                         .padding(5.dp)
                 ){
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Spacer(modifier = Modifier.padding(5.dp))
+//                    Spacer(modifier = Modifier.height(10.dp))
                     Column {
 //                        CustomColorTitleText(
 //                            text = "Event for ${selectedDateString}:",
@@ -616,23 +621,181 @@ fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>, selectedDateStri
 //                            weight = 20,
 //                            fontWeight = FontWeight.Normal
 //                        )
-                        Spacer(modifier = Modifier.padding(5.dp))
-                        if (eventsForSelectedDate.isEmpty()) {
-                            CustomColorTitleText(text = stringResource(R.string.no_events_for_today),
-                                color = R.color.slate,
-                                weight = 20,
-                                fontWeight = FontWeight.Normal
-                            )
-                            Spacer(modifier = Modifier.padding(5.dp))
-                        } else {
-                            eventsForSelectedDate.forEach { event ->
+
+                        // display current events
+                        val currentEvents = eventsForSelectedDate
+                            .filter { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date) == currentDate }
+                            .sortedByDescending { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! }
+
+                        if (currentEvents.isNotEmpty()) {
+                            Spacer(modifier = Modifier.padding(50.dp))
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CustomColorTitleText(
+                                    text = stringResource(R.string.current_event),
+                                    color = R.color.slate,
+                                    weight = 20,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            currentEvents.forEach { event ->
+                                val formattedDate =
+                                    currentDate.let {
+                                        SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).format(
+                                            it
+                                        )
+                                    }
+                                Spacer(modifier = Modifier.height(10.dp))
+                                CustomColorTitleText(
+                                    text = formattedDate.toString(),
+                                    color = R.color.slate,
+                                    weight = 20,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                Spacer(modifier = Modifier.height(5.dp))
                                 CustomColorTitleText(
                                     text = event.event_title,
                                     color = R.color.slate,
                                     weight = 20,
                                     fontWeight = FontWeight.Normal
                                 )
+                                Spacer(modifier = Modifier.height(10.dp))
+                                CustomDivider(
+                                    height = 1,
+                                    width = 330,
+                                    color = R.color.edit_text_gray
+                                )
                             }
+                        }
+
+                        // display upcoming events 7 days
+                        val sevenDaysIn = Calendar.getInstance()
+                        sevenDaysIn.add(Calendar.DATE, +7)
+                        val upcomingEvents = eventsForSelectedDate
+                            .filter { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! > currentDate }
+                            .filter { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! < sevenDaysIn.time }
+                            .sortedByDescending { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! }
+                        if (upcomingEvents.isNotEmpty()) {
+                            Spacer(modifier = Modifier.height(50.dp))
+
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CustomColorTitleText(
+                                    text = stringResource(R.string.upcoming_event),
+                                    color = R.color.slate,
+                                    weight = 20,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            upcomingEvents.forEach { event ->
+                                val formattedDate =
+                                    SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(event.event_date)
+                                        ?.let {
+                                            SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).format(
+                                                it
+                                            )
+                                        }
+                                Spacer(modifier = Modifier.height(10.dp))
+                                CustomColorTitleText(
+                                    text = formattedDate.toString(),
+                                    color = R.color.slate,
+                                    weight = 20,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                Spacer(modifier = Modifier.height(5.dp))
+                                CustomColorTitleText(
+                                    text = event.event_title,
+                                    color = R.color.slate,
+                                    weight = 20,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                                CustomDivider(
+                                    height = 1,
+                                    width = 330,
+                                    color = R.color.edit_text_gray
+                                )
+                            }
+                        }
+
+                        // display previous events within the last 7 days
+                        val sevenDaysAgo = Calendar.getInstance()
+                        sevenDaysAgo.add(Calendar.DATE, -7)
+                        val previousEvents = eventsForSelectedDate
+                            .filter { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! < currentDate }
+                            .filter { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! > sevenDaysAgo.time }
+                            .sortedByDescending { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! }
+
+                        if (previousEvents.isNotEmpty()) {
+                            Spacer(modifier = Modifier.height(50.dp))
+
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CustomColorTitleText(
+                                    text = stringResource(R.string.previous_event),
+                                    color = R.color.slate,
+                                    weight = 20,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            previousEvents.forEach { event ->
+                                val formattedDate =
+                                    SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(event.event_date)
+                                        ?.let {
+                                            SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).format(
+                                                it
+                                            )
+                                        }
+                                Spacer(modifier = Modifier.height(10.dp))
+
+                                CustomColorTitleText(
+                                    text = formattedDate.toString(),
+                                    color = R.color.slate,
+                                    weight = 20,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                Spacer(modifier = Modifier.height(5.dp))
+                                CustomColorTitleText(
+                                    text = event.event_title,
+                                    color = R.color.slate,
+                                    weight = 20,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                                CustomDivider(
+                                    height = 1,
+                                    width = 330,
+                                    color = R.color.edit_text_gray
+                                )
+                            }
+                        } else if (currentEvents.isEmpty() && upcomingEvents.isEmpty()) {
+                            Spacer(modifier = Modifier.height(50.dp))
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CustomColorTitleText(
+                                    text = stringResource(id = R.string.no_events),
+                                    color = R.color.slate,
+                                    weight = 20,
+                                    fontWeight = FontWeight.Normal
+                                )
+                            }
+
+//                            Spacer(modifier = Modifier.height(10.dp))
                         }
                     }
                 }
@@ -640,7 +803,6 @@ fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>, selectedDateStri
         }
     }
 }
-
 // profile components
 
 // image picker from gallery

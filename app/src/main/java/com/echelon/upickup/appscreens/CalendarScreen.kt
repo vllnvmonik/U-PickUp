@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +42,8 @@ fun CalendarScreen(navController: NavHostController, viewModel: CalendarViewMode
 
 
     Surface (modifier = Modifier
-        .fillMaxSize(),
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState()), // for scrollable screen
         color = colorResource(id = R.color.whitee)
     ){
         Box(
@@ -60,6 +63,7 @@ fun CalendarScreen(navController: NavHostController, viewModel: CalendarViewMode
                         Log.d("CalendarScreen", "Selected date: $selectedDate")
                     }
                 )
+                CalendarAnnouncementBox(eventsForSelectedDate = events)
             }
         }
     }

@@ -35,4 +35,8 @@
     <string name="uniform_type">Uniform Type</string>
     <string name="no_events">No Events</string>
     <string name="no_events_for_today">No events for today</string>
+    <string name="current_events">Current Events</string>
+    <string name="upcoming_event">Upcoming Event</string>
+    <string name="previous_event">Previous Event</string>
+    <string name="current_event">Current Event</string>
 </resources>
