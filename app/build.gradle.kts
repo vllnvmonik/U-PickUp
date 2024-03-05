@@ -83,6 +83,8 @@ dependencies {
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.24.13-rc")
     //time
     implementation ("com.github.marlonlom:timeago:4.0.0")
+    //material components
+    implementation ("com.google.android.material:material:1.11.0")
 
 
 }

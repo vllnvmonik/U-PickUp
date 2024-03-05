@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.UPickUp" parent="android:Theme.DeviceDefault.Light.NoActionBar.Fullscreen" />
+    <style name="Theme.UPickUp" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
 </resources>

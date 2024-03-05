@@ -12,6 +12,7 @@ import com.echelon.upickup.sharedprefs.CalendarManager
 import com.echelon.upickup.sharedprefs.StudentDetailsManager
 import com.echelon.upickup.sharedprefs.PostManager
 import com.echelon.upickup.sharedprefs.TokenManager
+import com.echelon.upickup.ui.theme.UPickUpTheme
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -24,7 +25,9 @@ class MainActivity : ComponentActivity() {
         CalendarManager.initialize(this)
         installSplashScreen()
         setContent {
-            UPickUp()
+            UPickUpTheme {
+                UPickUp()
+            }
         }
     }
 }

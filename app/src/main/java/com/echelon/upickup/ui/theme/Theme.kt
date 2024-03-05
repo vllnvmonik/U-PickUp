@@ -16,15 +16,15 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = PaleGreen,
+    secondary = DarkGreen,
+    tertiary = PaleGreen
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = PaleGreen,
+    secondary = DarkGreen,
+    tertiary = PaleGreen
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -68,3 +68,26 @@ fun UPickUpTheme(
         content = content
     )
 }
+// for static green theme only
+//@Composable
+//fun UPickUpTheme(
+//    darkTheme: Boolean = isSystemInDarkTheme(),
+//    content: @Composable () -> Unit
+//) {
+//    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+//
+//    val view = LocalView.current
+//    if (!view.isInEditMode) {
+//        SideEffect {
+//            val window = (view.context as Activity).window
+//            window.statusBarColor = colorScheme.primary.toArgb()
+//            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+//        }
+//    }
+//
+//    MaterialTheme(
+//        colorScheme = colorScheme,
+//        typography = Typography,
+//        content = content
+//    )
+//}
