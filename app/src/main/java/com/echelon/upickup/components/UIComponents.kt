@@ -617,12 +617,28 @@ fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>) {
 //                        )
 
                         // display current events
+                        val currentCalendar = Calendar.getInstance()
+                        currentCalendar.time = currentDate
+                        currentCalendar.set(Calendar.HOUR_OF_DAY, 0)
+                        currentCalendar.set(Calendar.MINUTE, 0)
+                        currentCalendar.set(Calendar.SECOND, 0)
+                        currentCalendar.set(Calendar.MILLISECOND, 0)
+
                         val currentEvents = eventsForSelectedDate
-                            .filter { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date) == currentDate }
-                            .sortedByDescending { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! }
+                            .filter { event ->
+                                val eventCalendar = Calendar.getInstance()
+                                eventCalendar.time = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(event.event_date)!!
+                                eventCalendar.set(Calendar.HOUR_OF_DAY, 0)
+                                eventCalendar.set(Calendar.MINUTE, 0)
+                                eventCalendar.set(Calendar.SECOND, 0)
+                                eventCalendar.set(Calendar.MILLISECOND, 0)
+                                eventCalendar == currentCalendar
+                            }
+                            .sortedByDescending { event ->
+                                SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(event.event_date)!!
+                            }
 
                         if (currentEvents.isNotEmpty()) {
-                            Spacer(modifier = Modifier.padding(50.dp))
                             Box(
                                 modifier = Modifier.fillMaxWidth(),
                                 contentAlignment = Alignment.Center
@@ -674,7 +690,6 @@ fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>) {
                             .filter { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! < sevenDaysIn.time }
                             .sortedByDescending { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! }
                         if (upcomingEvents.isNotEmpty()) {
-                            Spacer(modifier = Modifier.height(50.dp))
 
                             Box(
                                 modifier = Modifier.fillMaxWidth(),
@@ -723,13 +738,22 @@ fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>) {
                         // display previous events within the last 7 days
                         val sevenDaysAgo = Calendar.getInstance()
                         sevenDaysAgo.add(Calendar.DATE, -7)
-                        val previousEvents = eventsForSelectedDate
-                            .filter { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! < currentDate }
-                            .filter { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! > sevenDaysAgo.time }
-                            .sortedByDescending { SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(it.event_date)!! }
+                        val todayStart = Calendar.getInstance().apply {
+                            set(Calendar.HOUR_OF_DAY, 0)
+                            set(Calendar.MINUTE, 0)
+                            set(Calendar.SECOND, 0)
+                            set(Calendar.MILLISECOND, 0)
+                        }
 
+                        val previousEvents = eventsForSelectedDate
+                            .filter { event ->
+                                val eventDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(event.event_date)
+                                eventDate != null && eventDate < todayStart.time && eventDate > sevenDaysAgo.time
+                            }
+                            .sortedByDescending { event ->
+                                SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(event.event_date)!!
+                            }
                         if (previousEvents.isNotEmpty()) {
-                            Spacer(modifier = Modifier.height(50.dp))
 
                             Box(
                                 modifier = Modifier.fillMaxWidth(),
@@ -776,7 +800,7 @@ fun CalendarAnnouncementBox(eventsForSelectedDate: List<Event>) {
                                 )
                             }
                         } else if (currentEvents.isEmpty() && upcomingEvents.isEmpty()) {
-                            Spacer(modifier = Modifier.height(50.dp))
+                            Spacer(modifier = Modifier.height(30.dp))
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center
