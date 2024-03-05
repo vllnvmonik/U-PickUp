@@ -2,15 +2,12 @@ package com.echelon.upickup.components
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.CalendarView
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,7 +36,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,6 +50,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -88,7 +85,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.rememberAsyncImagePainter
 import com.echelon.upickup.R
-import com.echelon.upickup.model.Post
 import com.echelon.upickup.model.StudentDetails
 import com.echelon.upickup.navigation.BottomNavItem
 import com.echelon.upickup.navigation.Screen
@@ -96,12 +92,10 @@ import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.Event
 import com.echelon.upickup.network.apimodel.Modules
 import com.echelon.upickup.network.apimodel.Uniform
-import com.echelon.upickup.sharedprefs.UniformsManager
 import com.echelon.upickup.viewmodel.InventoryBooksViewModel
 import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
 import com.github.marlonlom.utilities.timeago.TimeAgo
-import kotlinx.coroutines.channels.BroadcastChannel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -1158,7 +1152,11 @@ fun ClickableBoxNavigation(
 
 // inventory BOOKS screen
 @Composable
-fun InventoryBooksBox(books: List<Books>, studentDetails: StudentDetails?) {
+fun InventoryBooksBox(
+    books: List<Books>,
+    studentDetails: StudentDetails?,
+    viewModel: InventoryBooksViewModel
+) {
 
     Card(
         modifier = Modifier
@@ -1188,14 +1186,23 @@ fun InventoryBooksBox(books: List<Books>, studentDetails: StudentDetails?) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val yearLevel = studentDetails?.program ?: "Select a year level"
-                    CustomColorTitleText(
-                        text = yearLevel,
-                        R.color.profile_texts,
-                        16,
-                        fontWeight = FontWeight.Normal
+                    val (selectedYearLevel, setSelectedYearLevel) = remember { mutableStateOf("") }
+
+                    studentDetails?.let {
+                        CustomColorTitleText(
+                            text = it.program,
+                            R.color.profile_texts,
+                            16,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
+                    InventoryModulesDropdown(
+                        onYearLevelSelected = { yearLevel ->
+                            setSelectedYearLevel(yearLevel)
+                            // call fetchBooksByYr with the selected year level
+                            studentDetails?.program?.let { viewModel.fetchBooksByYr(it, yearLevel.toInt()) }
+                        }
                     )
-                    InventoryBooksDropdown(studentDetails, InventoryBooksViewModel())
                 }
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Row(
@@ -1269,7 +1276,9 @@ fun InventoryBooksBox(books: List<Books>, studentDetails: StudentDetails?) {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InventoryBooksDropdown(studentDetails: StudentDetails?, viewModel: InventoryBooksViewModel) {
+fun InventoryBooksDropdown(
+    onYearLevelSelected: (String) -> Unit
+) {
 
     var expanded by remember { mutableStateOf(false) }
     val suggestions = listOf("1", "2", "3", "4")
@@ -1317,7 +1326,7 @@ fun InventoryBooksDropdown(studentDetails: StudentDetails?, viewModel: Inventory
                         selectedText = yearlvl
                         expanded = false
                         Log.d("Selected Dropdown Item", yearlvl)
-                        studentDetails?.let { viewModel.fetchBooksByYr(it.program, yearlvl.toInt()) }
+                        onYearLevelSelected(yearlvl)
                     }
                 )
             }
@@ -1327,7 +1336,11 @@ fun InventoryBooksDropdown(studentDetails: StudentDetails?, viewModel: Inventory
 
 // inventory MODULES screen
 @Composable
-fun InventoryModulesBox(modules: List<Modules>, studentDetails: StudentDetails?) {
+fun InventoryModulesBox(
+    modules: List<Modules>,
+    studentDetails: StudentDetails?,
+    viewModel: InventoryModulesViewModel
+) {
     Card(
         modifier = Modifier
             .padding(start = 15.dp, end = 15.dp)
@@ -1356,14 +1369,22 @@ fun InventoryModulesBox(modules: List<Modules>, studentDetails: StudentDetails?)
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val yearLevel = studentDetails?.program ?: "Select a year level"
-                    CustomColorTitleText(
-                        text = yearLevel,
-                        R.color.profile_texts,
-                        16,
-                        fontWeight = FontWeight.Normal
+                    val (selectedYearLevel, setSelectedYearLevel) = remember { mutableStateOf("") }
+                    studentDetails?.let {
+                        CustomColorTitleText(
+                            text = it.program,
+                            R.color.profile_texts,
+                            16,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
+                    InventoryModulesDropdown(
+                        onYearLevelSelected = { yearLevel ->
+                            setSelectedYearLevel(yearLevel)
+                            // call fetchBooksByYr with the selected year level
+                            studentDetails?.program?.let { viewModel.fetchModulesByYr(it, yearLevel.toInt()) }
+                        }
                     )
-                    InventoryModulesDropdown(studentDetails, InventoryModulesViewModel())
                 }
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Row(
@@ -1436,7 +1457,9 @@ fun InventoryModulesBox(modules: List<Modules>, studentDetails: StudentDetails?)
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InventoryModulesDropdown(studentDetails: StudentDetails?, viewModel: InventoryModulesViewModel) {
+fun InventoryModulesDropdown(
+    onYearLevelSelected: (String) -> Unit
+) {
 
     var expanded by remember { mutableStateOf(false) }
     val suggestions = listOf("1", "2", "3", "4")
@@ -1484,7 +1507,7 @@ fun InventoryModulesDropdown(studentDetails: StudentDetails?, viewModel: Invento
                         selectedText = yearlvl
                         expanded = false
                         Log.d("Selected Dropdown Item", yearlvl)
-                        studentDetails?.let { viewModel.fetchModulesByYr(it.program, yearlvl.toInt()) }
+                        onYearLevelSelected(yearlvl)
                     }
                 )
             }
@@ -1495,7 +1518,7 @@ fun InventoryModulesDropdown(studentDetails: StudentDetails?, viewModel: Invento
 // inventory UNIFORMS screen
 
 @Composable
-fun InventoryUniformsBox(uniforms: List<Uniform>, studentDetails: StudentDetails?) {
+fun InventoryUniformsBox(uniforms: List<Uniform>, studentDetails: StudentDetails?, viewModel: InventoryUniformsViewModel) {
 
     Card(
         modifier = Modifier
@@ -1525,6 +1548,8 @@ fun InventoryUniformsBox(uniforms: List<Uniform>, studentDetails: StudentDetails
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    val (selectedYearLevel, setSelectedYearLevel) = remember { mutableStateOf("") }
+
                     studentDetails?.let {
                         CustomColorTitleText(
                             text = it.program,
@@ -1533,7 +1558,13 @@ fun InventoryUniformsBox(uniforms: List<Uniform>, studentDetails: StudentDetails
                             fontWeight = FontWeight.Normal
                         )
                     }
-                    InventoryUniformsDropdown(studentDetails, InventoryUniformsViewModel())
+                    InventoryModulesDropdown(
+                        onYearLevelSelected = { yearLevel ->
+                            setSelectedYearLevel(yearLevel)
+                            // call fetchBooksByYr with the selected year level
+                            studentDetails?.program?.let { viewModel.fetchUniformsByYr(it, yearLevel.toInt()) }
+                        }
+                    )
                 }
                 CustomDivider(height = 2, width = 330, color = R.color.border_gray)
                 Row(
@@ -1607,7 +1638,10 @@ fun InventoryUniformsBox(uniforms: List<Uniform>, studentDetails: StudentDetails
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InventoryUniformsDropdown(studentDetails: StudentDetails?, viewModel: InventoryUniformsViewModel) {
+fun InventoryUniformsDropdown(
+    onYearLevelSelected: (String) -> Unit
+) {
+
     var expanded by remember { mutableStateOf(false) }
     val suggestions = listOf("1", "2", "3", "4")
 
@@ -1652,7 +1686,7 @@ fun InventoryUniformsDropdown(studentDetails: StudentDetails?, viewModel: Invent
                         selectedText = yearlvl
                         expanded = false
                         Log.d("Selected Dropdown Item", yearlvl)
-                        studentDetails?.let { viewModel.fetchUniformsByYr(it.program, selectedText.toInt()) }
+                        onYearLevelSelected(yearlvl)
                     }
                 )
             }

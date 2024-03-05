@@ -35,7 +35,6 @@ class InventoryUniformsViewModel: ViewModel() {
                         _uniforms.value = listOf(it)
                         Log.d("InventoryUniformsViewModel", "Fetched uniforms: $details")
                     }
-                    UniformsManager.saveUniformsResponse(details)
                 } else {
                     Log.e("InventoryUniformsViewModel", "Failed to fetch uniforms: ${response.code()}")
                     // Handle error response
@@ -57,7 +56,6 @@ class InventoryUniformsViewModel: ViewModel() {
                         _getYear.value = it
                         Log.d("InventoryUniformsViewModel", "Fetched unifs: $details")
                     }
-                    UniformsManager.saveUniformsByYear(details)
                 } else {
                     Log.e("getbyyearrunif", "Failed tsdsfsfo sdfsdf unif:${response.code()}")
                 }

@@ -35,16 +35,17 @@ import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
 
 @Composable
-fun InventoryUniformScreen(navController: NavHostController, viewModel: InventoryUniformsViewModel) {
-    val uniforms = UniformsManager.getUniformsByYear()
+fun InventoryUniformScreen(
+    viewModel: InventoryUniformsViewModel
+) {
+    val uniformsState = viewModel.getYear.observeAsState(emptyList())
     val studentDetails = StudentDetailsManager.getStudentDetails()
-    Log.d("InventoryUniformScreen", "show em: $uniforms")
+    Log.d("InventoryUniformScreen", "show em: $uniformsState")
     val isLoading: Boolean by viewModel.isLoading.observeAsState(false)
 
 
-
     LaunchedEffect(Unit) {
-        UniformsManager.getUniformsByYear()
+        studentDetails?.let { viewModel.fetchUniformsByYr(it.program, 1) }
     }
 
 
@@ -69,21 +70,20 @@ fun InventoryUniformScreen(navController: NavHostController, viewModel: Inventor
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(30.dp))
-                uniforms?.let { response ->
-                    InventoryUniformsBox(uniforms = response, studentDetails = studentDetails)
-                }
+
+                InventoryUniformsBox(uniforms = uniformsState.value, studentDetails = studentDetails, viewModel = viewModel)
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {
-                    Log.d("unifscreen", "show em: $uniforms")
+                    Log.d("unifscreen", "show em: $uniformsState")
                 }
             }
         }
     }
 }
 
-@Preview
-@Composable
-fun InventoryUniformsScreenPreview() {
-    InventoryUniformScreen(navController = rememberNavController(), viewModel = InventoryUniformsViewModel())
-}
+//@Preview
+//@Composable
+//fun InventoryUniformsScreenPreview() {
+//    InventoryUniformScreen(navController = rememberNavController(), viewModel = InventoryUniformsViewModel())
+//}

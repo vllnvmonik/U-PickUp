@@ -55,7 +55,6 @@ class InventoryModulesViewModel: ViewModel() {
                         _getYear.value = it
                         Log.d("InventoryModulesViewModel", "Fetched modules: $details")
                     }
-                    ModulesManager.saveModulesByYear(details)
                 } else {
                     Log.e("getbyyearrmodds", "Failed tsdsfsfo sdfsdf mods:${response.code()}")
                 }

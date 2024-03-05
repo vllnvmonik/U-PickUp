@@ -12,71 +12,65 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.CustomColorTitleText
 import com.echelon.upickup.components.InventoryBooksBox
-import com.echelon.upickup.sharedprefs.BooksManager
+import com.echelon.upickup.components.InventoryBooksDropdown
 import com.echelon.upickup.sharedprefs.StudentDetailsManager
 import com.echelon.upickup.viewmodel.InventoryBooksViewModel
 
 @Composable
-fun InventoryBooksScreen(navController: NavHostController, viewModel: InventoryBooksViewModel) {
-    val books = BooksManager.getBooksByYear()
+fun InventoryBooksScreen(
+    viewModel: InventoryBooksViewModel
+) {
+    val booksState = viewModel.getYear.observeAsState(emptyList())
     val studentDetails = StudentDetailsManager.getStudentDetails()
-    Log.d("InventoryBooksScreen", "show em: $books")
+    Log.d("InventoryBooksScreen", "show em: $booksState")
     val isLoading: Boolean by viewModel.isLoading.observeAsState(false)
 
-
     LaunchedEffect(Unit) {
-        BooksManager.getBooksByYear()
+        studentDetails?.program?.let { viewModel.fetchBooksByYr(it, 1) }
     }
 
-
-    Surface (modifier = Modifier
-        .fillMaxSize(),
+    Surface(
+        modifier = Modifier.fillMaxSize(),
         color = colorResource(id = R.color.whitee)
-    ){
+    ) {
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center)
-        {
-            Column (
-                modifier = Modifier
-                    .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-            ){
+            ) {
                 Spacer(modifier = Modifier.height(50.dp))
                 CustomColorTitleText(
-                    text =  stringResource(R.string.books),
+                    text = stringResource(R.string.books),
                     R.color.inventory_text,
                     20,
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(30.dp))
-                books?.let { response ->
-                    InventoryBooksBox(books = response, studentDetails = studentDetails)
-                }
+
+                InventoryBooksBox(
+                    books = booksState.value,
+                    studentDetails = studentDetails,
+                    viewModel = viewModel
+                )
                 if (isLoading) {
                     CircularProgressIndicator()
-                } else {
-//                    Log.d("InventoryBooksScreen", "show em: $books")
                 }
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun InventoryBookScreenPreview() {
-    InventoryBooksScreen(navController = rememberNavController(), viewModel = InventoryBooksViewModel())
 }

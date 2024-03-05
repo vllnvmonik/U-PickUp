@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -24,20 +26,21 @@ import androidx.navigation.compose.rememberNavController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.CustomColorTitleText
 import com.echelon.upickup.components.InventoryModulesBox
+import com.echelon.upickup.components.InventoryModulesDropdown
 import com.echelon.upickup.sharedprefs.ModulesManager
 import com.echelon.upickup.sharedprefs.StudentDetailsManager
 import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 
 @Composable
-fun InventoryModulesScreen(navController: NavHostController, viewModel: InventoryModulesViewModel) {
-    val modules = ModulesManager.getModulesByYear()
+fun InventoryModulesScreen(viewModel: InventoryModulesViewModel) {
+    val modulesState = viewModel.getYear.observeAsState(emptyList())
     val studentDetails = StudentDetailsManager.getStudentDetails()
-    Log.d("InventoryModulesScreen", "show em: $modules")
+    Log.d("InventoryModulesScreen", "show em: $modulesState")
     val isLoading: Boolean by viewModel.isLoading.observeAsState(false)
 
 
     LaunchedEffect(Unit) {
-        ModulesManager.getModulesByYear()
+        studentDetails?.let { viewModel.fetchModulesByYr(it.program, 1) }
     }
 
 
@@ -62,21 +65,25 @@ fun InventoryModulesScreen(navController: NavHostController, viewModel: Inventor
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(30.dp))
-                modules?.let { response ->
-                    InventoryModulesBox(modules = response, studentDetails = studentDetails)
-                }
+
+                InventoryModulesBox(
+                    modules = modulesState.value,
+                    studentDetails = studentDetails,
+                    viewModel = viewModel
+                )
+
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {
-                    Log.d("InventoryModulesScreen", "show em: $modules")
+                    Log.d("InventoryModulesScreen", "show em: $modulesState")
                 }
             }
         }
     }
 }
 
-@Preview
-@Composable
-fun InventoryModulesScreenPreview() {
-    InventoryModulesScreen(navController = rememberNavController(), viewModel = InventoryModulesViewModel())
-}
+//@Preview
+//@Composable
+//fun InventoryModulesScreenPreview() {
+//    InventoryModulesScreen(navController = rememberNavController(), viewModel = InventoryModulesViewModel())
+//}

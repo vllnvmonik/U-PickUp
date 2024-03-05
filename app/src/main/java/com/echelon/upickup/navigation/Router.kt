@@ -102,13 +102,13 @@ fun NavController(navController: NavHostController) {
                 InventoryScreen(navController = navController)
             }
             composable(Screen.InventoryBookScreen.route){
-                InventoryBooksScreen(navController = navController, viewModel = InventoryBooksViewModel())
+                InventoryBooksScreen(viewModel = InventoryBooksViewModel())
             }
             composable(Screen.InventoryModulesScreen.route){
-                InventoryModulesScreen(navController = navController, viewModel = InventoryModulesViewModel())
+                InventoryModulesScreen(viewModel = InventoryModulesViewModel())
             }
             composable(Screen.InventoryUniformScreen.route){
-                InventoryUniformScreen(navController = navController, viewModel = InventoryUniformsViewModel())
+                InventoryUniformScreen(viewModel = InventoryUniformsViewModel())
             }
             composable(Screen.ProfileScreen.route) {
                 ProfileScreen(navController = navController, viewModel = ProfileViewModel())

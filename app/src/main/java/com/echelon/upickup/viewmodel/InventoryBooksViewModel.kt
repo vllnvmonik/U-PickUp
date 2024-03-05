@@ -33,7 +33,6 @@ class InventoryBooksViewModel: ViewModel() {
                     details?.let {
                         _books.value = listOf(it)
                         Log.d("InventoryBooksViewModel", "Fetched books: $details")
-                        BooksManager.saveBooksResponse(it)
                     }
                 } else {
                     Log.e("InventoryBooksViewModel", "Failed to fetch books: ${response.code()}")
@@ -53,7 +52,6 @@ class InventoryBooksViewModel: ViewModel() {
                     val details = response.body()
                     details?.let {
                         _getYear.value = it
-                        BooksManager.saveBooksByYear(details)
                         Log.d("getbyyearr", "Fetchesdfsdfd books: $details")
                     }
                 } else {
