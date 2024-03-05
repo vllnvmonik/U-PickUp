@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.BooksResponse
 import com.echelon.upickup.repository.InventoryBooksRepository
-import com.echelon.upickup.sharedprefs.BooksManager
 import kotlinx.coroutines.launch
 
 class InventoryBooksViewModel: ViewModel() {

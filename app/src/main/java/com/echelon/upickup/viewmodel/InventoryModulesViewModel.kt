@@ -5,12 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.Modules
 import com.echelon.upickup.network.apimodel.ModulesResponse
 import com.echelon.upickup.repository.InventoryModulesRepository
-import com.echelon.upickup.sharedprefs.ModulesManager
-import com.echelon.upickup.sharedprefs.UniformsManager
 import kotlinx.coroutines.launch
 
 class InventoryModulesViewModel: ViewModel() {

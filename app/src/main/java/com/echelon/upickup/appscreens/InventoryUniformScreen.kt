@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,20 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.CustomColorTitleText
-import com.echelon.upickup.components.CustomImage
-import com.echelon.upickup.components.InventoryModulesBox
 import com.echelon.upickup.components.InventoryUniformsBox
-import com.echelon.upickup.network.apimodel.Uniform
-import com.echelon.upickup.network.apimodel.UniformsResponse
 import com.echelon.upickup.sharedprefs.StudentDetailsManager
-import com.echelon.upickup.sharedprefs.UniformsManager
-import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
 
 @Composable
