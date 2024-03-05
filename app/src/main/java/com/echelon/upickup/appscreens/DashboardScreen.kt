@@ -25,7 +25,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 
 @Composable
-fun DashboardScreen(navController: NavHostController, viewModel: PostViewModel) {
+fun DashboardScreen(viewModel: PostViewModel) {
 //    val posts = viewModel.posts.observeAsState(emptyList())
     val isLoading = viewModel.isLoading.observeAsState(false)
 

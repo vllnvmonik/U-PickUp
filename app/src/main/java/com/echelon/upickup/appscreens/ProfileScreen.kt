@@ -38,7 +38,7 @@ import com.echelon.upickup.viewmodel.LogoutViewModel
 import com.echelon.upickup.viewmodel.ProfileViewModel
 
 @Composable
-fun ProfileScreen(navController: NavHostController, viewModel: ProfileViewModel) {
+fun ProfileScreen(navController: NavHostController) {
     val studentDetails = StudentDetailsManager.getStudentDetails()
     Log.d("ProfileScreen", "Student details: $studentDetails")
     val logoutViewModel = LogoutViewModel()

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.echelon.upickup.network.apimodel.BooksResponse
 import com.echelon.upickup.network.apimodel.Post
 import com.echelon.upickup.network.apimodel.PostLikeResponse
 import com.echelon.upickup.repository.PostRepository
@@ -18,6 +19,7 @@ class PostViewModel: ViewModel() {
 
 
     private val _posts = MutableLiveData<List<Post>>()
+    val posts: LiveData<List<Post>> = _posts
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading

@@ -41,7 +41,6 @@ sealed class Screen (val route: String) {
 
     object DashboardScreen: Screen("dashboard")
     object CalendarScreen: Screen("calendar")
-//    object ChatScreen: Screen("chat")
     object InventoryScreen: Screen("inventory")
     object InventoryBookScreen: Screen("inventory-books")
     object InventoryModulesScreen: Screen("inventory-modules")
@@ -59,7 +58,6 @@ sealed class BottomNavItem(
 ) {
     object DashboardItems: BottomNavItem("dashboard", R.drawable.house_solid)
     object CalendarItems: BottomNavItem("calendar", R.drawable.calendar_solid)
-//    object ChatItems: BottomNavItem("chat", R.drawable.message_solid)
     object InventoryItems: BottomNavItem("inventory", R.drawable.book_solid)
     object ProfileItems: BottomNavItem("profile", R.drawable.circle_user_solid)
 }
@@ -93,10 +91,10 @@ fun NavController(navController: NavHostController) {
         // application navigation route after successful log in
         navigation(startDestination = Screen.DashboardScreen.route, route = Screen.AppRoute.route){
             composable(Screen.DashboardScreen.route) {
-                DashboardScreen(navController = navController, viewModel = PostViewModel())
+                DashboardScreen(viewModel = PostViewModel())
             }
             composable(Screen.CalendarScreen.route) {
-                CalendarScreen(navController = navController, viewModel = CalendarViewModel())
+                CalendarScreen(viewModel = CalendarViewModel())
             }
             composable(Screen.InventoryScreen.route){
                 InventoryScreen(navController = navController)
@@ -111,7 +109,7 @@ fun NavController(navController: NavHostController) {
                 InventoryUniformScreen(viewModel = InventoryUniformsViewModel())
             }
             composable(Screen.ProfileScreen.route) {
-                ProfileScreen(navController = navController, viewModel = ProfileViewModel())
+                ProfileScreen(navController = navController)
             }
         }
     }

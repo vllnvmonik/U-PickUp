@@ -31,7 +31,7 @@ import com.echelon.upickup.viewmodel.CalendarViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreen(navController: NavHostController, viewModel: CalendarViewModel) {
+fun CalendarScreen(viewModel: CalendarViewModel) {
     val events = CalendarManager.getEvents()
     Log.d("CalendarScreen", "show em: $events")
 
