@@ -24,7 +24,6 @@ import androidx.navigation.NavHostController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.CustomColorTitleText
 import com.echelon.upickup.components.InventoryBooksBox
-import com.echelon.upickup.components.InventoryBooksDropdown
 import com.echelon.upickup.sharedprefs.StudentDetailsManager
 import com.echelon.upickup.viewmodel.InventoryBooksViewModel
 

@@ -1236,7 +1236,7 @@ fun InventoryBooksBox(
                             fontWeight = FontWeight.Normal
                         )
                     }
-                    InventoryModulesDropdown(
+                    InventoryDropdown(
                         onYearLevelSelected = { yearLevel ->
                             setSelectedYearLevel(yearLevel)
                             // call fetchBooksByYr with the selected year level
@@ -1314,65 +1314,6 @@ fun InventoryBooksBox(
         }
     }
 }
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun InventoryBooksDropdown(
-    onYearLevelSelected: (String) -> Unit
-) {
-
-    var expanded by remember { mutableStateOf(false) }
-    val suggestions = listOf("1", "2", "3", "4")
-
-    var selectedText by remember { mutableStateOf("") }
-
-    var textFieldSize by remember { mutableStateOf(Size.Zero) }
-
-    val icon = if (expanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
-
-
-    Column(Modifier.padding(15.dp)) {
-        OutlinedTextField(
-            value = selectedText,
-            onValueChange = { },
-            modifier = Modifier
-                .width(200.dp)
-                .height(60.dp)
-                .onGloballyPositioned { coordinates ->
-                    //this value is used to assign to the Dropdown the same width
-                    textFieldSize = coordinates.size.toSize()
-                },
-            shape = RoundedCornerShape(10.dp),
-            label = { Text("Year Level") },
-            readOnly = true,
-            trailingIcon = {
-                Icon(icon, "contentDescription",
-                    Modifier.clickable { expanded = !expanded })
-            }
-        )
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
-        ) {
-            suggestions.forEach { yearlvl ->
-
-                DropdownMenuItem(
-                    text = { Text(text = yearlvl) },
-                    onClick = {
-                        selectedText = yearlvl
-                        expanded = false
-                        Log.d("Selected Dropdown Item", yearlvl)
-                        onYearLevelSelected(yearlvl)
-                    }
-                )
-            }
-        }
-    }
-}
 
 // inventory MODULES screen
 @Composable
@@ -1418,7 +1359,7 @@ fun InventoryModulesBox(
                             fontWeight = FontWeight.Normal
                         )
                     }
-                    InventoryModulesDropdown(
+                    InventoryDropdown(
                         onYearLevelSelected = { yearLevel ->
                             setSelectedYearLevel(yearLevel)
                             // call fetchBooksByYr with the selected year level
@@ -1495,65 +1436,6 @@ fun InventoryModulesBox(
         }
     }
 }
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun InventoryModulesDropdown(
-    onYearLevelSelected: (String) -> Unit
-) {
-
-    var expanded by remember { mutableStateOf(false) }
-    val suggestions = listOf("1", "2", "3", "4")
-
-    var selectedText by remember { mutableStateOf("") }
-
-    var textFieldSize by remember { mutableStateOf(Size.Zero) }
-
-    val icon = if (expanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
-
-
-    Column(Modifier.padding(15.dp)) {
-        OutlinedTextField(
-            value = selectedText,
-            onValueChange = { },
-            modifier = Modifier
-                .width(200.dp)
-                .height(60.dp)
-                .onGloballyPositioned { coordinates ->
-                    //this value is used to assign to the Dropdown the same width
-                    textFieldSize = coordinates.size.toSize()
-                },
-            shape = RoundedCornerShape(10.dp),
-            label = { Text("Year Level") },
-            readOnly = true,
-            trailingIcon = {
-                Icon(icon, "contentDescription",
-                    Modifier.clickable { expanded = !expanded })
-            }
-        )
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
-        ) {
-            suggestions.forEach { yearlvl ->
-
-                DropdownMenuItem(
-                    text = { Text(text = yearlvl) },
-                    onClick = {
-                        selectedText = yearlvl
-                        expanded = false
-                        Log.d("Selected Dropdown Item", yearlvl)
-                        onYearLevelSelected(yearlvl)
-                    }
-                )
-            }
-        }
-    }
-}
 
 // inventory UNIFORMS screen
 
@@ -1598,7 +1480,7 @@ fun InventoryUniformsBox(uniforms: List<Uniform>, studentDetails: StudentDetails
                             fontWeight = FontWeight.Normal
                         )
                     }
-                    InventoryModulesDropdown(
+                    InventoryDropdown(
                         onYearLevelSelected = { yearLevel ->
                             setSelectedYearLevel(yearLevel)
                             // call fetchBooksByYr with the selected year level
@@ -1676,9 +1558,10 @@ fun InventoryUniformsBox(uniforms: List<Uniform>, studentDetails: StudentDetails
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InventoryUniformsDropdown(
+fun InventoryDropdown(
     onYearLevelSelected: (String) -> Unit
 ) {
 
@@ -1693,6 +1576,7 @@ fun InventoryUniformsDropdown(
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
+
 
     Column(Modifier.padding(15.dp)) {
         OutlinedTextField(
@@ -1720,6 +1604,7 @@ fun InventoryUniformsDropdown(
                 .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
         ) {
             suggestions.forEach { yearlvl ->
+
                 DropdownMenuItem(
                     text = { Text(text = yearlvl) },
                     onClick = {
