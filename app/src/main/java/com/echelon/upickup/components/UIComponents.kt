@@ -322,8 +322,7 @@ fun BottomNavigationBar(navController: NavHostController) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     if (currentRoute !in listOf(Screen.AuthRoute.route,
-            Screen.SignInScreen.route, Screen.SignUpScreen.route,
-            Screen.InventoryModulesScreen.route, Screen.InventoryUniformScreen.route)) {
+            Screen.SignInScreen.route, Screen.SignUpScreen.route, Screen.ForgotPasswordScreen.route)) {
         var selectedItem by rememberSaveable {
             mutableIntStateOf(0)
         }
