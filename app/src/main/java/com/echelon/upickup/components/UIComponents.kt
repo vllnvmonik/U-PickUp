@@ -323,8 +323,6 @@ fun BottomNavigationBar(navController: NavHostController) {
 
     if (currentRoute !in listOf(Screen.AuthRoute.route,
             Screen.SignInScreen.route, Screen.SignUpScreen.route,
-            Screen.ForgotPasswordScreen.route, Screen.SignUpScreenTwo.route,
-            Screen.SignUpScreenThree.route, Screen.InventoryBookScreen.route,
             Screen.InventoryModulesScreen.route, Screen.InventoryUniformScreen.route)) {
         var selectedItem by rememberSaveable {
             mutableIntStateOf(0)

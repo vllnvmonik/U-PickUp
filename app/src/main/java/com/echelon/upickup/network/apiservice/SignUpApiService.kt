@@ -12,7 +12,7 @@ import retrofit2.http.Path
 
 interface SignUpApiService {
     @POST("student-registration")
-    suspend fun signIn(@Body signUpRequest: SignUpRequest): Response<SignUpResponse>
+    suspend fun signUp(@Body signUpRequest: SignUpRequest): Response<SignUpResponse>
 }
 
 interface CheckStudentID {

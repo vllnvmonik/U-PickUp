@@ -15,15 +15,15 @@ data class StudentRegistration(
 )
 
 data class SignUpRequest(
-    val student_id: String,
-    val email_ad: String,
     val first_name: String,
     val middle_name: String,
     val last_name: String,
-    val age: Int,
     val gender: String,
-    val department: String,
+    val age: String,
     val program: String,
+    val department: String,
+    val email_ad: String,
+    val student_id: String,
     val password: String,
     val password_confirmation: String
 )
