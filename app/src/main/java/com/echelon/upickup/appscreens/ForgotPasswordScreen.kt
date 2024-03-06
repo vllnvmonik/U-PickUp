@@ -59,7 +59,10 @@ fun ForgotPasswordScreen(navController: NavHostController, viewModel: ForgotPass
             RoundedButton(
                 text = stringResource(R.string.reset_password),
                 onClick = { viewModel.resetPassword() },
-                enabled = uiState.isEmailValid
+                enabled = true,
+                validation = {uiState.isEmailValid},
+                errorText = "Please fill in all required fields"
+
             )
             Spacer(modifier = Modifier.height(50.dp))
             Column (

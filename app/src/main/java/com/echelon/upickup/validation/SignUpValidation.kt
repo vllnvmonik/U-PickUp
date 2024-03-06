@@ -26,22 +26,23 @@ object SignUpValidation {
     }
 
     fun isProgramValid(program: String): Boolean {
-        return program.isNotEmpty()
+        return program.isNotEmpty() && program.length >= MIN_NAME_LENGTH
     }
 
     fun isDepartmentValid(department: String): Boolean {
-        return department.isNotEmpty()
+        return department.isNotEmpty()&& department.length >= MIN_NAME_LENGTH
     }
 
     fun isGenderValid(gender: String): Boolean {
-        return gender.isNotEmpty()
+        return gender.isNotEmpty()&& gender.length >= MIN_NAME_LENGTH
     }
 
     fun isAgeValid(age: String): Boolean {
-        return age.isNotEmpty()
+        return age.isNotEmpty() && age.toIntOrNull() != null
     }
 
     fun isEmailValid(email: String): Boolean {
-        return email.isNotEmpty()
+        val emailRegex = Regex("^\\S+@\\S+\\.\\S+\$")
+        return emailRegex.matches(email)
     }
 }

@@ -93,7 +93,7 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel){
                     onValueChange = viewModel::onGenderChanged,
                     title = stringResource(R.string.gender),
                     keyboardType = KeyboardType.Text,
-                    isError = uiState.gender.isNotBlank() && !SignUpValidation.isNameValid(uiState.gender),
+                    isError = uiState.gender.isNotBlank() && !SignUpValidation.isGenderValid(uiState.gender),
                     errorMessage = ""
                 )
                 Spacer(modifier = Modifier.height(5.dp))
@@ -102,7 +102,7 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel){
                     onValueChange = viewModel::onAgeChanged,
                     title = stringResource(R.string.age),
                     keyboardType = KeyboardType.Text,
-                    isError = uiState.age.isNotBlank() && !SignUpValidation.isNameValid(uiState.age),
+                    isError = uiState.age.isNotBlank() && !SignUpValidation.isAgeValid(uiState.age),
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
@@ -110,11 +110,16 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel){
                 RoundedButton(
                     text = stringResource(R.string.proceed),
                     onClick = {
-                        navController.navigate(Screen.SignUpScreenTwo.route)
-                        SignUpDataManager.saveSignUpData(navController.context, uiState)
+                        if (uiState.isFormValid) {
+                            navController.navigate(Screen.SignUpScreenTwo.route)
+                            SignUpDataManager.saveSignUpUIState(navController.context, signUpUIState = uiState)
+                        }
                     },
-                    enabled = true
+                    enabled = true,
+                    validation = { uiState.isFormValid },
+                    errorText = "Please fill in all required fields"
                 )
+
                 Spacer(modifier = Modifier.height(90.dp))
                 ClickableNavigationText(
                     normalText = stringResource(R.string.already_have_an_account),

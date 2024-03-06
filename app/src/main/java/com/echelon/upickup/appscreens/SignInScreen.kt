@@ -61,7 +61,7 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChanged,
                 title = stringResource(R.string.password),
-                isError = uiState.password.isNotBlank() && !SignInValidation.isPasswordValid(uiState.password)
+                isError = uiState.password.isNotBlank() && !SignInValidation.isPasswordValid(uiState.password),
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -83,7 +83,10 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
             RoundedButton(
                 text = stringResource(R.string.sign_in),
                 onClick = { viewModel.signIn() },
-                enabled = uiState.isFormValid
+                enabled = true,
+                validation = {uiState.isFormValid},
+                errorText = "Please fill in all required fields"
+
             )
 
             Spacer(modifier = Modifier.height(120.dp))

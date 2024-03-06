@@ -238,8 +238,22 @@ fun EditTextPassword(
 }
 
 @Composable
-fun RoundedButton(text: String, onClick: () -> Unit, enabled: Boolean = true) {
-    Button(onClick = onClick,
+fun RoundedButton(
+    text: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true,
+    validation: () -> Boolean,
+    errorText: String
+) {
+    var buttonClicked by remember { mutableStateOf(false) }
+
+    Button(
+        onClick = {
+            buttonClicked = true
+            if (enabled && validation()) {
+                onClick()
+            }
+        },
         enabled = enabled,
         modifier = Modifier
             .width(220.dp)
@@ -249,7 +263,11 @@ fun RoundedButton(text: String, onClick: () -> Unit, enabled: Boolean = true) {
     ) {
         ButtonText(text = text)
     }
+    if (buttonClicked && !validation()) {
+        Text(text = errorText, color = Color.Red)
+    }
 }
+
 @Composable
 fun ButtonText(
     text: String
