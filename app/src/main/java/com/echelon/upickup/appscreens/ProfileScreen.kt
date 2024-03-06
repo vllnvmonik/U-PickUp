@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -13,8 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,9 +30,7 @@ import com.echelon.upickup.components.StaticProfile
 import com.echelon.upickup.navigation.Screen
 import com.echelon.upickup.sharedprefs.AuthManager
 import com.echelon.upickup.sharedprefs.StudentDetailsManager
-import com.echelon.upickup.sharedprefs.TokenManager
 import com.echelon.upickup.viewmodel.LogoutViewModel
-import com.echelon.upickup.viewmodel.ProfileViewModel
 
 @Composable
 fun ProfileScreen(navController: NavHostController) {
@@ -64,7 +59,6 @@ fun ProfileScreen(navController: NavHostController) {
                 Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(10.dp))
-//                ProfileImage()
                 StaticProfile()
                 Spacer(modifier = Modifier.height(20.dp))
                 studentDetails.let { details ->

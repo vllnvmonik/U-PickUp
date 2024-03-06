@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.echelon.upickup.appscreens.CalendarScreen
 import com.echelon.upickup.network.apimodel.Event
 import com.echelon.upickup.repository.CalendarRepository
 import com.echelon.upickup.sharedprefs.CalendarManager
