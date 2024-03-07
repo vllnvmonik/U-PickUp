@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -23,12 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.ClickableNavigationText
-import com.echelon.upickup.components.DepartmentDropdown
 import com.echelon.upickup.components.EditText
 import com.echelon.upickup.components.EditTextPassword
-import com.echelon.upickup.components.GenderDropdown
+import com.echelon.upickup.components.ErrorDialog
 import com.echelon.upickup.components.LogoImage
-import com.echelon.upickup.components.ProgramDropdown
 import com.echelon.upickup.components.RoundedButton
 import com.echelon.upickup.components.TitleText
 import com.echelon.upickup.navigation.Screen
@@ -45,6 +42,8 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
     var showSecondColumn by remember { mutableStateOf(false) }
     var showThirdColumn by remember { mutableStateOf(false) }
 
+    var showErrorDialog by remember { mutableStateOf(false) }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = colorResource(id = R.color.background_color),
@@ -54,11 +53,6 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-//            Spacer(modifier = Modifier.height(20.dp))
-            LogoImage()
-//            Spacer(modifier = Modifier.height(10.dp))
-            TitleText(text = stringResource(R.string.create_new_account))
-            Spacer(modifier = Modifier.height(20.dp))
 
             // first Column
             if (showFirstColumn) {
@@ -67,7 +61,12 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Spacer(modifier = Modifier.height(10.dp))
+                    //            Spacer(modifier = Modifier.height(20.dp))
+                    LogoImage()
+//            Spacer(modifier = Modifier.height(10.dp))
+                    TitleText(text = stringResource(R.string.create_new_account))
+                    Spacer(modifier = Modifier.height(20.dp))
+//                    Spacer(modifier = Modifier.height(10.dp))
                     EditText(
                         value = uiState.name,
                         onValueChange = viewModel::onNameChanged,
@@ -110,15 +109,20 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                         keyboardType = KeyboardType.Text,
                         isError = uiState.gender.isNotBlank() && !SignUpValidation.isGenderValid(uiState.gender)
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
                     RoundedButton(
                         text = "Proceed",
                         onClick = {
-                            showFirstColumn = false
-                            showSecondColumn = true
+                            // check if the form is valid before proceeding
+                            if (uiState.isFormValid) {
+                                showFirstColumn = false
+                                showSecondColumn = true
+                            }else{
+                                showErrorDialog = true
+                            }
                         },
-                        validation = { uiState.isFormValid },
-                        errorText = "Please fill in all required fields"
+//                        validation = { uiState.isFormValid },
+//                        errorText = ""
                     )
                     Spacer(modifier = Modifier.height(25.dp))
 
@@ -138,7 +142,12 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Spacer(modifier = Modifier.height(10.dp))
+                    //            Spacer(modifier = Modifier.height(20.dp))
+                    LogoImage()
+//            Spacer(modifier = Modifier.height(10.dp))
+                    TitleText(text = stringResource(R.string.we_need_to_know_you_more_up))
+                    Spacer(modifier = Modifier.height(60.dp))
+//                    Spacer(modifier = Modifier.height(10.dp))
                     EditText(
                         value = uiState2.department,
                         onValueChange = viewModel::onDepartmentChanged,
@@ -157,7 +166,7 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                         isError = uiState2.program.isNotBlank() && !SignUpValidation.isProgramValid(uiState2.program),
                         errorMessage = "Invalid Program"
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(100.dp))
                     RoundedButton(
                         text = "Proceed",
                         onClick = {
@@ -165,10 +174,12 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                             if (uiState2.isFormValid) {
                                 showSecondColumn = false
                                 showThirdColumn = true
+                            }else{
+                                showErrorDialog = true
                             }
                         },
-                        validation = { uiState2.isFormValid },
-                        errorText = "Please fill in all required fields"
+//                        validation = { uiState2.isFormValid },
+//                        errorText = ""
                     )
                     Spacer(modifier = Modifier.height(15.dp))
 
@@ -178,8 +189,8 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                             showFirstColumn = true
                             showSecondColumn = false
                         },
-                        validation = { true },
-                        errorText = ""
+//                        validation = { true },
+//                        errorText = ""
                     )
                 }
             }
@@ -191,7 +202,12 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Spacer(modifier = Modifier.height(10.dp))
+                    //            Spacer(modifier = Modifier.height(20.dp))
+                    LogoImage()
+//            Spacer(modifier = Modifier.height(10.dp))
+                    TitleText(text = stringResource(R.string.final_touches_up))
+                    Spacer(modifier = Modifier.height(20.dp))
+//                    Spacer(modifier = Modifier.height(10.dp))
                     EditText(
                         value = uiState3.email,
                         onValueChange = viewModel::onEmailChanged,
@@ -224,7 +240,7 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                         isError = uiState3.confirmPassword.isNotBlank() && !SignUpValidation.isConfirmPasswordValid(uiState3.password, uiState3.confirmPassword)
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     RoundedButton(
                         text = stringResource(R.string.sign_up),
@@ -233,11 +249,13 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                             if ( uiState.isFormValid && uiState2.isFormValid && uiState3.isFormValid) {
                                 viewModel.signUp()
                                 navController.navigate(Screen.SignInScreen.route)
+                            }else{
+                                showErrorDialog = true
                             }
                         },
                         // validate the form before enabling the button
-                        validation = { uiState.isFormValid && uiState2.isFormValid && uiState3.isFormValid},
-                        errorText = "Please fill in all required fields"
+//                        validation = { uiState.isFormValid && uiState2.isFormValid && uiState3.isFormValid},
+//                        errorText = ""
                     )
                     Spacer(modifier = Modifier.height(15.dp))
 
@@ -247,11 +265,17 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                             showSecondColumn = true
                             showThirdColumn = false
                         },
-                        validation = { true },
-                        errorText = ""
+//                        validation = { true },
+//                        errorText = ""
                     )
                 }
             }
+        }
+        if (showErrorDialog) {
+            ErrorDialog(
+                showDialog = showErrorDialog,
+                onDismiss = { showErrorDialog = false }
+            )
         }
     }
 }

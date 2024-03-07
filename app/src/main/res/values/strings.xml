@@ -40,4 +40,9 @@
     <string name="previous_event">Previous Event</string>
     <string name="current_event">Current Event</string>
     <string name="department">Department</string>
+    <string name="we_need_to_know_you_more">We need to know you more!</string>
+    <string name="final_touches">Final Touches!</string>
+    <string name="create_new_account_lc">Create New Account</string>
+    <string name="we_need_to_know_you_more_up">LET US KNOW YOU MORE</string>
+    <string name="final_touches_up">ALMOST THERE!</string>
 </resources>

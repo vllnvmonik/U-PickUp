@@ -10,6 +10,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -21,6 +24,7 @@ import com.echelon.upickup.R
 import com.echelon.upickup.components.ClickableNavigationText
 import com.echelon.upickup.components.EditText
 import com.echelon.upickup.components.EditTextPassword
+import com.echelon.upickup.components.ErrorDialog
 import com.echelon.upickup.components.LogoImage
 import com.echelon.upickup.components.RoundedButton
 import com.echelon.upickup.components.TitleText
@@ -31,6 +35,7 @@ import com.echelon.upickup.viewmodel.SignInViewModel
 @Composable
 fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
     val uiState by viewModel.uiState.collectAsState()
+    var showErrorDialog by remember { mutableStateOf(false) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -82,10 +87,16 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
 
             RoundedButton(
                 text = stringResource(R.string.sign_in),
-                onClick = { viewModel.signIn() },
+                onClick = {
+                    if (uiState.isFormValid) {
+                        viewModel.signIn()
+                    } else {
+                        showErrorDialog = true
+                    }
+                },
                 enabled = true,
-                validation = {uiState.isFormValid},
-                errorText = "Please fill in all required fields"
+//                validation = {uiState.isFormValid},
+//                errorText = "Please fill in all required fields"
 
             )
 
@@ -96,6 +107,12 @@ fun SignInScreen(navController: NavHostController, viewModel: SignInViewModel) {
                 clickableText = "SIGN UP!",
                 navigateTo = Screen.SignUpScreen.route,
                 navController = navController
+            )
+        }
+        if (showErrorDialog) {
+            ErrorDialog(
+                showDialog = showErrorDialog,
+                onDismiss = { showErrorDialog = false }
             )
         }
     }

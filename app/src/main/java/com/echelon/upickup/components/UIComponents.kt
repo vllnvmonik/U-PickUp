@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,17 +42,16 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -62,8 +62,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -95,7 +93,6 @@ import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.Event
 import com.echelon.upickup.network.apimodel.Modules
 import com.echelon.upickup.network.apimodel.Uniform
-import com.echelon.upickup.uistate.SignUpUIState2
 import com.echelon.upickup.viewmodel.InventoryBooksViewModel
 import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
@@ -246,15 +243,14 @@ fun RoundedButton(
     text: String,
     onClick: () -> Unit,
     enabled: Boolean = true,
-    validation: () -> Boolean,
-    errorText: String
+//    validation: () -> Boolean,
 ) {
     var buttonClicked by remember { mutableStateOf(false) }
 
     Button(
         onClick = {
             buttonClicked = true
-            if (enabled && validation()) {
+            if (enabled) {
                 onClick()
             }
         },
@@ -267,9 +263,9 @@ fun RoundedButton(
     ) {
         ButtonText(text = text)
     }
-    if (buttonClicked && !validation()) {
-        Text(text = errorText, color = Color.Red)
-    }
+//    if (buttonClicked && !validation()) {
+//        Text(text = errorText, color = Color.Red)
+//    }
 }
 
 @Composable
@@ -1582,7 +1578,7 @@ fun InventoryDropdown(
 
 
     Column(Modifier.padding(15.dp)) {
-        TextField(
+        OutlinedTextField(
             value = selectedText,
             onValueChange = { },
             modifier = Modifier
@@ -1899,3 +1895,34 @@ fun GenderDropdown(
         }
     }
 }
+
+@Composable
+fun ErrorDialog(
+    showDialog: Boolean,
+    onDismiss: () -> Unit
+) {
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { onDismiss() },
+            title = { Text("Error") },
+            text = { Text("Please fill in all required fields.") },
+            confirmButton = {
+                Button(
+                    onClick = { onDismiss() },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(R.color.dark_green),
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier.background(color = colorResource(id = R.color.background_color)),
+                    shape = MaterialTheme.shapes.small.copy(all = CornerSize(5.dp))
+                ) {
+                    Text("OK")
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            containerColor = colorResource(R.color.background_color),
+            shape = MaterialTheme.shapes.small.copy(all = CornerSize(5.dp))
+        )
+    }
+}
+
