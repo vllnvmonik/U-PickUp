@@ -29,7 +29,16 @@ object PostManager {
         val serializedPosts = sharedPreferences.getString(KEY_POSTS, null)
         return gson.fromJson(serializedPosts, object : TypeToken<List<Post>>() {}.type)
     }
+    fun isPostLiked(postId: String): Boolean {
+        return sharedPreferences.getBoolean(postId, false)
+    }
 
+    fun savePostLiked(postId: String, isLiked: Boolean) {
+        with(sharedPreferences.edit()) {
+            putBoolean(postId, isLiked)
+            apply()
+        }
+    }
 //    fun clearPosts() {
 //        val editor = sharedPreferences.edit()
 //        editor.remove(KEY_POSTS)

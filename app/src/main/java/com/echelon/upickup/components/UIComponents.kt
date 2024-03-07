@@ -51,6 +51,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -93,6 +94,7 @@ import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.Event
 import com.echelon.upickup.network.apimodel.Modules
 import com.echelon.upickup.network.apimodel.Uniform
+import com.echelon.upickup.sharedprefs.PostManager
 import com.echelon.upickup.viewmodel.InventoryBooksViewModel
 import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
@@ -407,8 +409,13 @@ fun FeedBoxLayout(
     post: com.echelon.upickup.model.Post,
     onLikeClicked: (postId: String) -> Unit
 ) {
-
     var isLiked by remember { mutableStateOf(false) }
+    var likesCount by remember { mutableStateOf(post.likes_count) }
+
+    // Check if the post is liked
+    LaunchedEffect(post.id) {
+        isLiked = PostManager.isPostLiked(post.id)
+    }
 
     //format the created_at
     val dateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault())
@@ -424,7 +431,7 @@ fun FeedBoxLayout(
     val relativeTime = TimeAgo.using(localCreatedAtMillis)
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(bottom = 15.dp)
             .fillMaxWidth()
             .wrapContentSize(),
@@ -433,7 +440,6 @@ fun FeedBoxLayout(
             containerColor = colorResource(id = R.color.white)
         ),
         elevation = CardDefaults.cardElevation(0.5.dp),
-//        border = BorderStroke(2.dp, colorResource(id = R.color.border_gray))
     ) {
         Box(
             Modifier
@@ -486,13 +492,20 @@ fun FeedBoxLayout(
                         modifier = Modifier
                             .clickable {
                                 isLiked = !isLiked
+                                if (isLiked) {
+                                    likesCount++
+                                    PostManager.savePostLiked(post.id, true)
+                                } else {
+                                    likesCount--
+                                    PostManager.savePostLiked(post.id, false)
+                                }
                                 onLikeClicked(post.id)
                             }
                             .size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     CustomColorTitleText(
-                        text = post.likes_count.toString(),
+                        text = likesCount.toString(),
                         color = R.color.black,
                         16,
                         FontWeight.Normal
