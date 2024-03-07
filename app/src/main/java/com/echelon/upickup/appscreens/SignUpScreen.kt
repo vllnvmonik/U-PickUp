@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -22,9 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.ClickableNavigationText
+import com.echelon.upickup.components.DepartmentDropdown
 import com.echelon.upickup.components.EditText
 import com.echelon.upickup.components.EditTextPassword
+import com.echelon.upickup.components.GenderDropdown
 import com.echelon.upickup.components.LogoImage
+import com.echelon.upickup.components.ProgramDropdown
 import com.echelon.upickup.components.RoundedButton
 import com.echelon.upickup.components.TitleText
 import com.echelon.upickup.navigation.Screen
@@ -92,20 +96,19 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     EditText(
-                        value = uiState.gender,
-                        onValueChange = viewModel::onGenderChanged,
-                        title = stringResource(R.string.gender),
-                        keyboardType = KeyboardType.Text,
-                        isError = uiState.gender.isNotBlank() && !SignUpValidation.isGenderValid(uiState.gender),
-                        errorMessage = ""
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    EditText(
                         value = uiState.age,
                         onValueChange = viewModel::onAgeChanged,
                         title = stringResource(R.string.age),
                         keyboardType = KeyboardType.Text,
                         isError = uiState.age.isNotBlank() && !SignUpValidation.isAgeValid(uiState.age),
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    EditText(
+                        value = uiState.gender,
+                        onValueChange = viewModel::onGenderChanged,
+                        title = stringResource(id = R.string.gender),
+                        keyboardType = KeyboardType.Text,
+                        isError = uiState.gender.isNotBlank() && !SignUpValidation.isGenderValid(uiState.gender)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     RoundedButton(
@@ -137,21 +140,22 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel) {
                 ) {
                     Spacer(modifier = Modifier.height(10.dp))
                     EditText(
+                        value = uiState2.department,
+                        onValueChange = viewModel::onDepartmentChanged,
+                        title = stringResource(R.string.department),
+                        keyboardType = KeyboardType.Text,
+
+                        isError = uiState2.department.isNotBlank() && !SignUpValidation.isDepartmentValid(uiState2.department)
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    EditText(
                         value = uiState2.program,
                         onValueChange = viewModel::onProgramChanged,
                         title = stringResource(R.string.program),
+//                        selectedDepartment = uiState2.department,
                         keyboardType = KeyboardType.Text,
                         isError = uiState2.program.isNotBlank() && !SignUpValidation.isProgramValid(uiState2.program),
                         errorMessage = "Invalid Program"
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    EditText(
-                        value = uiState2.department,
-                        onValueChange = viewModel::onDepartmentChanged,
-                        title = "Department",
-                        keyboardType = KeyboardType.Text,
-                        isError = uiState2.department.isNotBlank() && !SignUpValidation.isDepartmentValid(uiState2.department),
-                        errorMessage = "Invalid Department"
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     RoundedButton(

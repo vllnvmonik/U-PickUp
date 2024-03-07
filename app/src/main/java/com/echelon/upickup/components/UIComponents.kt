@@ -47,6 +47,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -61,6 +62,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -92,6 +95,7 @@ import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.Event
 import com.echelon.upickup.network.apimodel.Modules
 import com.echelon.upickup.network.apimodel.Uniform
+import com.echelon.upickup.uistate.SignUpUIState2
 import com.echelon.upickup.viewmodel.InventoryBooksViewModel
 import com.echelon.upickup.viewmodel.InventoryModulesViewModel
 import com.echelon.upickup.viewmodel.InventoryUniformsViewModel
@@ -1578,7 +1582,7 @@ fun InventoryDropdown(
 
 
     Column(Modifier.padding(15.dp)) {
-        OutlinedTextField(
+        TextField(
             value = selectedText,
             onValueChange = { },
             modifier = Modifier
@@ -1614,6 +1618,284 @@ fun InventoryDropdown(
                     }
                 )
             }
+        }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProgramDropdown(
+    value: String,
+    onValueChange: (String) -> Unit,
+    title: String,
+    selectedDepartment: String?,
+    isError: Boolean = false,
+    errorMessage: String? = null
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(value) }
+
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+
+    val suggestions = listOf(
+        "AB COMM",
+        "AB POLSCI",
+        "BEED",
+        "BSA",
+        "BSAIS",
+        "BSARCH",
+        "BSCE",
+        "BSCPE",
+        "BSCRIM",
+        "BSEE",
+        "BSECE",
+        "BSHM",
+        "BSIT",
+        "BSMA",
+        "BSME",
+        "BSMLS",
+        "BSN",
+        "BSPHARMA",
+        "BSPSYCH",
+        "BSTM",
+        "BSBA-FM",
+        "BSBA-MM",
+        "BSED-ENGLISH",
+        "BSED-MATH",
+        "BSED-SCIENCE",
+        "BSED-SOCIAL STUDIES"
+    ).filter { program ->
+        // filter programs based on selected department
+        when (selectedDepartment) {
+            // test test test
+            "CAS" -> program in listOf("AB COMM", "AB POLSCI", "BSAIS", "BSBA-FM", "BSBA-MM")
+            "CAHS" -> program in listOf("BEED", "BSED-ENGLISH", "BSED-MATH", "BSED-SCIENCE", "BSED-SOCIAL STUDIES")
+            "CEA" -> program in listOf("BSA", "BSCE")
+            "CELA" -> program in listOf("AB COMM", "AB POLSCI", "BEED", "BSED-ENGLISH", "BSED-MATH", "BSED-SCIENCE", "BSED-SOCIAL STUDIES")
+            "CITE" -> program == "BSIT"
+            "CMA" -> program in listOf("BSA", "BSBA-FM", "BSBA-MM")
+            "CCJE" -> program == "BSCRIM"
+            else -> true // if no department is selected, show all programs
+        }
+    }
+    val icon = if (expanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
+
+    Column(Modifier.padding(15.dp)) {
+        TextField(
+            value = selectedText,
+            onValueChange = {},
+            modifier = Modifier
+                .width(300.dp)
+                .height(60.dp)
+                .onGloballyPositioned { coordinates ->
+                    // this value is used to assign to the Dropdown the same width
+                    textFieldSize = coordinates.size.toSize()
+                },
+            colors = TextFieldDefaults.textFieldColors(
+                unfocusedLabelColor = colorResource(id = R.color.edit_text_gray),
+                focusedLabelColor = colorResource(id = R.color.edit_text_gray),
+                containerColor = colorResource(id = R.color.background_color)
+            ),
+            textStyle = TextStyle(fontSize = 18.sp),
+            label = { Text(title) },
+            readOnly = true,
+            trailingIcon = {
+                Icon(
+                    icon, "contentDescription",
+                    Modifier.clickable { expanded = !expanded }
+                )
+            }
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+        ) {
+            suggestions.forEach { suggestion ->
+                DropdownMenuItem(
+                    text = { Text(text = suggestion) },
+                    onClick = {
+                        selectedText = suggestion
+                        expanded = false
+                        onValueChange(suggestion)
+                        Log.d("program", selectedText)
+                    }
+                )
+            }
+        }
+        if (isError && !errorMessage.isNullOrBlank()) {
+            Text(
+                text = errorMessage,
+                modifier = Modifier.padding(start = 12.dp),
+                color = Color.Red
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DepartmentDropdown(
+    value: String,
+    onValueChange: (String) -> Unit,
+    title: String,
+    isError: Boolean = false,
+    errorMessage: String? = null
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(value) }
+
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+
+    val suggestions = listOf(
+        "CAS",
+        "CAHS",
+        "CEA",
+        "CELA",
+        "CITE",
+        "CMA",
+        "CCJE"
+    )
+
+    val icon = if (expanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
+
+    Column(Modifier.padding(15.dp)) {
+        TextField(
+            value = selectedText,
+            onValueChange = {},
+            modifier = Modifier
+                .width(300.dp)
+                .height(60.dp)
+                .onGloballyPositioned { coordinates ->
+                    // this value is used to assign to the Dropdown the same width
+                    textFieldSize = coordinates.size.toSize()
+                },
+            colors = TextFieldDefaults.textFieldColors(
+                unfocusedLabelColor = colorResource(id = R.color.edit_text_gray),
+                focusedLabelColor = colorResource(id = R.color.edit_text_gray),
+                containerColor = colorResource(id = R.color.background_color)
+            ),
+            textStyle = TextStyle(fontSize = 18.sp),
+            label = { Text(title) },
+            readOnly = true,
+            trailingIcon = {
+                Icon(
+                    icon, "contentDescription",
+                    Modifier.clickable { expanded = !expanded }
+                )
+            }
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+        ) {
+            suggestions.forEach { suggestion ->
+                DropdownMenuItem(
+                    text = { Text(text = suggestion) },
+                    onClick = {
+                        selectedText = suggestion
+                        expanded = false
+                        onValueChange(suggestion)
+                        Log.d("dept", selectedText)
+                    }
+                )
+            }
+        }
+        if (isError && !errorMessage.isNullOrBlank()) {
+            Text(
+                text = errorMessage,
+                modifier = Modifier.padding(start = 12.dp),
+                color = Color.Red
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun GenderDropdown(
+    value: String,
+    onValueChange: (String) -> Unit,
+    title: String,
+    isError: Boolean = false,
+    errorMessage: String? = null
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(value) }
+
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+
+    val suggestions = listOf(
+        "Female",
+        "Male",
+        "Non Binary",
+        "Other",
+        "Prefer not to say"
+    )
+
+    val icon = if (expanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
+
+    Column(Modifier.padding(15.dp)) {
+        TextField(
+            value = selectedText,
+            onValueChange = {},
+            modifier = Modifier
+                .width(300.dp)
+                .height(60.dp)
+                .onGloballyPositioned { coordinates ->
+                    // this value is used to assign to the Dropdown the same width
+                    textFieldSize = coordinates.size.toSize()
+                },
+            colors = TextFieldDefaults.textFieldColors(
+                unfocusedLabelColor = colorResource(id = R.color.edit_text_gray),
+                focusedLabelColor = colorResource(id = R.color.edit_text_gray),
+                containerColor = colorResource(id = R.color.background_color)
+            ),
+            textStyle = TextStyle(fontSize = 18.sp),
+            label = { Text(title) },
+            readOnly = true,
+            trailingIcon = {
+                Icon(
+                    icon, "contentDescription",
+                    Modifier.clickable { expanded = !expanded }
+                )
+            }
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+        ) {
+            suggestions.forEach { suggestion ->
+                DropdownMenuItem(
+                    text = { Text(text = suggestion) },
+                    onClick = {
+                        selectedText = suggestion
+                        expanded = false
+                        onValueChange(suggestion)
+                        Log.d("gender", selectedText)
+                    }
+                )
+            }
+        }
+        if (isError && !errorMessage.isNullOrBlank()) {
+            Text(
+                text = errorMessage,
+                modifier = Modifier.padding(start = 12.dp),
+                color = Color.Red
+            )
         }
     }
 }
