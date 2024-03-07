@@ -18,6 +18,7 @@ class PostViewModel: ViewModel() {
     val studentDetails = StudentDetailsManager.getStudentDetails()
 
     private val _posts = MutableLiveData<List<Post>>()
+    val posts: LiveData<List<Post>> = _posts
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading

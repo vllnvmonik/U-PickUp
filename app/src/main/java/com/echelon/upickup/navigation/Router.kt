@@ -81,10 +81,10 @@ fun NavController(navController: NavHostController) {
         // application navigation route after successful log in
         navigation(startDestination = Screen.DashboardScreen.route, route = Screen.AppRoute.route){
             composable(Screen.DashboardScreen.route) {
-                DashboardScreen(viewModel = PostViewModel())
+                DashboardScreen(navController, viewModel = PostViewModel())
             }
             composable(Screen.CalendarScreen.route) {
-                CalendarScreen(viewModel = CalendarViewModel())
+                CalendarScreen(navController, viewModel = CalendarViewModel())
             }
             composable(Screen.InventoryScreen.route){
                 InventoryScreen(navController = navController)

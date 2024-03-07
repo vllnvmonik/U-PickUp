@@ -18,23 +18,29 @@ import com.echelon.upickup.R
 import com.echelon.upickup.components.FeedBox
 import com.echelon.upickup.viewmodel.PostViewModel
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.echelon.upickup.navigation.Screen
 import com.echelon.upickup.sharedprefs.PostManager
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 
 @Composable
-fun DashboardScreen(viewModel: PostViewModel) {
-//    val posts = viewModel.posts.observeAsState(emptyList())
+fun DashboardScreen(navController: NavHostController,viewModel: PostViewModel) {
+    val posts = viewModel.posts.observeAsState(emptyList())
     val isLoading = viewModel.isLoading.observeAsState(false)
+    Log.d("DashboardScreen", "posts from viewModel.posts: $posts")
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchPosts()
+//    val coroutineScope = rememberCoroutineScope()
+    val backStackEntry = navController.currentBackStackEntryAsState().value
+    LaunchedEffect(backStackEntry) {
+        if (backStackEntry?.destination?.route == Screen.DashboardScreen.route) {
+            viewModel.fetchPosts()
+        }
     }
 
-    // Retrieve posts from SharedPrefs
-    val postDetails = PostManager.getPosts()?.sortedByDescending { it.created_at }
-    Log.d("DashboardScreen", "Post details from sharedprefs: $postDetails")
     //refreshhs
     val refreshingState = rememberSwipeRefreshState(isRefreshing = isLoading.value)
 
@@ -55,22 +61,14 @@ fun DashboardScreen(viewModel: PostViewModel) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.height(10.dp))
-                    postDetails?.let { response ->
-                        FeedBox(
-                            posts = response,
-                            onLikeClicked = { postId->
-                                viewModel.likePost(postId)
-                                viewModel.fetchPosts()
-                            }
-                        )                    }
-                    if (isLoading.value) {
-                        CircularProgressIndicator()
-                    } else {
-                        Log.d("DashboardScreen", "show em: $postDetails")
+                    FeedBox(
+                        posts = posts.value
+                    ) { postId ->
+                        viewModel.likePost(postId)
+                        viewModel.fetchPosts()
                     }
                 }
             }
         }
     }
 }
-

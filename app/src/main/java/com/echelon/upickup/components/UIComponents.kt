@@ -52,7 +52,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -93,6 +92,7 @@ import com.echelon.upickup.navigation.Screen
 import com.echelon.upickup.network.apimodel.Books
 import com.echelon.upickup.network.apimodel.Event
 import com.echelon.upickup.network.apimodel.Modules
+import com.echelon.upickup.network.apimodel.Post
 import com.echelon.upickup.network.apimodel.Uniform
 import com.echelon.upickup.sharedprefs.PostManager
 import com.echelon.upickup.viewmodel.InventoryBooksViewModel
@@ -386,7 +386,7 @@ fun CustomImage(width: Int, height: Int, imageResourceID: Int) {
 
 @Composable
 fun FeedBox(
-    posts: List<com.echelon.upickup.model.Post>,
+    posts: List<Post>,
     onLikeClicked: (postId: String) -> Unit
 ) {
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
@@ -406,7 +406,7 @@ fun FeedBox(
 @Composable
 fun FeedBoxLayout(
     modifier: Modifier,
-    post: com.echelon.upickup.model.Post,
+    post: Post,
     onLikeClicked: (postId: String) -> Unit
 ) {
     var isLiked by remember { mutableStateOf(false) }
