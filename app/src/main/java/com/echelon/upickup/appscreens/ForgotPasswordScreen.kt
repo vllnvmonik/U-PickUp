@@ -13,6 +13,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -24,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.echelon.upickup.R
 import com.echelon.upickup.components.ClickableNavigationText
 import com.echelon.upickup.components.EditText
+import com.echelon.upickup.components.ErrorDialog
 import com.echelon.upickup.components.LogoImage
 import com.echelon.upickup.components.RoundedButton
 import com.echelon.upickup.components.TitleText
@@ -34,6 +38,7 @@ import com.echelon.upickup.viewmodel.ForgotPasswordViewModel
 @Composable
 fun ForgotPasswordScreen(navController: NavHostController, viewModel: ForgotPasswordViewModel){
     val uiState by viewModel.uiState.collectAsState()
+    var showErrorDialog by remember { mutableStateOf(false) }
 
     Surface (modifier = Modifier
         .fillMaxSize(),
@@ -58,10 +63,16 @@ fun ForgotPasswordScreen(navController: NavHostController, viewModel: ForgotPass
             Spacer(modifier = Modifier.height(50.dp))
             RoundedButton(
                 text = stringResource(R.string.reset_password),
-                onClick = { viewModel.resetPassword() },
+                onClick = {
+                    if (uiState.isEmailValid) {
+                        viewModel.resetPassword()
+                    } else {
+                        showErrorDialog = true
+                    }
+                },
                 enabled = true,
-                validation = {uiState.isEmailValid},
-                errorText = "Please fill in all required fields"
+//                validation = {uiState.isEmailValid},
+//                errorText = "Please fill in all required fields"
 
             )
             Spacer(modifier = Modifier.height(50.dp))
@@ -90,6 +101,12 @@ fun ForgotPasswordScreen(navController: NavHostController, viewModel: ForgotPass
                     )
                 }
             }
+        }
+        if (showErrorDialog) {
+            ErrorDialog(
+                showDialog = showErrorDialog,
+                onDismiss = { showErrorDialog = false }
+            )
         }
     }
 }
