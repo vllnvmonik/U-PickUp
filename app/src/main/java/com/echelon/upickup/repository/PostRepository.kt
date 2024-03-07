@@ -3,7 +3,7 @@ package com.echelon.upickup.repository
 import com.echelon.upickup.network.RetrofitInstance
 import com.echelon.upickup.network.apimodel.Post
 import com.echelon.upickup.network.apimodel.PostLikeResponse
-import com.echelon.upickup.network.apiservice.PostApiService
+import com.echelon.upickup.sharedprefs.StudentDetailsManager
 import retrofit2.Response
 
 class PostRepository {
@@ -11,13 +11,33 @@ class PostRepository {
     private val postLikesApiService = RetrofitInstance.postLikesApiService
 
 
+//    suspend fun getPosts(): Response<List<Post>> {
+//        return postApiService.getPosts()
+//    }
+
     suspend fun getPosts(): Response<List<Post>> {
-        return postApiService.getPosts()
+        val studentId = getStudentId()
+        return postApiService.getPosts(studentId)
     }
 
-    suspend fun likePost(postId: String): Result<PostLikeResponse> {
-         return postLikesApiService.likePost(postId)
+    private fun getStudentId(): String? {
+        val studentDetails = StudentDetailsManager.getStudentDetails()
+        return studentDetails?.id
     }
+
+    suspend fun likePost(postId: String, studentId: String?): Result<PostLikeResponse> {
+        return try {
+            val response = postLikesApiService.likePost(postId, studentId)
+            Result.success(response.body()!!)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
+//    suspend fun likePost(postId: String): Result<PostLikeResponse> {
+//         return postLikesApiService.likePost(postId)
+//    }
 //        return try {
 //            val response = postLikesApiService.likePost(postId)
 //            if (response.isSuccessful) {
