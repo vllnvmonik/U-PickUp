@@ -18,17 +18,6 @@ object PostManager {
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
-    fun savePosts(posts: List<com.echelon.upickup.network.apimodel.Post>) {
-        val serializedPosts = gson.toJson(posts)
-        val editor = sharedPreferences.edit()
-        editor.putString(KEY_POSTS, serializedPosts)
-        editor.apply()
-    }
-
-    fun getPosts(): List<Post>? {
-        val serializedPosts = sharedPreferences.getString(KEY_POSTS, null)
-        return gson.fromJson(serializedPosts, object : TypeToken<List<Post>>() {}.type)
-    }
     fun isPostLiked(postId: String): Boolean {
         return sharedPreferences.getBoolean(postId, false)
     }

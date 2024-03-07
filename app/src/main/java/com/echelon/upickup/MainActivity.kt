@@ -8,9 +8,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.echelon.upickup.app.UPickUp
 import com.echelon.upickup.sharedprefs.AuthManager
-import com.echelon.upickup.sharedprefs.CalendarManager
-import com.echelon.upickup.sharedprefs.StudentDetailsManager
 import com.echelon.upickup.sharedprefs.PostManager
+import com.echelon.upickup.sharedprefs.StudentDetailsManager
 import com.echelon.upickup.sharedprefs.TokenManager
 import com.echelon.upickup.ui.theme.UPickUpTheme
 
@@ -22,7 +21,6 @@ class MainActivity : ComponentActivity() {
         StudentDetailsManager.initialize(this)
         PostManager.initialize(this)
         AuthManager.initialize(this)
-        CalendarManager.initialize(this)
         installSplashScreen()
         setContent {
             UPickUpTheme {

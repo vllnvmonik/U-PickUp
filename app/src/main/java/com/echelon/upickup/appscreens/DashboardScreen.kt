@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,11 +17,10 @@ import com.echelon.upickup.R
 import com.echelon.upickup.components.FeedBox
 import com.echelon.upickup.viewmodel.PostViewModel
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.echelon.upickup.navigation.Screen
-import com.echelon.upickup.sharedprefs.PostManager
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
@@ -40,6 +38,7 @@ fun DashboardScreen(navController: NavHostController,viewModel: PostViewModel) {
             viewModel.fetchPosts()
         }
     }
+    val sortedPosts = posts.value.sortedByDescending { it.created_at }
 
     //refreshhs
     val refreshingState = rememberSwipeRefreshState(isRefreshing = isLoading.value)
@@ -62,7 +61,7 @@ fun DashboardScreen(navController: NavHostController,viewModel: PostViewModel) {
                 ) {
                     Spacer(modifier = Modifier.height(10.dp))
                     FeedBox(
-                        posts = posts.value
+                        posts = sortedPosts
                     ) { postId ->
                         viewModel.likePost(postId)
                         viewModel.fetchPosts()

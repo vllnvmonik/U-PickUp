@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echelon.upickup.network.apimodel.Event
 import com.echelon.upickup.repository.CalendarRepository
-import com.echelon.upickup.sharedprefs.CalendarManager
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -25,8 +24,7 @@ class CalendarViewModel: ViewModel() {
         viewModelScope.launch {
             try {
                 val response = postRepository.getEvents()
-                if (response.isSuccessful) {
-                    val details = response.body()
+                val details = response.body()
                     details?.let {
                         _events.value = it.map { event ->
                             event.copy(
@@ -35,14 +33,8 @@ class CalendarViewModel: ViewModel() {
                         }
                         Log.d("CalendarViewModel", "Fetched events: $details")
                     }
-                    details?.let { CalendarManager.saveEvents(it) }
-                } else {
-                    Log.e("CalendarViewModel", "Failed to fetch events: ${response.code()}")
-                    // Handle error response
-                }
             } catch (e: Exception) {
                 Log.e("CalendarViewModel", "Error fetching events: ${e.message}", e)
-                // Handle network exceptions
             }
         }
     }

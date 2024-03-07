@@ -23,9 +23,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.echelon.upickup.R
 import com.echelon.upickup.components.CalendarAnnouncementBox
 import com.echelon.upickup.components.CalendarBox
-import com.echelon.upickup.components.CustomImage
 import com.echelon.upickup.navigation.Screen
-import com.echelon.upickup.sharedprefs.CalendarManager
 import com.echelon.upickup.viewmodel.CalendarViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
