@@ -374,6 +374,21 @@ fun CustomImage(width: Int, height: Int, imageResourceID: Int) {
         contentDescription = "Image"
     )
 }
+
+@Composable
+fun CustomImageLogo(width: Int, height: Int, imageResourceID: Int, circleColor: Color) {
+    Box(
+        modifier = Modifier
+            .width(width.dp)
+            .height(height.dp)
+            .background(circleColor, shape = CircleShape)
+    ) {
+        Image(
+            painter = painterResource(id = imageResourceID),
+            contentDescription = "Image"
+        )
+    }
+}
 // dashboard screen components
 //@Composable
 //fun FeedBox(posts: List<com.echelon.upickup.model.Post>) {
@@ -456,16 +471,14 @@ fun FeedBoxLayout(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ){
-                    CustomImage(
-                        width = 50,
-                        height = 50,
-                        imageResourceID = R.drawable.phinma_logo
-                    )
+                    CustomImageLogo(width = 50, height = 50, imageResourceID = R.drawable.logo2, circleColor = colorResource(
+                        id = R.color.dark_green
+                    ))
                     Spacer(modifier = Modifier.width(10.dp))
                     CustomColorTitleText(
                         text = relativeTime,
                         color = R.color.black,
-                        16,
+                        14,
                         FontWeight.Normal
                     )
                 }
